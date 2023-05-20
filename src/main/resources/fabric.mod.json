@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "spawn",
+  "version": "1.0-fabric",
+
+  "name": "Spawn",
+  "description": "An animal mod that focuses not on utility or ambience. But on giving each animal ita niche and personality inside Minecraft’s ecosystems",
+  "authors": [
+    "Ninni"
+  ],
+  "contact": {
+    "issues": "https://github.com/N1nn1/spawn/issues",
+    "sources": "https://github.com/N1nn1/spawn"
+  },
+  "license": "All Rights Reserved (Assets)",
+  "icon": "assets/spawn/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.ninni.spawn.Spawn"
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric-api": "*",
+    "minecraft": "~1.19.4",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
