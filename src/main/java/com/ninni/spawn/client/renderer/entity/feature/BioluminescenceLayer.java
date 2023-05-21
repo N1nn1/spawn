@@ -21,7 +21,7 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 @Environment(EnvType.CLIENT)
 public class BioluminescenceLayer<T extends AnglerFish> extends EyesLayer<T, AnglerFishModel<T>> {
     private final Predicate<T> predicate;
-    private static final RenderType BIOLUMINESCENCE = RenderType.eyes(new ResourceLocation(MOD_ID, "textures/entity/angler_fish/angler_fish_bioluminescence.png"));
+    private static final RenderType BIOLUMINESCENCE = RenderType.entityTranslucentEmissive(new ResourceLocation(MOD_ID, "textures/entity/angler_fish/angler_fish_bioluminescence.png"));
 
     public BioluminescenceLayer(RenderLayerParent<T, AnglerFishModel<T>> renderLayerParent, Predicate<T> predicate) {
         super(renderLayerParent);

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:glow_berries",
+    "minecraft:glowstone",
+    "#sofishticated:angler_fish_feeds"
+  ]
+}

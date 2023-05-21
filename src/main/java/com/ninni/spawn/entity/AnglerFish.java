@@ -3,9 +3,12 @@ package com.ninni.spawn.entity;
 
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.registry.SpawnItems;
+import com.ninni.spawn.registry.SpawnParticles;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -74,10 +77,9 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
     @Override
     public void aiStep() {
         super.aiStep();
-        //TODO
-        //if (this.level.isClientSide && this.isUnderWater() && this.tickCount % 2 == 0) {
-        //    EntityHelper.addParticle(this, SofishticatedParticleTypes.ANGLER_FISH_LANTERN_GLOW, 0.15D, 1.25D);
-        //}
+        if (this.isUnderWater() && this.tickCount % 4 == 0) {
+            this.level.addParticle(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.15D), this.getY(1.25D), this.getRandomZ(0.15D), 0.0D, 0.0D, 0.0D);
+        }
     }
 
     @Override
@@ -93,14 +95,16 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
 
                     // add visual effects
                     this.playSound(SpawnSoundEvents.ENTITY_ANGLER_FISH_EFFECT_GIVE);
-                    //TODO
-                    //EntityHelper.spawnParticles(player, SofishticatedParticleTypes.ANGLER_FISH_LANTERN_GLOW, 0.1D, 0.5D, 0.25D, 40, 1.0D);
+                    if (this.level instanceof ServerLevel world) {
+                        world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.1F), this.getY(0.5F), this.getRandomZ(0.1F), 40, 25F, 25F, 25F, 0F);
+                    }
 
                     this.lastEffectGiven = time;
                 } else {
                     this.playSound(SpawnSoundEvents.ENTITY_ANGLER_FISH_EFFECT_DENY);
-                    //TODO
-                    //EntityHelper.spawnParticles(this, SofishticatedParticleTypes.ANGLER_FISH_LANTERN_GLOW, 0.05D, 0.5D, 0.25D, 10, 0.0D);
+                    if (this.level instanceof ServerLevel world) {
+                        world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.05F), this.getY(0.5F), this.getRandomZ(0.05F), 10, 25F, 25F, 25F, 0F);
+                    }
                 }
 
                 return InteractionResult.SUCCESS;
