@@ -4,6 +4,9 @@
   "package": "com.ninni.spawn.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractFishMixin",
+    "MobBucketItemAccessor",
+    "MobBucketItemMixin"
   ],
   "client": [
   ],

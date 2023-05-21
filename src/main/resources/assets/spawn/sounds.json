@@ -1,4 +1,80 @@
 {
+	"entity.fish.flop": {
+		"sounds": [
+			"minecraft:entity/fish/flop1",
+			"minecraft:entity/fish/flop2",
+			"minecraft:entity/fish/flop3",
+			"minecraft:entity/fish/flop4"
+		],
+		"subtitle": "subtitles.entity.spawn.fish.flop"
+	},
+	"entity.fish.hurt": {
+		"sounds": [
+			"minecraft:entity/fish/hurt1",
+			"minecraft:entity/fish/hurt2",
+			"minecraft:entity/fish/hurt3",
+			"minecraft:entity/fish/hurt4"
+		],
+		"subtitle": "subtitles.entity.spawn.fish.hurt"
+	},
+	"entity.fish.death": {
+		"sounds": [
+			"minecraft:entity/fish/hurt1",
+			"minecraft:entity/fish/hurt2",
+			"minecraft:entity/fish/hurt3",
+			"minecraft:entity/fish/hurt4"
+		],
+		"subtitle": "subtitles.entity.spawn.fish.death"
+	},
+	"entity.fish.ambient": { "sounds": [], "subtitle": "subtitles.entity.spawn.fish.ambient" },
+
+	"entity.angler_fish.deflate": {
+		"sounds": [ "spawn:entity/angler_fish/deflate" ],
+		"subtitle": "subtitles.entity.spawn.angler_fish.deflate"
+	},
+	"entity.angler_fish.effect.give": {
+		"sounds": [ "spawn:entity/angler_fish/effect_give" ],
+		"subtitle": "subtitles.entity.spawn.angler_fish.effect.give"
+	},
+	"entity.angler_fish.effect.deny": {
+		"sounds": [ "spawn:entity/angler_fish/effect_deny" ],
+		"subtitle": "subtitles.entity.spawn.angler_fish.effect.deny"
+	},
+
+	"entity.seahorse.hurt": {
+		"sounds": [
+			"minecraft:entity/fish/hurt1",
+			"minecraft:entity/fish/hurt2",
+			"minecraft:entity/fish/hurt3",
+			"minecraft:entity/fish/hurt4"
+		],
+		"subtitle": "subtitles.entity.spawn.seahorse.hurt"
+	},
+	"entity.seahorse.death": {
+		"sounds": [
+			"minecraft:entity/fish/hurt1",
+			"minecraft:entity/fish/hurt2",
+			"minecraft:entity/fish/hurt3",
+			"minecraft:entity/fish/hurt4"
+		],
+		"subtitle": "subtitles.entity.spawn.seahorse.death"
+	},
+	"entity.seahorse.growl": {
+		"sounds": [
+			"spawn:entity/seahorse/growl1",
+			"spawn:entity/seahorse/growl2"
+		],
+		"subtitle": "subtitles.entity.spawn.seahorse.growl"
+	},
+	"entity.seahorse.click": {
+		"sounds": [
+			"spawn:entity/seahorse/click1",
+			"spawn:entity/seahorse/click2",
+			"spawn:entity/seahorse/click3"
+		],
+		"subtitle": "subtitles.entity.spawn.seahorse.click"
+	},
+
 	"entity.snail.death": {
 		"sounds": [
 			"spawn:entity/snail/death"

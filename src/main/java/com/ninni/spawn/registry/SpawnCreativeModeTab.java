@@ -21,12 +21,18 @@ public class SpawnCreativeModeTab {
             );
         });
 
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
+            entries.addAfter(Items.SALMON_BUCKET, ANGLER_FISH_BUCKET);
+            entries.addAfter(Items.TROPICAL_FISH_BUCKET, SEAHORSE_BUCKET);
+        });
+
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(entries -> {
             entries.addAfter(Items.HONEY_BLOCK, MUCUS_BLOCK, GHOSTLY_MUCUS_BLOCK);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> {
-            entries.addAfter(Items.HONEY_BLOCK, MUCUS_BLOCK);
+            entries.addAfter(Items.HONEY_BLOCK, MUCUS_BLOCK, BIG_SNAIL_SHELL);
+            entries.addAfter(Items.FROGSPAWN, SNAIL_EGGS);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
@@ -36,6 +42,7 @@ public class SpawnCreativeModeTab {
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
             entries.addAfter(Items.PUFFERFISH, ESCARGOT);
+            entries.addAfter(Items.SALMON, ANGLER_FISH);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(entries -> {
@@ -44,11 +51,22 @@ public class SpawnCreativeModeTab {
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> {
+            entries.addAfter(Items.ALLAY_SPAWN_EGG, ANGLER_FISH_SPAWN_EGG);
+            entries.addAfter(Items.SALMON_SPAWN_EGG, SEAHORSE_SPAWN_EGG);
             entries.addAfter(Items.SLIME_SPAWN_EGG, SNAIL_SPAWN_EGG);
         });
 
         FabricItemGroup.builder(new ResourceLocation(MOD_ID,"item_group")).icon(SPAWN::getDefaultInstance).displayItems((featureFlagSet, output) -> {
-            //snail
+            //angler fish
+            output.accept(ANGLER_FISH_SPAWN_EGG);
+            output.accept(ANGLER_FISH_BUCKET);
+            output.accept(ANGLER_FISH);
+
+            // seahorse
+            output.accept(SEAHORSE_SPAWN_EGG);
+            output.accept(SEAHORSE_BUCKET);
+
+            // snail
             output.accept(SNAIL_SPAWN_EGG);
             output.accept(SNAIL_SHELL);
             output.accept(ESCARGOT);

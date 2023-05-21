@@ -130,7 +130,8 @@ public class SnailModel extends EntityModel<Snail> {
         //retreating in its shell
         if (entity.isScared()) {
             this.foot.visible = false;
-            this.shell.y = 21.0F;
+            if (entity.isBaby()) this.shell.y = 23.0F;
+            else this.shell.y = 21.0F;
             this.shell.z = -4.0F;
             this.shell.zRot = 0.0F;
         } else {

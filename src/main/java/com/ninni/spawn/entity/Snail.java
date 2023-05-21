@@ -31,7 +31,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.behavior.AnimalMakeLove;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
@@ -62,7 +61,7 @@ public class Snail extends Animal {
 
     @Override
     public boolean isFood(ItemStack itemStack) {
-        return itemStack.is(SpawnTags.SNAIL_TEMPT_ITEMS);
+        return itemStack.is(SpawnTags.SNAIL_TEMPTS);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class Snail extends Animal {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new BreedGoal(this, 1.0F));
         this.goalSelector.addGoal(2, new SnailLayEggGoal(this));
-        this.goalSelector.addGoal(2, new TemptGoal(this, 1.25, Ingredient.of(SpawnTags.SNAIL_TEMPT_ITEMS), false));
+        this.goalSelector.addGoal(2, new TemptGoal(this, 1.25, Ingredient.of(SpawnTags.SNAIL_TEMPTS), false));
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1));
         this.goalSelector.addGoal(6, new SnailWanderGoal(this, 1));
         this.goalSelector.addGoal(7, new SnailLookAtEntityGoal(this, Player.class, 6));

@@ -11,6 +11,9 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 @Environment(EnvType.CLIENT)
 public interface SpawnEntityModelLayers {
 
+    ModelLayerLocation ANGLER_FISH = main("angler_fish", AnglerFishModel::getLayerDefinition);
+    ModelLayerLocation ANGLER_FISH_DEFLATED = main("angler_fish_deflated", AnglerFishModel::getDeflatedLayerDefinition);
+    ModelLayerLocation SEAHORSE = main("seahorse", SeahorseModel::getLayerDefinition);
     ModelLayerLocation SNAIL = main("snail", SnailModel::getLayerDefinition);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {

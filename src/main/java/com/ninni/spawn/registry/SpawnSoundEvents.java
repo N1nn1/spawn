@@ -10,6 +10,21 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 
 public interface SpawnSoundEvents {
 
+    SoundEvent ENTITY_FISH_AMBIENT = register("entity.fish.ambient");
+    SoundEvent ENTITY_FISH_FLOP = register("entity.fish.flop");
+    SoundEvent ENTITY_FISH_SWIM = register("entity.fish.swim");
+    SoundEvent ENTITY_FISH_HURT = register("entity.fish.hurt");
+    SoundEvent ENTITY_FISH_DEATH = register("entity.fish.death");
+
+    SoundEvent ENTITY_ANGLER_FISH_DEFLATE = register("entity.angler_fish.deflate");
+    SoundEvent ENTITY_ANGLER_FISH_EFFECT_GIVE = register("entity.angler_fish.effect.give");
+    SoundEvent ENTITY_ANGLER_FISH_EFFECT_DENY = register("entity.angler_fish.effect.deny");
+
+    SoundEvent ENTITY_SEAHORSE_GROWL = register("entity.seahorse.growl");
+    SoundEvent ENTITY_SEAHORSE_CLICK = register("entity.seahorse.click");
+    SoundEvent ENTITY_SEAHORSE_HURT = register("entity.seahorse.hurt");
+    SoundEvent ENTITY_SEAHORSE_DEATH = register("entity.seahorse.death");
+
     SoundEvent ENTITY_SNAIL_SLIDE = register("entity.snail.slide");
     SoundEvent ENTITY_SNAIL_HURT_HIDDEN = register("entity.snail.hurt_hidden");
     SoundEvent ENTITY_SNAIL_HURT = register("entity.snail.hurt");
