@@ -127,6 +127,18 @@
 		],
 		"subtitle": "subtitles.entity.snail.slide"
 	},
+	"entity.snail.lay_eggs": {
+		"sounds": [
+			"spawn:entity/snail/lay_eggs"
+		],
+		"subtitle": "subtitles.entity.snail.lay_eggs"
+	},
+	"block.snail_eggs.hatch": {
+	"sounds": [
+		"spawn:entity/block/snail_eggs/hatch"
+	],
+	"subtitle": "subtitles.block.snail_eggs.hatch"
+	},
 	"block.snail_shell.break": {
 		"sounds": [
 			"spawn:block/snail_shell/break1",

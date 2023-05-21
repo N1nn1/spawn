@@ -42,10 +42,12 @@
   "block.spawn.mucus": "Mucus",
   "block.spawn.mucus_block": "Mucus Block",
   "block.spawn.ghostly_mucus_block": "Ghostly Mucus Block",
+  "subtitles.block.snail_eggs.hatch": "Snail Eggs Hatch",
   "subtitles.entity.snail.death": "Snail dies",
   "subtitles.entity.snail.eat": "Snail munches",
   "subtitles.entity.snail.hurt": "Snail hurts",
   "subtitles.entity.snail.hurt_hidden": "Snail deflects",
   "subtitles.entity.snail.shell_grow": "Snail Shell grows",
+  "subtitles.entity.snail.lay_eggs": "Snail lays Eggs",
   "subtitles.entity.snail.slide": "Snail slides"
 }

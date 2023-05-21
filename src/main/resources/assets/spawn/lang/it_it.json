@@ -42,10 +42,12 @@
   "block.spawn.mucus": "Bava",
   "block.spawn.mucus_block": "Blocco di bava",
   "block.spawn.ghostly_mucus_block": "Blocco di bava spettrale",
+  "subtitles.block.snail_eggs.hatch": "Uova di chiocciola si schiudono",
   "subtitles.entity.snail.death": "Chiocciola muore",
   "subtitles.entity.snail.eat": "Chiocciola mordicchia",
   "subtitles.entity.snail.hurt": "Chiocciola ferita",
   "subtitles.entity.snail.hurt_hidden": "Chiocciola deflette",
   "subtitles.entity.snail.shell_grow": "Guscio di chiocciola cresce",
+  "subtitles.entity.snail.lay_eggs": "Chiocciola depone uova",
   "subtitles.entity.snail.slide": "Chiocciola striscia"
 }

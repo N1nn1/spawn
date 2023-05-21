@@ -32,8 +32,6 @@ public interface SpawnSoundEvents {
     SoundEvent ENTITY_SNAIL_DEATH = register("entity.snail.death");
     SoundEvent ENTITY_SNAIL_DEATH_HIDDEN = register("entity.snail.death_hidden");
     SoundEvent ENTITY_SNAIL_SHELL_GROW = register("entity.snail.shell_grow");
-
-    //TODO these sounds
     SoundEvent ENTITY_SNAIL_LAY_EGGS = register("entity.snail.lay_eggs");
     SoundEvent BLOCK_SNAIL_EGGS_HATCH = register("block.snail_eggs.hatch");
 
