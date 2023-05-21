@@ -1,0 +1,138 @@
+{
+	"entity.snail.death": {
+		"sounds": [
+			"spawn:entity/snail/death"
+		],
+		"subtitle": "subtitles.entity.snail.death"
+	},
+	"entity.snail.death_hidden": {
+		"sounds": [
+			"spawn:entity/snail/death_hidden"
+		],
+		"subtitle": "subtitles.entity.snail.death"
+	},
+	"entity.snail.hurt": {
+		"sounds": [
+			"spawn:entity/snail/hurt1",
+			"spawn:entity/snail/hurt2"
+		],
+		"subtitle": "subtitles.entity.snail.hurt"
+	},
+	"entity.snail.eat": {
+		"sounds": [
+			"spawn:entity/snail/eat1",
+			"spawn:entity/snail/eat2"
+		],
+		"subtitle": "subtitles.entity.snail.eat"
+	},
+	"entity.snail.hurt_hidden": {
+		"sounds": [
+			"spawn:entity/snail/hurt_hidden1",
+			"spawn:entity/snail/hurt_hidden2",
+			"spawn:entity/snail/hurt_hidden3",
+			"spawn:entity/snail/hurt_hidden4"
+		],
+		"subtitle": "subtitles.entity.snail.hurt_hidden"
+	},
+	"entity.snail.shell_grow": {
+		"sounds": [
+			"spawn:entity/snail/shell_grow"
+		],
+		"subtitle": "subtitles.entity.snail.shell_grow"
+	},
+	"entity.snail.slide": {
+		"sounds": [
+			"spawn:entity/snail/slide1",
+			"spawn:entity/snail/slide2",
+			"spawn:entity/snail/slide3",
+			"spawn:entity/snail/slide4",
+			"spawn:entity/snail/slide5",
+			"spawn:entity/snail/slide6"
+		],
+		"subtitle": "subtitles.entity.snail.slide"
+	},
+	"block.snail_shell.break": {
+		"sounds": [
+			"spawn:block/snail_shell/break1",
+			"spawn:block/snail_shell/break2",
+			"spawn:block/snail_shell/break3"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"block.snail_shell.fall": {
+		"sounds": [
+			{
+				"name": "spawn:block.snail_shell.break",
+				"type": "event"
+			}
+		]
+	},
+	"block.snail_shell.hit": {
+		"sounds": [
+			{
+				"name": "spawn:block.snail_shell.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"block.snail_shell.place": {
+		"sounds": [
+			"dig/stone1",
+			"dig/stone2",
+			"dig/stone3",
+			"dig/stone4"
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"block.snail_shell.step": {
+		"sounds": [
+			"step/stone1",
+			"step/stone2",
+			"step/stone3",
+			"step/stone4"
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
+	},
+	"block.mucus.break": {
+		"sounds": [
+			"spawn:block/mucus/heavy1",
+			"spawn:block/mucus/heavy2",
+			"spawn:block/mucus/heavy3"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"block.mucus.fall": {
+		"sounds": [
+			{
+				"name": "spawn:block.mucus.break",
+				"type": "event"
+			}
+		]
+	},
+	"block.mucus.hit": {
+		"sounds": [
+			{
+				"name": "spawn:block.mucus.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"block.mucus.place": {
+		"sounds": [
+			{
+				"name": "spawn:block.mucus.break",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"block.mucus.step": {
+		"sounds": [
+			"spawn:block/mucus/light1",
+			"spawn:block/mucus/light2"
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
+	}
+}

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "spawn:mucus_block",
+    "spawn:ghostly_mucus_block"
+  ]
+}

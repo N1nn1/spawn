@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "spawn:block/big_snail_shell",
+      "y": 90,
+      "uvlock": false
+    },
+    "facing=north": {
+      "model": "spawn:block/big_snail_shell",
+      "uvlock": false
+    },
+    "facing=south": {
+      "model": "spawn:block/big_snail_shell",
+      "y": 180,
+      "uvlock": false
+    },
+    "facing=west": {
+      "model": "spawn:block/big_snail_shell",
+      "y": 270,
+      "uvlock": false
+    }
+  }
+}

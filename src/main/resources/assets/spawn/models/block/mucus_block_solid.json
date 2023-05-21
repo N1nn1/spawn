@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "side": "spawn:block/mucus_block_solid",
+    "bottom": "spawn:block/mucus_block_bottom_solid",
+    "top": "spawn:block/mucus_block_top_solid"
+  }
+}

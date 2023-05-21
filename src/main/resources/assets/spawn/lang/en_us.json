@@ -1,2 +1,24 @@
 {
+  "itemGroup.spawn.item_group": "Spawn",
+  "item.spawn.spawn": "Spawn",
+
+  "entity.spawn.snail": "Snail",
+  "item.spawn.snail_spawn_egg": "Snail Spawn Egg",
+  "item.spawn.snail_shell": "Snail Shell",
+  "block.spawn.snail_eggs": "Snail Eggs",
+  "block.spawn.big_snail_shell": "Big Snail Shell",
+  "block.spawn.snail_shell_tiles": "Snail Shell Tiles",
+  "block.spawn.snail_shell_tile_stairs": "Snail Shell Tile Stairs",
+  "block.spawn.snail_shell_tile_slab": "Snail Shell Tile Slab",
+  "item.spawn.escargot": "Escargot",
+  "block.spawn.potted_sweet_berry_bush": "Potted Sweet Berries",
+  "block.spawn.mucus": "Mucus",
+  "block.spawn.mucus_block": "Mucus Block",
+  "block.spawn.ghostly_mucus_block": "Ghostly Mucus Block",
+  "subtitles.entity.snail.death": "Snail dies",
+  "subtitles.entity.snail.eat": "Snail munches",
+  "subtitles.entity.snail.hurt": "Snail hurts",
+  "subtitles.entity.snail.hurt_hidden": "Snail deflects",
+  "subtitles.entity.snail.shell_grow": "Snail Shell grows",
+  "subtitles.entity.snail.slide": "Snail slides"
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "spawn:snail_shell"
+    }
+  },
+  "result": {
+    "item": "spawn:big_snail_shell"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+	"solid=false": {
+      "model": "spawn:block/mucus_block"
+    },
+    "solid=true": {
+      "model": "spawn:block/mucus_block_solid"
+    }
+  }
+}

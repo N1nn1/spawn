@@ -1,0 +1,22 @@
+{
+	"textures": {
+		"0": "spawn:block/mucus_block_top",
+		"1": "spawn:block/mucus_block",
+		"2": "spawn:block/mucus_block_bottom",
+		"particle": "spawn:block/mucus_block_top"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 2, 16],
+			"faces": {
+				"north": {"uv": [0, 3, 16, 5], "texture": "#1"},
+				"east": {"uv": [0, 3, 16, 5], "texture": "#1"},
+				"south": {"uv": [0, 3, 16, 5], "texture": "#1"},
+				"west": {"uv": [0, 3, 16, 5], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#2"}
+			}
+		}
+	]
+}

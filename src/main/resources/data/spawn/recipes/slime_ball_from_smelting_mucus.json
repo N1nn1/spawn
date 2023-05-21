@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "spawn:mucus"
+  },
+  "result": "minecraft:slime_ball",
+  "experience": 0.7,
+  "cookingtime": 150
+}

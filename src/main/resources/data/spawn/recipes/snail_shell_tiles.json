@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "spawn:snail_shell"
+    }
+  },
+  "result": {
+    "item": "spawn:snail_shell_tiles",
+    "count": 4
+  }
+}

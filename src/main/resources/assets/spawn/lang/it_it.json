@@ -1,0 +1,24 @@
+{
+  "itemGroup.spawn.item_group": "Spawn",
+  "item.spawn.spawn": "Spawn",
+
+  "entity.spawn.snail": "Chiocciola",
+  "item.spawn.snail_spawn_egg": "Uovo generatore di chiocciola",
+  "item.spawn.snail_shell": "Guscio di chiocciola",
+  "block.spawn.snail_eggs": "Uova di chiocciola",
+  "block.spawn.big_snail_shell": "Guscio di chiocciola grosso",
+  "block.spawn.snail_shell_tiles": "Gusci di chiocciola",
+  "block.spawn.snail_shell_tile_stairs": "Scalini di gusci di chiocciola",
+  "block.spawn.snail_shell_tile_slab": "Lastra di gusci di chiocciola",
+  "item.spawn.escargot": "Escargot",
+  "block.spawn.potted_sweet_berry_bush": "Vaso di bacche dolci",
+  "block.spawn.mucus": "Bava",
+  "block.spawn.mucus_block": "Blocco di bava",
+  "block.spawn.ghostly_mucus_block": "Blocco di bava spettrale",
+  "subtitles.entity.snail.death": "Chiocciola muore",
+  "subtitles.entity.snail.eat": "Chiocciola mordicchia",
+  "subtitles.entity.snail.hurt": "Chiocciola ferita",
+  "subtitles.entity.snail.hurt_hidden": "Chiocciola deflette",
+  "subtitles.entity.snail.shell_grow": "Guscio di chiocciola cresce",
+  "subtitles.entity.snail.slide": "Chiocciola striscia"
+}

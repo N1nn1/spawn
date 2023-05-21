@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "spawn:block/snail_shell_tile_slab"
+    },
+    "type=double": {
+      "model": "spawn:block/snail_shell_tiles"
+    },
+    "type=top": {
+      "model": "spawn:block/snail_shell_tile_slab_top"
+    }
+  }
+}

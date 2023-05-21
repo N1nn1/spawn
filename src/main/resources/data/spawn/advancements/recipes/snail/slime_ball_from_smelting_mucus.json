@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "spawn:slime_ball_from_smelting_mucus"
+    ]
+  },
+  "criteria": {
+    "has_raw_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "spawn:mucus"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "spawn:slime_ball_from_smelting_mucus"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_item",
+      "has_the_recipe"
+    ]
+  ]
+}

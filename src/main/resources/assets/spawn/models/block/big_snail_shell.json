@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "up": "spawn:block/big_snail_shell_top",
+    "down": "spawn:block/big_snail_shell_bottom",
+    "north": "spawn:block/big_snail_shell_front",
+    "south": "spawn:block/big_snail_shell_back",
+    "east": "spawn:block/big_snail_shell_left",
+    "west": "spawn:block/big_snail_shell_right",
+    "particle": "spawn:block/big_snail_shell_right"
+  }
+}

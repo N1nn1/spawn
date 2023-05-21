@@ -19,6 +19,9 @@
   "entrypoints": {
     "main": [
       "com.ninni.spawn.Spawn"
+    ],
+    "client": [
+      "com.ninni.spawn.SpawnClient"
     ]
   },
   "mixins": [

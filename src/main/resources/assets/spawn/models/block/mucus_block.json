@@ -1,0 +1,38 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"3": "spawn:block/mucus_block_bottom_solid",
+		"4": "spawn:block/mucus_block_solid",
+		"5": "spawn:block/mucus_block_top_solid",
+		"down": "spawn:block/mucus_block_bottom",
+		"up": "spawn:block/mucus_block_top",
+		"particle": "spawn:block/mucus_block",
+		"side": "spawn:block/mucus_block"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "north"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "south"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#up", "cullface": "up"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#down", "cullface": "down"}
+			}
+		},
+		{
+			"from": [1, 1, 1],
+			"to": [15, 15, 15],
+			"faces": {
+				"north": {"uv": [1, 1, 15, 15], "texture": "#4"},
+				"east": {"uv": [1, 1, 15, 15], "texture": "#4"},
+				"south": {"uv": [1, 1, 15, 15], "texture": "#4"},
+				"west": {"uv": [1, 1, 15, 15], "texture": "#4"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#5"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#3"}
+			}
+		}
+	]
+}
