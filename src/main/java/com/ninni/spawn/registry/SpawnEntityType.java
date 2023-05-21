@@ -11,6 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.AbstractFish;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 public class SpawnEntityType {
@@ -32,7 +33,7 @@ public class SpawnEntityType {
                     .entityFactory(AnglerFish::new)
                     .defaultAttributes(AnglerFish::createAttributes)
                     .spawnGroup(MobCategory.WATER_AMBIENT)
-                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR, AbstractFish::checkMobSpawnRules)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR, WaterAnimal::checkSurfaceWaterAnimalSpawnRules)
                     .dimensions(EntityDimensions.scalable(0.6F, 0.6F))
                     .trackRangeChunks(10)
     );
@@ -43,14 +44,14 @@ public class SpawnEntityType {
                     .entityFactory(Seahorse::new)
                     .defaultAttributes(Seahorse::createAttributes)
                     .spawnGroup(MobCategory.WATER_AMBIENT)
-                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR, AbstractFish::checkMobSpawnRules)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WaterAnimal::checkSurfaceWaterAnimalSpawnRules)
                     .dimensions(EntityDimensions.scalable(0.3F, 0.6F))
                     .trackRangeChunks(10)
     );
 
     static {
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.ANGLER_FISH_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.ANGLER_FISH, 10, 1, 1);
-        BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.SEAHORSE_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.SEAHORSE, 10, 1, 3);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.SEAHORSE_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.SEAHORSE, 20, 1, 3);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.SNAIL_SPAWNS), MobCategory.CREATURE, SpawnEntityType.SNAIL, 12, 1, 3);
     }
 
