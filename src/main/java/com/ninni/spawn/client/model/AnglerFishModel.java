@@ -13,6 +13,7 @@ import net.minecraft.util.Mth;
 
 import static net.minecraft.client.model.geom.PartNames.*;
 
+@SuppressWarnings("FieldCanBeLocal, unused")
 @Environment(EnvType.CLIENT)
 public class AnglerFishModel<E extends AnglerFish> extends EntityModel<E> {
     public static final String LANTERN = "lantern";
@@ -37,7 +38,6 @@ public class AnglerFishModel<E extends AnglerFish> extends EntityModel<E> {
         this.rightFin = this.body.getChild(RIGHT_FIN);
     }
 
-    @SuppressWarnings("unused")
     public static LayerDefinition getLayerDefinition() {
         MeshDefinition data = new MeshDefinition();
         PartDefinition root = data.getRoot();

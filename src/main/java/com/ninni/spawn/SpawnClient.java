@@ -2,10 +2,7 @@ package com.ninni.spawn;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.spawn.client.model.SpawnEntityModelLayers;
-import com.ninni.spawn.client.renderer.entity.AnglerFishRenderer;
-import com.ninni.spawn.client.renderer.entity.SeahorseRenderer;
-import com.ninni.spawn.client.renderer.entity.SnailRenderer;
-import com.ninni.spawn.entity.Seahorse;
+import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.registry.SpawnBlocks;
 import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnParticles;
@@ -35,6 +32,8 @@ public class SpawnClient implements ClientModInitializer {
 
 		Reflection.initialize(SpawnEntityModelLayers.class);
 		EntityRendererRegistry.register(SpawnEntityType.ANGLER_FISH, AnglerFishRenderer::new);
+		EntityRendererRegistry.register(SpawnEntityType.TUNA, TunaRenderer::new);
+		EntityRendererRegistry.register(SpawnEntityType.TUNA_EGG, TunaEggRenderer::new);
 		EntityRendererRegistry.register(SpawnEntityType.SEAHORSE, SeahorseRenderer::new);
 		EntityRendererRegistry.register(SpawnEntityType.SNAIL, SnailRenderer::new);
 	}

@@ -1,6 +1,6 @@
 package com.ninni.spawn.mixin;
 
-import com.ninni.spawn.entity.FlopConditionable;
+import com.ninni.spawn.entity.common.FlopConditionable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.Bucketable;

@@ -23,6 +23,12 @@ public class SpawnItems {
     public static final Item ANGLER_FISH_BUCKET = register("angler_fish_bucket", new MobBucketItem(SpawnEntityType.ANGLER_FISH, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
     public static final Item ANGLER_FISH = register("angler_fish", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.3f).effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 3 * 20), 1.0F).alwaysEat().build())));
 
+    public static final Item TUNA_SPAWN_EGG = register("tuna_spawn_egg", new SpawnEggItem(SpawnEntityType.TUNA, 0x4572B3, 0xE9B936, new Item.Properties().stacksTo(64)));
+    public static final Item TUNA_CHUNK = register("tuna_chunk", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.3f).build())));
+    public static final Item COOKED_TUNA_CHUNK = register("cooked_tuna_chunk", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.3f).build())));
+    public static final Item TUNA_SANDWICH = register("tuna_sandwich", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.3f).build())));
+    public static final Item TUNA_EGG_BUCKET = register("tuna_egg_bucket", new MobBucketItem(SpawnEntityType.TUNA_EGG, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
+
     public static final Item SEAHORSE_SPAWN_EGG = register("seahorse_spawn_egg", new SpawnEggItem(SpawnEntityType.SEAHORSE, 0xFBC738, 0xFFFFFF, new Item.Properties().stacksTo(64)));
     public static final Item SEAHORSE_BUCKET = register("seahorse_bucket", new MobBucketItem(SpawnEntityType.SEAHORSE, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
 

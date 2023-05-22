@@ -16,16 +16,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 
 public class SpawnEntityType {
 
-    public static final EntityType<Snail> SNAIL = register(
-            "snail",
-            FabricEntityTypeBuilder.createMob()
-                    .entityFactory(Snail::new)
-                    .defaultAttributes(Snail::createAttributes)
-                    .spawnGroup(MobCategory.CREATURE)
-                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Snail::canSpawn)
-                    .dimensions(EntityDimensions.scalable(0.8F, 0.8F))
-                    .trackRangeChunks(10)
-    );
+
 
     public static final EntityType<AnglerFish> ANGLER_FISH = register(
             "angler_fish",
@@ -36,6 +27,27 @@ public class SpawnEntityType {
                     .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR, WaterAnimal::checkSurfaceWaterAnimalSpawnRules)
                     .dimensions(EntityDimensions.scalable(0.6F, 0.6F))
                     .trackRangeChunks(10)
+    );
+
+    public static final EntityType<Tuna> TUNA = register(
+            "tuna",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Tuna::new)
+                    .defaultAttributes(Tuna::createAttributes)
+                    .spawnGroup(MobCategory.WATER_CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Tuna::checkSurfaceWaterAnimalSpawnRules)
+                    .dimensions(EntityDimensions.scalable(1.2F, 0.8F))
+                    .trackRangeChunks(10)
+    );
+
+    public static final EntityType<TunaEgg> TUNA_EGG = register(
+            "tuna_egg",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(TunaEgg::new)
+                    .defaultAttributes(TunaEgg::createAttributes)
+                    .spawnGroup(MobCategory.MISC)
+                    .dimensions(EntityDimensions.fixed(0.125f, 0.125f))
+                    .trackRangeChunks(6)
     );
 
     public static final EntityType<Seahorse> SEAHORSE = register(
@@ -49,8 +61,20 @@ public class SpawnEntityType {
                     .trackRangeChunks(10)
     );
 
+    public static final EntityType<Snail> SNAIL = register(
+            "snail",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Snail::new)
+                    .defaultAttributes(Snail::createAttributes)
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Snail::canSpawn)
+                    .dimensions(EntityDimensions.scalable(0.8F, 0.8F))
+                    .trackRangeChunks(10)
+    );
+
     static {
-        BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.ANGLER_FISH_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.ANGLER_FISH, 10, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.ANGLER_FISH_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.ANGLER_FISH, 5, 1, 1);
+        //TODO make tuna spawn
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.SEAHORSE_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.SEAHORSE, 20, 1, 3);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.SNAIL_SPAWNS), MobCategory.CREATURE, SpawnEntityType.SNAIL, 12, 1, 3);
     }

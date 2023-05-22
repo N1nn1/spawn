@@ -62,6 +62,13 @@ public class SpawnCreativeModeTab {
             output.accept(ANGLER_FISH_BUCKET);
             output.accept(ANGLER_FISH);
 
+            //tuna
+            output.accept(TUNA_SPAWN_EGG);
+            output.accept(TUNA_CHUNK);
+            output.accept(COOKED_TUNA_CHUNK);
+            output.accept(TUNA_SANDWICH);
+            output.accept(TUNA_EGG_BUCKET);
+
             // seahorse
             output.accept(SEAHORSE_SPAWN_EGG);
             output.accept(SEAHORSE_BUCKET);

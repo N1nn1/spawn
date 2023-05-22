@@ -16,6 +16,7 @@ import net.minecraft.util.Mth;
 
 import static net.minecraft.client.model.geom.PartNames.*;
 
+@SuppressWarnings("FieldCanBeLocal, unused")
 @Environment(EnvType.CLIENT)
 public class SeahorseModel<E extends Seahorse> extends EntityModel<E> {
     public static final String TAIL_BASE = "tail_base";
@@ -48,7 +49,6 @@ public class SeahorseModel<E extends Seahorse> extends EntityModel<E> {
         this.tail = this.tailBase.getChild(TAIL);
     }
 
-    @SuppressWarnings("unused")
     public static LayerDefinition getLayerDefinition() {
         MeshDefinition data = new MeshDefinition();
         PartDefinition root = data.getRoot();

@@ -13,6 +13,8 @@ public interface SpawnEntityModelLayers {
 
     ModelLayerLocation ANGLER_FISH = main("angler_fish", AnglerFishModel::getLayerDefinition);
     ModelLayerLocation ANGLER_FISH_DEFLATED = main("angler_fish_deflated", AnglerFishModel::getDeflatedLayerDefinition);
+    ModelLayerLocation TUNA = main("tuna", TunaModel::getLayerDefinition);
+    ModelLayerLocation TUNA_EGG = main("tuna_egg", TunaEggModel::getLayerDefinition);
     ModelLayerLocation SEAHORSE = main("seahorse", SeahorseModel::getLayerDefinition);
     ModelLayerLocation SNAIL = main("snail", SnailModel::getLayerDefinition);
 

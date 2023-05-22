@@ -1,4 +1,4 @@
-package com.ninni.spawn.entity;
+package com.ninni.spawn.entity.common;
 
 
 import net.minecraft.world.entity.EntityType;
