@@ -245,7 +245,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
         this.leftEar.yRot = Mth.cos(animationProgress * speed * 0.2F) * degree * 0.6F * 0.25F - 0.6F;
         this.rightEar.yRot = Mth.cos(animationProgress * speed * 0.2F + pi) * degree * 0.6F * 0.25F + 0.6F;
 
-        this.body.y = Mth.cos(2 + limbAngle * 0.6f) * 0.8f * limbDistance + (entity.isStanding() ? 21.0F : 20F);
+        this.body.y = Mth.cos(2 + limbAngle * 0.6f) * 0.8f * limbDistance + (entity.isStanding() ? 21.0F : (entity.isInSittingPose() ? 21F : 20F));
         this.body.yRot = Mth.cos(1 + limbAngle * 1) * 0.2f * limbDistance;
         this.rightLeg.xRot = Mth.cos(limbAngle * 0.6f) * 1.4f * limbDistance;
         this.leftLeg.xRot = Mth.cos(limbAngle * 0.6f + pi) * 1.4f * limbDistance;

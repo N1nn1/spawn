@@ -13,6 +13,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -20,6 +22,7 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -47,14 +50,16 @@ public class Hamster extends TamableAnimal {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.2));
-        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0F));
-        this.goalSelector.addGoal(3, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.SNAIL_TEMPTS), false));
-        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(9, new StandGoal());
+        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(2, new PanicGoal(this, 1.2));
+        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.1, 7f, 2.0f, false));
+        this.goalSelector.addGoal(5, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
+        this.goalSelector.addGoal(6, new FollowParentGoal(this, 1));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(10, new StandGoal());
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -64,12 +69,54 @@ public class Hamster extends TamableAnimal {
     }
 
     @Override
+    public boolean isFood(ItemStack itemStack) {
+        return itemStack.is(SpawnTags.HAMSTER_TEMPTS);
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
+        ItemStack itemStack = player.getItemInHand(interactionHand);
+        Item item = itemStack.getItem();
+        if (this.level.isClientSide) {
+            boolean bl = this.isOwnedBy(player) || this.isTame() || itemStack.is(SpawnTags.HAMSTER_FEEDS) && !this.isTame();
+            return bl ? InteractionResult.CONSUME : InteractionResult.PASS;
+        }
+        if (this.isTame()) {
+            if (this.isFood(itemStack) && this.getHealth() < this.getMaxHealth()) {
+                if (!player.getAbilities().instabuild) itemStack.shrink(1);
+                this.heal(4f);
+                return InteractionResult.SUCCESS;
+            }
+            InteractionResult interactionResult = super.mobInteract(player, interactionHand);
+            if (interactionResult.consumesAction() && !this.isBaby() || !this.isOwnedBy(player)) return interactionResult;
+            this.setOrderedToSit(!this.isOrderedToSit());
+            this.jumping = false;
+            this.navigation.stop();
+            this.setTarget(null);
+            return InteractionResult.SUCCESS;
+        }
+        if (!itemStack.is(SpawnTags.HAMSTER_FEEDS)) return super.mobInteract(player, interactionHand);
+        if (!player.getAbilities().instabuild) itemStack.shrink(1);
+        if (this.random.nextInt(3) == 0) {
+            this.tame(player);
+            this.navigation.stop();
+            this.setTarget(null);
+            this.setOrderedToSit(true);
+            this.level.broadcastEntityEvent(this, (byte)7);
+            return InteractionResult.SUCCESS;
+        } else {
+            this.level.broadcastEntityEvent(this, (byte)6);
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    @Override
     protected int calculateFallDamage(float f, float g) {
         return super.calculateFallDamage(f, g) - 10;
     }
     
     boolean canMove() {
-        return !this.isStanding();
+        return !this.isStanding() && !this.isInSittingPose();
     }
     
     @Override
@@ -79,6 +126,16 @@ public class Hamster extends TamableAnimal {
         this.entityData.define(DATA_FLAGS_ID, (byte)0);
     }
 
+    @Override
+    public void setTame(boolean bl) {
+        super.setTame(bl);
+        if (bl) {
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(12.0);
+            this.setHealth(20.0f);
+        } else {
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(6.0);
+        }
+    }
 
     public boolean isStanding() {
         return this.getFlag(1);
@@ -190,24 +247,17 @@ public class Hamster extends TamableAnimal {
     @Nullable
     public Hamster getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
         Hamster hamster = SpawnEntityType.HAMSTER.create(serverLevel);
-        //TODO
-        //if (hamster != null && ageableMob instanceof Hamster) {
-        //    Hamster hamster2 = (Hamster)ageableMob;
-        //    if (this.random.nextBoolean()) {
-        //        hamster.setVariant(this.getVariant());
-        //    } else {
-        //        hamster.setVariant(hamster2.getVariant());
-        //    }
-        //    if (this.isTame()) {
-        //        hamster.setOwnerUUID(this.getOwnerUUID());
-        //        hamster.setTame(true);
-        //        if (this.random.nextBoolean()) {
-        //            hamster.setCollarColor(this.getCollarColor());
-        //        } else {
-        //            hamster.setCollarColor(hamster2.getCollarColor());
-        //        }
-        //    }
-        //}
+        if (hamster != null && ageableMob instanceof Hamster hamster2) {
+            if (this.random.nextBoolean()) {
+                hamster.setVariant(this.getVariant());
+            } else {
+                hamster.setVariant(hamster2.getVariant());
+            }
+            if (this.isTame()) {
+                hamster.setOwnerUUID(this.getOwnerUUID());
+                hamster.setTame(true);
+            }
+        }
         return hamster;
     }
 }
