@@ -2,6 +2,7 @@ package com.ninni.spawn;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.spawn.client.model.SpawnEntityModelLayers;
+import com.ninni.spawn.client.particles.TunaEggParticle;
 import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.registry.SpawnBlocks;
 import com.ninni.spawn.registry.SpawnEntityType;
@@ -29,6 +30,7 @@ public class SpawnClient implements ClientModInitializer {
 		);
 
 		ParticleFactoryRegistry.getInstance().register(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, GlowParticle.GlowSquidProvider::new);
+		ParticleFactoryRegistry.getInstance().register(SpawnParticles.TUNA_EGG, TunaEggParticle.Factory::new);
 
 		Reflection.initialize(SpawnEntityModelLayers.class);
 		EntityRendererRegistry.register(SpawnEntityType.ANGLER_FISH, AnglerFishRenderer::new);

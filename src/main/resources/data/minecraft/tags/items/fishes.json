@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
+    "spawn:tuna_chunk",
+    "spawn:cooked_tuna_chunk",
     "spawn:angler_fish"
   ]
 }

@@ -15,10 +15,21 @@ public interface SpawnSoundEvents {
     SoundEvent ENTITY_FISH_SWIM = register("entity.fish.swim");
     SoundEvent ENTITY_FISH_HURT = register("entity.fish.hurt");
     SoundEvent ENTITY_FISH_DEATH = register("entity.fish.death");
+    //TODO
+    SoundEvent ENTITY_BIG_FISH_SWIM = register("entity.big_fish.swim");
 
     SoundEvent ENTITY_ANGLER_FISH_DEFLATE = register("entity.angler_fish.deflate");
     SoundEvent ENTITY_ANGLER_FISH_EFFECT_GIVE = register("entity.angler_fish.effect.give");
     SoundEvent ENTITY_ANGLER_FISH_EFFECT_DENY = register("entity.angler_fish.effect.deny");
+
+    //TODO
+    SoundEvent ENTITY_TUNA_EGG_HIT = register("entity.tuna_egg.hit");
+    //TODO
+    SoundEvent ENTITY_TUNA_EGG_BROKEN = register("entity.tuna_egg.broken");
+    //TODO
+    SoundEvent BUCKET_EMPTY_TUNA_EGG = register("item.bucket.empty_tuna_egg");
+    //TODO
+    SoundEvent BUCKET_FILL_TUNA_EGG = register("item.bucket.fill_tuna_egg");
 
     SoundEvent ENTITY_SEAHORSE_GROWL = register("entity.seahorse.growl");
     SoundEvent ENTITY_SEAHORSE_CLICK = register("entity.seahorse.click");

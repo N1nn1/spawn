@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:bread"
+    },
+    {
+      "item": "spawn:cooked_tuna_chunk"
+    },
+    {
+      "item": "spawn:cooked_tuna_chunk"
+    },
+    {
+      "item": "minecraft:bread"
+    }
+  ],
+  "result": {
+    "item": "spawn:tuna_sandwich",
+    "count": 1
+  }
+}

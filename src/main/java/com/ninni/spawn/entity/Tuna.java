@@ -175,7 +175,7 @@ public class Tuna extends Animal {
 
     @Override
     protected SoundEvent getSwimSound() {
-        return SpawnSoundEvents.ENTITY_FISH_SWIM;
+        return SpawnSoundEvents.ENTITY_BIG_FISH_SWIM;
     }
 
     @Nullable
