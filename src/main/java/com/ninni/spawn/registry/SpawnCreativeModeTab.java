@@ -94,6 +94,9 @@ public class SpawnCreativeModeTab {
             output.accept(MUCUS_BLOCK);
             output.accept(GHOSTLY_MUCUS_BLOCK);
 
+            // hamster
+            output.accept(HAMSTER_SPAWN_EGG);
+
         }).build();
     }
 }

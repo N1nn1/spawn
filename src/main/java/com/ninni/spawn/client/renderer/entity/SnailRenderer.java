@@ -1,7 +1,7 @@
 package com.ninni.spawn.client.renderer.entity;
 
 import com.ninni.spawn.client.model.SnailModel;
-import com.ninni.spawn.client.model.SpawnEntityModelLayers;
+import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import com.ninni.spawn.entity.Snail;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

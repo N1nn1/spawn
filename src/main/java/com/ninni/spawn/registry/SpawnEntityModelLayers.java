@@ -1,5 +1,6 @@
-package com.ninni.spawn.client.model;
+package com.ninni.spawn.registry;
 
+import com.ninni.spawn.client.model.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -17,6 +18,8 @@ public interface SpawnEntityModelLayers {
     ModelLayerLocation TUNA_EGG = main("tuna_egg", TunaEggModel::getLayerDefinition);
     ModelLayerLocation SEAHORSE = main("seahorse", SeahorseModel::getLayerDefinition);
     ModelLayerLocation SNAIL = main("snail", SnailModel::getLayerDefinition);
+    ModelLayerLocation HAMSTER = main("hamster", HamsterModel::getLayerDefinition);
+    ModelLayerLocation HAMSTER_STANDING = main("hamster_standing", HamsterModel::getStandingLayerDefinition);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

@@ -71,6 +71,17 @@ public class SpawnEntityType {
                     .trackRangeChunks(10)
     );
 
+    public static final EntityType<Hamster> HAMSTER = register(
+            "hamster",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Hamster::new)
+                    .defaultAttributes(Hamster::createAttributes)
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.ON_GROUND, Heightmap.Types.WORLD_SURFACE_WG, Hamster::canSpawn)
+                    .dimensions(EntityDimensions.scalable(0.6F, 0.5F))
+                    .trackRangeChunks(10)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.ANGLER_FISH_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.ANGLER_FISH, 5, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.TUNA_SPAWNS), MobCategory.WATER_CREATURE, SpawnEntityType.TUNA, 15, 1, 1);

@@ -2,7 +2,7 @@ package com.ninni.spawn.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.ninni.spawn.client.model.AnglerFishModel;
-import com.ninni.spawn.client.model.SpawnEntityModelLayers;
+import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import com.ninni.spawn.client.renderer.entity.feature.BioluminescenceLayer;
 import com.ninni.spawn.entity.AnglerFish;
 import net.fabricmc.api.EnvType;

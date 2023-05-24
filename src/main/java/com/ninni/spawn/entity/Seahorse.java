@@ -34,7 +34,6 @@ public class Seahorse extends AbstractFish implements Bucketable {
         super(type, world);
     }
 
-
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {

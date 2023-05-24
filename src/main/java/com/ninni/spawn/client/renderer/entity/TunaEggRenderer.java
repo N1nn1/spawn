@@ -2,7 +2,7 @@ package com.ninni.spawn.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.ninni.spawn.client.model.SpawnEntityModelLayers;
+import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import com.ninni.spawn.client.model.TunaEggModel;
 import com.ninni.spawn.entity.TunaEgg;
 import net.fabricmc.api.EnvType;
