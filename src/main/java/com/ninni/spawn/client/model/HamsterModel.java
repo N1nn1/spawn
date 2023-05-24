@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
 
 import static net.minecraft.client.model.geom.PartNames.*;
 
@@ -55,15 +56,15 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                 CubeListBuilder.create()
                         .texOffs(0, 0)
                         .addBox(-3.75F, -3.0F, -4.5F, 7.0F, 6.0F, 9.0F),
-                PartPose.offset(-0.25F, 20.0F, -0.5F)
+                PartPose.offset(0.25F, 20.0F, -0.5F)
         );
 
         PartDefinition leftCheek = body.addOrReplaceChild(
                 LEFT_CHEEK,
                 CubeListBuilder.create()
                         .texOffs(23, 6)
-                        .addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(-0.6F)),
-                PartPose.offset(2.15F, 2.4F, -3.4F)
+                        .addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F),
+                PartPose.offset(2.5F, 2.4F, -3.4F)
         );
 
         PartDefinition rightCheek = body.addOrReplaceChild(
@@ -73,7 +74,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                         .mirror()
                         .addBox(-2.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F)
                         .mirror(false),
-                PartPose.offset(-1.65F, 2.4F, -3.4F)
+                PartPose.offset(-1.15F, 2.4F, -3.4F)
         );
 
         PartDefinition tail = body.addOrReplaceChild(
@@ -107,7 +108,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                 CubeListBuilder.create()
                         .texOffs(0, 3)
                         .addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 2.0F),
-                PartPose.offset(-2.0F, 23.0F, 2.0F)
+                PartPose.offset(-1.5F, 23.0F, 2.0F)
         );
 
         PartDefinition rightArm = partdefinition.addOrReplaceChild(
@@ -115,7 +116,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                 CubeListBuilder.create()
                         .texOffs(0, 8)
                         .addBox(-1.0F, 0.0F, 0.0F, 2.0F, 1.0F, 0.0F),
-                PartPose.offset(-2.0F, 23.0F, -2.0F)
+                PartPose.offset(-1.5F, 23.0F, -2.0F)
         );
 
         PartDefinition leftLeg = partdefinition.addOrReplaceChild(
@@ -125,7 +126,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                         .mirror()
                         .addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 2.0F)
                         .mirror(false),
-                PartPose.offset(1.0F, 23.0F, 2.0F)
+                PartPose.offset(1.5F, 23.0F, 2.0F)
         );
 
         PartDefinition leftArm = partdefinition.addOrReplaceChild(
@@ -135,7 +136,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                         .mirror()
                         .addBox(-1.0F, 0.0F, 0.0F, 2.0F, 1.0F, 0.0F)
                         .mirror(false),
-                PartPose.offset(1.0F, 23.0F, -2.0F)
+                PartPose.offset(1.5F, 23.0F, -2.0F)
         );
 
         return LayerDefinition.create(meshdefinition, 32, 32);
@@ -150,7 +151,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                 CubeListBuilder.create()
                         .texOffs(0, 16)
                         .addBox(-3.75F, -7.0F, -1.5F, 7.0F, 10.0F, 6.0F),
-                PartPose.offset(-0.25F, 21.0F, -0.5F)
+                PartPose.offset(0.25F, 21.0F, -0.5F)
         );
 
         PartDefinition leftCheek = body.addOrReplaceChild(
@@ -158,7 +159,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                 CubeListBuilder.create()
                         .texOffs(23, 6)
                         .addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F),
-                PartPose.offset(2.15F, -1.6F, -0.4F)
+                PartPose.offset(2.5F, -1.6F, -0.4F)
         );
 
         PartDefinition rightCheek = body.addOrReplaceChild(
@@ -168,7 +169,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                         .mirror()
                         .addBox(-2.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F)
                         .mirror(false),
-                PartPose.offset(-1.65F, -1.6F, -0.4F)
+                PartPose.offset(-1.15F, -1.6F, -0.4F)
         );
 
         PartDefinition tail = body.addOrReplaceChild(
@@ -202,7 +203,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                 CubeListBuilder.create()
                         .texOffs(0, 3)
                         .addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 2.0F),
-                PartPose.offsetAndRotation(-4.0F, 23.0F, -2.0F, 0.0F, 0.7854F, 0.0F)
+                PartPose.offsetAndRotation(-3.5F, 23.0F, -2.0F, 0.0F, 0.7854F, 0.0F)
         );
 
         PartDefinition rightArm = partdefinition.addOrReplaceChild(
@@ -210,7 +211,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                 CubeListBuilder.create()
                         .texOffs(0, 8)
                         .addBox(-1.0F, 0.0F, 0.0F, 2.0F, 1.0F, 0.0F),
-                PartPose.offsetAndRotation(-3.0F, 20.0F, -2.0F, -0.3927F, 0.0F, 0.0F)
+                PartPose.offsetAndRotation(-2.5F, 20.0F, -2.0F, -0.3927F, 0.0F, 0.0F)
         );
 
         PartDefinition leftLeg = partdefinition.addOrReplaceChild(
@@ -220,7 +221,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                         .mirror()
                         .addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 2.0F)
                         .mirror(false),
-                PartPose.offsetAndRotation(3.0F, 23.0F, -2.0F, 0.0F, -0.7854F, 0.0F)
+                PartPose.offsetAndRotation(3.5F, 23.0F, -2.0F, 0.0F, -0.7854F, 0.0F)
         );
 
         PartDefinition leftArm = partdefinition.addOrReplaceChild(
@@ -230,7 +231,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                         .mirror()
                         .addBox(-1.0F, 0.0F, 0.0F, 2.0F, 1.0F, 0.0F)
                         .mirror(false),
-                PartPose.offsetAndRotation(2.0F, 20.0F, -2.0F, -0.3927F, 0.0F, 0.0F)
+                PartPose.offsetAndRotation(2.5F, 20.0F, -2.0F, -0.3927F, 0.0F, 0.0F)
         );
 
         return LayerDefinition.create(meshdefinition, 32, 32);
@@ -242,15 +243,31 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
         float degree = 1.0f;
         float pi = ((float)Math.PI);
 
+        if (!entity.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty()) {
+            this.leftCheek.xScale = 2f;
+            this.leftCheek.zScale = 2f;
+            this.leftCheek.yScale = 2f;
+            this.rightCheek.xScale = 2f;
+            this.rightCheek.zScale = 2f;
+            this.rightCheek.yScale = 2f;
+        } else {
+            this.leftCheek.xScale = 0f;
+            this.leftCheek.zScale = 0f;
+            this.leftCheek.yScale = 0f;
+            this.rightCheek.xScale = 0f;
+            this.rightCheek.zScale = 0f;
+            this.rightCheek.yScale = 0f;
+        }
+
         this.leftEar.yRot = Mth.cos(animationProgress * speed * 0.2F) * degree * 0.6F * 0.25F - 0.6F;
         this.rightEar.yRot = Mth.cos(animationProgress * speed * 0.2F + pi) * degree * 0.6F * 0.25F + 0.6F;
 
-        this.body.y = Mth.cos(2 + limbAngle * 0.6f) * 0.8f * limbDistance + (entity.isStanding() ? 21.0F : (entity.isInSittingPose() ? 21F : 20F));
-        this.body.yRot = Mth.cos(1 + limbAngle * 1) * 0.2f * limbDistance;
-        this.rightLeg.xRot = Mth.cos(limbAngle * 0.6f) * 1.4f * limbDistance;
-        this.leftLeg.xRot = Mth.cos(limbAngle * 0.6f + pi) * 1.4f * limbDistance;
-        this.rightArm.xRot = Mth.cos(limbAngle * 0.6f + pi) * 1.4f * limbDistance + (entity.isStanding() ? -0.3927F : 0F);
-        this.leftArm.xRot = Mth.cos(limbAngle * 0.6f) * 1.4f * limbDistance + (entity.isStanding() ? -0.3927F : 0F);
+        this.body.y = Mth.cos(2 + limbAngle * 0.6f * speed) * 0.6f * limbDistance + (entity.isStanding() ? 21.0F : (entity.isInSittingPose() ? 21F : 20F));
+        this.body.yRot = Mth.cos(1 + limbAngle * 1 * speed) * 0.2f * limbDistance;
+        this.rightLeg.xRot = Mth.cos(limbAngle * 0.6f * speed) * 1.4f * limbDistance;
+        this.leftLeg.xRot = Mth.cos(limbAngle * 0.6f * speed + pi) * 1.4f * limbDistance;
+        this.rightArm.xRot = Mth.cos(limbAngle * 0.6f * speed + pi) * 1.4f * limbDistance + (entity.isStanding() ? -0.3927F : 0F);
+        this.leftArm.xRot = Mth.cos(limbAngle * 0.6f * speed) * 1.4f * limbDistance + (entity.isStanding() ? -0.3927F : 0F);
     }
 
     @Override

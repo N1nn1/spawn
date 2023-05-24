@@ -5,38 +5,50 @@ import com.ninni.spawn.entity.variant.HamsterVariant;
 import com.ninni.spawn.registry.SpawnEntityType;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
-public class Hamster extends TamableAnimal {
+public class Hamster extends TamableAnimal implements InventoryCarrier {
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.BYTE);
+    static final Predicate<ItemEntity> ALLOWED_ITEMS = itemEntity -> !itemEntity.hasPickUpDelay() && itemEntity.isAlive();
+    private final SimpleContainer inventory = new SimpleContainer(12);
 
     public Hamster(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new Hamster.HamsterMoveControl();
+        this.setCanPickUpLoot(true);
     }
 
     @Override
@@ -56,10 +68,11 @@ public class Hamster extends TamableAnimal {
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.1, 7f, 2.0f, false));
         this.goalSelector.addGoal(5, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
         this.goalSelector.addGoal(6, new FollowParentGoal(this, 1));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6));
-        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(10, new StandGoal());
+        this.goalSelector.addGoal(7, new HamsterSearchForItemsGoal());
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 6));
+        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(11, new StandGoal());
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -76,7 +89,6 @@ public class Hamster extends TamableAnimal {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
-        Item item = itemStack.getItem();
         if (this.level.isClientSide) {
             boolean bl = this.isOwnedBy(player) || this.isTame() || itemStack.is(SpawnTags.HAMSTER_FEEDS) && !this.isTame();
             return bl ? InteractionResult.CONSUME : InteractionResult.PASS;
@@ -111,12 +123,43 @@ public class Hamster extends TamableAnimal {
     }
 
     @Override
+    public void aiStep() {
+        if (this.isStanding()) {
+                this.jumping = false;
+                this.xxa = 0.0f;
+                this.zza = 0.0f;
+        }
+        super.aiStep();
+    }
+
+    public SimpleContainer getInventory() {
+        return this.inventory;
+    }
+
+    @Override
+    protected void pickUpItem(ItemEntity itemEntity) {
+        InventoryCarrier.pickUpItem(this, this, itemEntity);
+    }
+
+
+    @Override
+    protected void dropEquipment() {
+        super.dropEquipment();
+        this.inventory.removeAllItems().forEach(this::spawnAtLocation);
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        if (!itemStack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemStack)) {
+            this.spawnAtLocation(itemStack);
+            this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        }
+    }
+
+    @Override
     protected int calculateFallDamage(float f, float g) {
         return super.calculateFallDamage(f, g) - 10;
     }
     
     boolean canMove() {
-        return !this.isStanding() && !this.isInSittingPose();
+        return !this.isStanding() && !this.isInSittingPose() && !this.isImmobile();
     }
     
     @Override
@@ -173,6 +216,39 @@ public class Hamster extends TamableAnimal {
         }
     }
 
+    class HamsterSearchForItemsGoal extends Goal {
+        public HamsterSearchForItemsGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (!Hamster.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty()) return false;
+            if (Hamster.this.getTarget() != null || Hamster.this.getLastHurtByMob() != null) return false;
+            if (!Hamster.this.canMove()) return false;
+            if (Hamster.this.getRandom().nextInt(Hamster.HamsterSearchForItemsGoal.reducedTickDelay(10)) != 0) return false;
+            List<ItemEntity> list = Hamster.this.level.getEntitiesOfClass(ItemEntity.class, Hamster.this.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS);
+            return !list.isEmpty() && Hamster.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty();
+        }
+
+        @Override
+        public void tick() {
+            List<ItemEntity> list = Hamster.this.level.getEntitiesOfClass(ItemEntity.class, Hamster.this.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS);
+            ItemStack itemStack = Hamster.this.getItemBySlot(EquipmentSlot.MAINHAND);
+            if (itemStack.isEmpty() && !list.isEmpty()) {
+                Hamster.this.getNavigation().moveTo(list.get(0), 1f);
+            }
+        }
+
+        @Override
+        public void start() {
+            List<ItemEntity> list = Hamster.this.level.getEntitiesOfClass(ItemEntity.class, Hamster.this.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS);
+            if (!list.isEmpty()) {
+                Hamster.this.getNavigation().moveTo(list.get(0), 1.2f);
+            }
+        }
+    }
+
     class StandGoal extends Goal {
         private double relX;
         private double relZ;
@@ -185,7 +261,11 @@ public class Hamster extends TamableAnimal {
 
         @Override
         public boolean canUse() {
-            return Hamster.this.getLastHurtByMob() == null && Hamster.this.getRandom().nextFloat() < 0.02f && !Hamster.this.isSleeping() && Hamster.this.getTarget() == null && Hamster.this.getNavigation().isDone() && !Hamster.this.isInSittingPose();
+            return Hamster.this.getLastHurtByMob() == null
+                    && Hamster.this.getRandom().nextFloat() < 0.02f
+                    && Hamster.this.getNavigation().isDone()
+                    && !Hamster.this.isInSittingPose()
+                    && Hamster.this.isOnGround();
         }
 
         @Override
@@ -196,7 +276,7 @@ public class Hamster extends TamableAnimal {
         @Override
         public void start() {
             this.resetLook();
-            this.looksRemaining = 60 + Hamster.this.getRandom().nextInt(40);
+            this.looksRemaining = 2 + Hamster.this.getRandom().nextInt(3);
             Hamster.this.setStanding(true);
             Hamster.this.getNavigation().stop();
         }
