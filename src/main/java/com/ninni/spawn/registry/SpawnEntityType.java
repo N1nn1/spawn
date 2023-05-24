@@ -37,7 +37,6 @@ public class SpawnEntityType {
                     .spawnGroup(MobCategory.WATER_CREATURE)
                     .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Tuna::checkSurfaceWaterAnimalSpawnRules)
                     .dimensions(EntityDimensions.scalable(1.2F, 0.8F))
-                    .trackRangeChunks(10)
     );
 
     public static final EntityType<TunaEgg> TUNA_EGG = register(
@@ -47,7 +46,7 @@ public class SpawnEntityType {
                     .defaultAttributes(TunaEgg::createAttributes)
                     .spawnGroup(MobCategory.MISC)
                     .dimensions(EntityDimensions.fixed(0.15f, 0.15f))
-                    .trackRangeChunks(6)
+                    .trackRangeChunks(10)
     );
 
     public static final EntityType<Seahorse> SEAHORSE = register(

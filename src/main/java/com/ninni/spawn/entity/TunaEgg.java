@@ -147,7 +147,6 @@ public class TunaEgg extends Mob implements Bucketable {
     public void broken() {
         this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SpawnSoundEvents.ENTITY_TUNA_EGG_BROKEN, this.getSoundSource(), 1.0f, 1.0f);
         if (this.level instanceof ServerLevel) {
-            //((ServerLevel)this.level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, Items.REDSTONE.getDefaultInstance()), this.getX(), this.getY(), this.getZ(), 10, this.getBbWidth(), this.getBbHeight(), this.getBbWidth(), 0.05);
             ((ServerLevel)this.level).sendParticles(SpawnParticles.TUNA_EGG, this.getX(), this.getY() + 0.25F, this.getZ(), 10, this.getBbWidth(), this.getBbHeight(), this.getBbWidth(), 0.5);
         }
         this.remove(RemovalReason.DISCARDED);
