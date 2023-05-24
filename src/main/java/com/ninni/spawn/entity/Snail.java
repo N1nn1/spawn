@@ -57,6 +57,7 @@ public class Snail extends Animal {
 
     public Snail(EntityType<? extends Snail> entityType, Level world) {
         super(entityType, world);
+        this.setMaxUpStep(1);
     }
 
     @Override

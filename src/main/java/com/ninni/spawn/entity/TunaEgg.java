@@ -2,6 +2,9 @@ package com.ninni.spawn.entity;
 
 import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnItems;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -12,14 +15,21 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
@@ -27,13 +37,14 @@ public class TunaEgg extends Mob implements Bucketable {
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(TunaEgg.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> HATCH_TICKS = SynchedEntityData.defineId(TunaEgg.class, EntityDataSerializers.INT);
     public static final String BUCKET_VARIANT_TAG = "BucketVariantTag";
+    public long lastHit;
 
     public TunaEgg(EntityType<? extends Mob> entityType, Level level) {
         super(entityType, level);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 2.0);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0);
     }
 
     @Nullable
@@ -47,6 +58,24 @@ public class TunaEgg extends Mob implements Bucketable {
     }
 
     @Override
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
+    @Override
+    public boolean hurt(DamageSource damageSource, float f) {
+        long l = this.level.getGameTime();
+        boolean bl = damageSource.getDirectEntity() instanceof AbstractArrow;
+        if (l - this.lastHit <= 5L || bl) {
+            this.broken();
+        } else {
+            this.level.broadcastEntityEvent(this, (byte)32);
+            this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
+            this.lastHit = l;
+        }
+        return true;
+    }
+
+    @Override
     public void saveToBucketTag(ItemStack itemStack) {
         Bucketable.saveDefaultDataToBucketTag(this, itemStack);
         CompoundTag compoundTag = itemStack.getOrCreateTag();
@@ -57,7 +86,7 @@ public class TunaEgg extends Mob implements Bucketable {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(FROM_BUCKET, false);
-        this.entityData.define(HATCH_TICKS, 0);
+        this.entityData.define(HATCH_TICKS, 5 * 20 * 60);
     }
 
     @Override
@@ -90,11 +119,37 @@ public class TunaEgg extends Mob implements Bucketable {
         this.setHatchTicks(compoundTag.getInt("HatchTicks"));
     }
 
+    protected void handleAirSupply(int i) {
+        if (this.isAlive() && !this.isInWaterOrBubble()) {
+            this.setAirSupply(i - 1);
+            if (this.getAirSupply() == -20) {
+                this.setAirSupply(0);
+                this.broken();
+            }
+        } else this.setAirSupply(300);
+    }
+
+    @Override
+    public void baseTick() {
+        int i = this.getAirSupply();
+        super.baseTick();
+        this.handleAirSupply(i);
+    }
+
+
     @Override
     public void aiStep() {
         super.aiStep();
         if (this.getHatchTicks() > 0) this.setHatchTicks(this.getHatchTicks() - 1);
         if (this.getHatchTicks() == 0 && this.getLevel() instanceof ServerLevel serverLevel) this.hatch(serverLevel);
+    }
+
+    public void broken() {
+        this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARMOR_STAND_BREAK, this.getSoundSource(), 1.0f, 1.0f);
+        if (this.level instanceof ServerLevel) {
+            ((ServerLevel)this.level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, Items.REDSTONE.getDefaultInstance()), this.getX(), this.getY(), this.getZ(), 10, this.getBbWidth(), this.getBbHeight(), this.getBbWidth(), 0.05);
+        }
+        this.remove(RemovalReason.DISCARDED);
     }
 
     @Override
@@ -109,7 +164,7 @@ public class TunaEgg extends Mob implements Bucketable {
         tuna.setPersistenceRequired();
         tuna.moveTo(this.getX(), this.getY(), this.getZ(), 0.0f, 0.0f);
         level.addFreshEntity(tuna);
-        this.remove(RemovalReason.DISCARDED);
+        this.broken();
     }
 
     @Override

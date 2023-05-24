@@ -15,6 +15,13 @@
   "subtitles.entity.spawn.angler_fish.effect.give": "Pesce abissale grazia",
   "subtitles.entity.spawn.angler_fish.effect.deny": "Pesce abissale stanco",
 
+  "entity.spawn.tuna": "Tonno",
+  "item.spawn.tuna_spawn_egg": "Uovo generatore di tonno",
+  "item.spawn.tuna_chunk": "Trancio di tonno",
+  "item.spawn.cooked_tuna_chunk": "Trancio di tonno cotto",
+  "item.spawn.tuna_sandwich": "Panino con tonno",
+  "item.spawn.tuna_egg_bucket": "Secchio con uova di tonno",
+
   "entity.spawn.seahorse": "Cavalluccio marino",
   "item.spawn.seahorse_spawn_egg": "Uovo generatore di cavalluccio marino",
   "item.spawn.seahorse_bucket": "Secchio con cavalluccio marino",

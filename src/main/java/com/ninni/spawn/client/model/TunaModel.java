@@ -8,6 +8,7 @@ import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 
 import static net.minecraft.client.model.geom.PartNames.*;
 
@@ -57,7 +58,10 @@ public class TunaModel extends AgeableListModel<Tuna> {
 
         PartDefinition body = partdefinition.addOrReplaceChild(
                 BODY,
-                CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, -6.0F, -12.0F, 7.0F, 10.0F, 22.0F), PartPose.offset(0.0F, 20.0F, -1.0F)
+                CubeListBuilder.create()
+                        .texOffs(0, 0)
+                        .addBox(-3.5F, -6.0F, -12.0F, 7.0F, 10.0F, 22.0F),
+                PartPose.offset(0.0F, 20.0F, -1.0F)
         );
 
         PartDefinition tail = body.addOrReplaceChild(
@@ -149,9 +153,24 @@ public class TunaModel extends AgeableListModel<Tuna> {
     }
 
     @Override
-    public void setupAnim(Tuna entity, float f, float g, float h, float i, float j) {
-        this.body.xRot = j * ((float)Math.PI / 180);
-        this.body.yRot = i * ((float)Math.PI / 180);
+    public void setupAnim(Tuna entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        float speed = 1.2f;
+        float degree = 1.5f;
+        float pi = ((float)Math.PI);
+        this.body.xRot = headPitch * (pi/180);
+        this.body.yRot = headYaw * (pi/180);
+
+        this.body.y = Mth.cos(animationProgress * speed * 0.2F) * degree * 1.5F * 0.25F + 20.0F;
+        this.body.yRot += Mth.cos(animationProgress * speed * 0.4F + 2f) * degree * 0.4F * 0.25F;
+        this.body.xRot += Mth.cos(animationProgress * speed * 0.2F + 2f) * degree * 0.1F * 0.25F;
+        this.tail.yRot = Mth.cos(animationProgress * speed * 0.4F + 1f) * degree * 0.8F * 0.25F;
+        this.tailFin.yRot = Mth.cos(animationProgress * speed * 0.4F) * degree * 1.6F * 0.25F;
+        this.mouth.xRot = Mth.cos(animationProgress * speed * 0.1F) * degree * 0.1F * 0.25F + 0.05F;
+
+        this.rightFin.zRot = Mth.cos(animationProgress * speed * 0.4F + 1f) * degree * 0.8F * 0.25F - 0.4F;
+        this.rightFin.yRot = 0.4F;
+        this.leftFin.zRot = Mth.cos(animationProgress * speed * 0.4F + 1f + pi) * degree * 0.8F * 0.25F + 0.4F;
+        this.leftFin.yRot = -0.4F;
     }
     
     @Override

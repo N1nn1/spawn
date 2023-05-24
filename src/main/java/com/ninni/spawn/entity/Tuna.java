@@ -6,11 +6,13 @@ import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -46,16 +48,16 @@ public class Tuna extends Animal {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PanicGoal(this, 1.25));
+        this.goalSelector.addGoal(0, new PanicGoal(this, 1.8));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0));
-        this.goalSelector.addGoal(4, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.TUNA_TEMPTS), false));
+        this.goalSelector.addGoal(4, new TemptGoal(this, 1.4, Ingredient.of(SpawnTags.TUNA_TEMPTS), false));
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.1));
         this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 15.0)
-                .add(Attributes.MOVEMENT_SPEED, 1.6f)
+                .add(Attributes.MOVEMENT_SPEED, 1f)
                 .add(Attributes.ATTACK_DAMAGE, 3.0);
     }
 
@@ -67,11 +69,15 @@ public class Tuna extends Animal {
     @Override
     public void travel(Vec3 vec3) {
         if (this.isEffectiveAi() && this.isInWater()) {
-            this.moveRelative(0.01f, vec3);
+            this.moveRelative(this.getSpeed(), vec3);
             this.move(MoverType.SELF, this.getDeltaMovement());
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
-            if (this.getTarget() == null) this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.005, 0.0));
-        } else super.travel(vec3);
+            if (this.getTarget() == null) {
+                this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.005, 0.0));
+            }
+        } else {
+            super.travel(vec3);
+        }
     }
 
     @Nullable
@@ -81,9 +87,24 @@ public class Tuna extends Animal {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (this.level.isClientSide && this.isInWater() && this.getDeltaMovement().lengthSqr() > 0.03) {
+            Vec3 vec3 = this.getViewVector(0.0f);
+            float f = Mth.cos(this.getYRot() * ((float)Math.PI / 180)) * 0.3f;
+            float g = Mth.sin(this.getYRot() * ((float)Math.PI / 180)) * 0.3f;
+            float h = 1.2f - this.random.nextFloat() * 0.7f;
+            for (int i = 0; i < 2; ++i) {
+                this.level.addParticle(ParticleTypes.DOLPHIN, this.getX() - vec3.x * (double)h + (double)f, this.getY() + 0.4F, this.getZ() - vec3.z * (double)h + (double)g, 0.0, 0.0, 0.0);
+                this.level.addParticle(ParticleTypes.DOLPHIN, this.getX() - vec3.x * (double)h - (double)f, this.getY() + 0.4F, this.getZ() - vec3.z * (double)h - (double)g, 0.0, 0.0, 0.0);
+            }
+        }
+    }
+
+    @Override
     public void aiStep() {
         if (!this.isInWater() && this.onGround && this.verticalCollision) {
-            this.setDeltaMovement(this.getDeltaMovement().add((this.random.nextFloat() * 2.0f - 1.0f) * 0.05f, 0.4f, (this.random.nextFloat() * 2.0f - 1.0f) * 0.05f));
+            this.setDeltaMovement(this.getDeltaMovement().add((this.random.nextFloat() * 2.0f - 1.0f) * 0.05f, 0.6f, (this.random.nextFloat() * 2.0f - 1.0f) * 0.05f));
             this.onGround = false;
             this.hasImpulse = true;
             this.playSound(this.getFlopSound(), this.getSoundVolume(), this.getVoicePitch());
@@ -98,7 +119,17 @@ public class Tuna extends Animal {
 
     @Override
     protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-        return entityDimensions.height * 0.65f;
+        return entityDimensions.height * 0.5f;
+    }
+
+    @Override
+    public int getMaxHeadXRot() {
+        return 1;
+    }
+
+    @Override
+    public int getMaxHeadYRot() {
+        return 1;
     }
 
     @Override

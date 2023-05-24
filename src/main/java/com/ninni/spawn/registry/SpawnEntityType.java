@@ -46,7 +46,7 @@ public class SpawnEntityType {
                     .entityFactory(TunaEgg::new)
                     .defaultAttributes(TunaEgg::createAttributes)
                     .spawnGroup(MobCategory.MISC)
-                    .dimensions(EntityDimensions.fixed(0.125f, 0.125f))
+                    .dimensions(EntityDimensions.fixed(0.15f, 0.15f))
                     .trackRangeChunks(6)
     );
 

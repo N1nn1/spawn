@@ -22,7 +22,8 @@ public class SpawnCreativeModeTab {
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
-            entries.addAfter(Items.SALMON_BUCKET, ANGLER_FISH_BUCKET);
+            entries.addAfter(Items.SALMON_BUCKET, TUNA_EGG_BUCKET);
+            entries.addAfter(Items.COD_BUCKET, ANGLER_FISH_BUCKET);
             entries.addAfter(Items.TROPICAL_FISH_BUCKET, SEAHORSE_BUCKET);
         });
 
@@ -42,7 +43,12 @@ public class SpawnCreativeModeTab {
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
             entries.addAfter(Items.PUFFERFISH, ESCARGOT);
-            entries.addAfter(Items.SALMON, ANGLER_FISH);
+            entries.addAfter(Items.COOKED_SALMON,
+                    TUNA_CHUNK,
+                    COOKED_TUNA_CHUNK,
+                    ANGLER_FISH
+            );
+            entries.addAfter(Items.BREAD, TUNA_SANDWICH);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(entries -> {
@@ -54,6 +60,7 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.ALLAY_SPAWN_EGG, ANGLER_FISH_SPAWN_EGG);
             entries.addAfter(Items.SALMON_SPAWN_EGG, SEAHORSE_SPAWN_EGG);
             entries.addAfter(Items.SLIME_SPAWN_EGG, SNAIL_SPAWN_EGG);
+            entries.addAfter(Items.TROPICAL_FISH_SPAWN_EGG, TUNA_SPAWN_EGG);
         });
 
         FabricItemGroup.builder(new ResourceLocation(MOD_ID,"item_group")).icon(SPAWN::getDefaultInstance).displayItems((featureFlagSet, output) -> {

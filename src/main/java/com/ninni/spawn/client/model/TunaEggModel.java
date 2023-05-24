@@ -9,6 +9,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.RenderType;
 
 @SuppressWarnings("FieldCanBeLocal, unused")
 @Environment(value= EnvType.CLIENT)
@@ -19,6 +20,7 @@ public class TunaEggModel extends EntityModel<TunaEgg> {
     private final ModelPart main;
 
     public TunaEggModel(ModelPart root) {
+        super(RenderType::entityTranslucent);
         this.root = root;
         this.main = this.root.getChild(MAIN);
     }
