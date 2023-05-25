@@ -60,11 +60,10 @@ import java.util.function.Predicate;
 
 public class Hamster extends TamableAnimal implements InventoryCarrier, ContainerListener, HasCustomInventoryScreen {
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> PUFF_TICKS = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.BYTE);
     static final Predicate<ItemEntity> ALLOWED_ITEMS = itemEntity -> !itemEntity.hasPickUpDelay() && itemEntity.isAlive();
     public final SimpleContainer inventory = new SimpleContainer(12);
-    private float cheekPuffingAnimationTicks;
-    private float cheekPuffingAnimationTicks0;
 
     public Hamster(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -147,21 +146,24 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         return InteractionResult.SUCCESS;
     }
 
-    @Override
-    public void tick() {
-        if (this.level.isClientSide) {
-            this.cheekPuffingAnimationTicks0 = this.cheekPuffingAnimationTicks;
-            this.cheekPuffingAnimationTicks = hasFilledSlots() ? Mth.clamp(this.cheekPuffingAnimationTicks + 1.0f, 0.0f, 5.0f) : Mth.clamp(this.cheekPuffingAnimationTicks - 1.0f, 0.0f, 5.0f);
-        }
-        super.tick();
+    public float getPuffTicks() {
+        return this.entityData.get(PUFF_TICKS);
     }
 
-    public boolean hasFilledSlots() {
-        for (int i = 2; i < this.inventory.getContainerSize(); ++i) {
-            ItemStack itemStack = this.inventory.getItem(i);
-            if (!itemStack.isEmpty()) return true;
+    @Override
+    public void tick() {
+        if (!this.level.isClientSide) {
+            float puffTicks = this.entityData.get(PUFF_TICKS);
+            float change = 0.2F;
+            if (!this.getInventory().isEmpty()) {
+                if (puffTicks < 1) {
+                    this.entityData.set(PUFF_TICKS, puffTicks + change);
+                }
+            } else if (puffTicks > 0) {
+                this.entityData.set(PUFF_TICKS, puffTicks - change);
+            }
         }
-        return false;
+        super.tick();
     }
 
     @Override
@@ -203,15 +205,12 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         return !this.isStanding() && !this.isInSittingPose() && !this.isImmobile();
     }
 
-    public float getCheekPuffAnimationProgress(float f) {
-        return Mth.lerp(f, this.cheekPuffingAnimationTicks0, this.cheekPuffingAnimationTicks) / 5.0f;
-    }
-
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(VARIANT, HamsterVariant.RUSSIAN.id());
         this.entityData.define(DATA_FLAGS_ID, (byte)0);
+        this.entityData.define(PUFF_TICKS, 0.0F);
     }
 
     @Override

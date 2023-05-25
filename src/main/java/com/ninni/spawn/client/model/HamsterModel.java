@@ -243,8 +243,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
         float speed = 1.0f;
         float degree = 1.0f;
         float pi = ((float)Math.PI);
-        float q = entity.getCheekPuffAnimationProgress(animationProgress - (float)entity.tickCount);
-
+        float q = entity.getPuffTicks();
 
         this.leftCheek.xScale = 2f * q;
         this.leftCheek.zScale = 2f * q;
