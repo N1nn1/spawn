@@ -5,30 +5,47 @@ import com.ninni.spawn.entity.variant.HamsterVariant;
 import com.ninni.spawn.registry.SpawnEntityType;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerListener;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HasCustomInventoryScreen;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -39,7 +56,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class Hamster extends TamableAnimal implements InventoryCarrier {
+public class Hamster extends TamableAnimal implements InventoryCarrier, ContainerListener, HasCustomInventoryScreen {
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.BYTE);
     static final Predicate<ItemEntity> ALLOWED_ITEMS = itemEntity -> !itemEntity.hasPickUpDelay() && itemEntity.isAlive();
@@ -89,6 +106,10 @@ public class Hamster extends TamableAnimal implements InventoryCarrier {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
+        if (!this.level.isClientSide && player.isSecondaryUseActive() && player instanceof HamsterOpenContainer hamsterOpenContainer) {
+            this.openCustomInventoryScreen(player);
+            return InteractionResult.SUCCESS;
+        }
         if (this.level.isClientSide) {
             boolean bl = this.isOwnedBy(player) || this.isTame() || itemStack.is(SpawnTags.HAMSTER_FEEDS) && !this.isTame();
             return bl ? InteractionResult.CONSUME : InteractionResult.PASS;
@@ -140,7 +161,6 @@ public class Hamster extends TamableAnimal implements InventoryCarrier {
     protected void pickUpItem(ItemEntity itemEntity) {
         InventoryCarrier.pickUpItem(this, this, itemEntity);
     }
-
 
     @Override
     protected void dropEquipment() {
@@ -204,6 +224,18 @@ public class Hamster extends TamableAnimal implements InventoryCarrier {
     }
     public void setVariant(HamsterVariant variant) {
         this.entityData.set(VARIANT, variant.id());
+    }
+
+    @Override
+    public void containerChanged(Container container) {
+
+    }
+
+    @Override
+    public void openCustomInventoryScreen(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            ((HamsterOpenContainer)serverPlayer).openHamsterInventory(this, this.getInventory());
+        }
     }
 
     class HamsterMoveControl extends MoveControl {
@@ -308,6 +340,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier {
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
+        this.writeInventoryToTag(compoundTag);
         compoundTag.putInt("Variant", this.getVariant().id());
         compoundTag.putBoolean("Standing", this.isStanding());
     }
@@ -315,6 +348,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier {
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
+        this.readInventoryFromTag(compoundTag);
         this.setVariant(HamsterVariant.byId(compoundTag.getInt("Variant")));
         this.setStanding(compoundTag.getBoolean("Standing"));
     }

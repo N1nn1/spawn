@@ -56,5 +56,7 @@
   "subtitles.entity.snail.hurt_hidden": "Snail deflects",
   "subtitles.entity.snail.shell_grow": "Snail Shell grows",
   "subtitles.entity.snail.lay_eggs": "Snail lays Eggs",
-  "subtitles.entity.snail.slide": "Snail slides"
+  "subtitles.entity.snail.slide": "Snail slides",
+
+  "entity.spawn.hamster": "Hamster"
 }
