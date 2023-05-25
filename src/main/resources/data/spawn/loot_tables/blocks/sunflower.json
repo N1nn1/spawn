@@ -13,7 +13,7 @@
           "type": "minecraft:item",
           "conditions": [
             {
-              "block": "minecraft:sunflower",
+              "block": "spawn:sunflower",
               "condition": "minecraft:block_state_property",
               "properties": {
                 "half": "lower"

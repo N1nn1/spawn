@@ -13,7 +13,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
@@ -21,30 +20,15 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HasCustomInventoryScreen;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.world.entity.ai.goal.FollowParentGoal;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -81,23 +65,30 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
 
     @Override
     protected void registerGoals() {
+        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Hamster.class, false, this::getTerritorialTarget));
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new PanicGoal(this, 1.2));
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.1, 7f, 2.0f, false));
-        this.goalSelector.addGoal(5, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
-        this.goalSelector.addGoal(6, new FollowParentGoal(this, 1));
-        this.goalSelector.addGoal(7, new HamsterSearchForItemsGoal());
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 6));
-        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(11, new StandGoal());
+        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, true));
+        this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.1, 7f, 2.0f, false));
+        this.goalSelector.addGoal(6, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
+        this.goalSelector.addGoal(7, new FollowParentGoal(this, 1));
+        this.goalSelector.addGoal(8, new HamsterSearchForItemsGoal());
+        this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 6));
+        this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(12, new StandGoal());
+    }
+
+    private boolean getTerritorialTarget(LivingEntity livingEntity) {
+        return livingEntity instanceof Hamster hamster && hamster.isTame() && this.isTame() && hamster.getOwnerUUID() == this.getOwnerUUID();
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
+                .add(Attributes.ATTACK_DAMAGE, 1.0)
                 .add(Attributes.MAX_HEALTH, 6.0);
     }
 

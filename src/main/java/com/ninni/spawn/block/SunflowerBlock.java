@@ -14,24 +14,27 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
-public class SunflowerBlock extends DoublePlantBlock {
+public class SunflowerBlock extends DoublePlantBlock implements BonemealableBlock {
     public static final EnumProperty<SunflowerRotation> ROTATION = SpawnProperties.SUNFLOWER_ROTATION;
     public static final BooleanProperty SEEDS = SpawnProperties.SEEDS;
 
     public SunflowerBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.defaultBlockState().setValue(SEEDS, true).setValue(ROTATION, SunflowerRotation.DAY).setValue(HALF, DoubleBlockHalf.LOWER));
+        this.registerDefaultState(this.defaultBlockState().setValue(SEEDS, false).setValue(ROTATION, SunflowerRotation.DAY).setValue(HALF, DoubleBlockHalf.LOWER));
     }
 
     @Override
@@ -55,7 +58,7 @@ public class SunflowerBlock extends DoublePlantBlock {
 
     @Override
     public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
-        SunflowerRotation sunflowerRotation = this.getRotationType(serverLevel);
+        SunflowerRotation sunflowerRotation = getRotationType(serverLevel);
         SunflowerRotation currentRotation = blockState.getValue(ROTATION);
         if (currentRotation != sunflowerRotation) {
             boolean flag = blockState.getValue(SEEDS) || currentRotation == SunflowerRotation.NIGHT && sunflowerRotation == SunflowerRotation.MORNING;
@@ -64,19 +67,40 @@ public class SunflowerBlock extends DoublePlantBlock {
         serverLevel.scheduleTick(blockPos, this, 20);
     }
 
-    public SunflowerRotation getRotationType(ServerLevel serverLevel) {
-        if (serverLevel.isNight()) {
+    public static SunflowerRotation getRotationType(ServerLevel serverLevel) {
+        if (serverLevel.dimension() != Level.OVERWORLD) {
             return SunflowerRotation.NIGHT;
-        } else if (serverLevel.dayTime() < 2000) {
-            return SunflowerRotation.MORNING;
-        } else if (serverLevel.dayTime() >= 7000) {
-            return SunflowerRotation.EVENING;
         } else {
-            return SunflowerRotation.DAY;
+            if (serverLevel.isNight()) {
+                return SunflowerRotation.NIGHT;
+            } else if (serverLevel.dayTime() < 2000) {
+                return SunflowerRotation.MORNING;
+            } else if (serverLevel.dayTime() >= 7000) {
+                return SunflowerRotation.EVENING;
+            } else {
+                return SunflowerRotation.DAY;
+            }
         }
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(ROTATION, HALF, SEEDS);
+    }
+
+    @Override
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
+        return blockState.getValue(HALF) == DoubleBlockHalf.UPPER && !blockState.getValue(SEEDS);
+    }
+
+    @Override
+    public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
+        return blockState.getValue(HALF) == DoubleBlockHalf.UPPER && !blockState.getValue(SEEDS);
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel serverLevel, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
+        BlockState blockState2 = blockState.setValue(SEEDS, true);
+        serverLevel.setBlock(blockPos, blockState2, 2);
+        serverLevel.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(blockState2));
     }
 }

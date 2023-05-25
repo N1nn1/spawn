@@ -47,7 +47,7 @@ public class SpawnItems {
 
     public static final Item HAMSTER_SPAWN_EGG = register("hamster_spawn_egg", new SpawnEggItem(SpawnEntityType.HAMSTER, 0x92816C, 0xFFFFFF, new Item.Properties().stacksTo(64)));
     public static final Item SUNFLOWER = register("sunflower", new BlockItem(SpawnBlocks.SUNFLOWER, new FabricItemSettings()));
-    public static final Item SUNFLOWER_SEEDS = register("sunflower_seeds", new Item(new FabricItemSettings()));
+    public static final Item SUNFLOWER_SEEDS = register("sunflower_seeds", new ItemNameBlockItem(SpawnBlocks.SUNFLOWER_PLANT, new FabricItemSettings()));
     public static final Item ROASTED_SUNFLOWER_SEEDS = register("roasted_sunflower_seeds", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.2f).fast().build())));
 
     private static Item register(String id, Item item) {

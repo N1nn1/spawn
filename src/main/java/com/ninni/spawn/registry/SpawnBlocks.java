@@ -7,6 +7,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
@@ -22,6 +23,7 @@ public class SpawnBlocks {
     public static final Block GHOSTLY_MUCUS_BLOCK = register("ghostly_mucus_block", new GhostlyMucusBlockBlock(FabricBlockSettings.copyOf(MUCUS)));
 
     public static final Block SUNFLOWER = register("sunflower", new SunflowerBlock(FabricBlockSettings.copyOf(Blocks.SUNFLOWER)));
+    public static final Block SUNFLOWER_PLANT = register("sunflower_plant", new SunflowerPlantBlock(FabricBlockSettings.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
 
     private static Block register(String id, Block block) { 
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Spawn.MOD_ID, id), block); 
