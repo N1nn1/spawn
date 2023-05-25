@@ -12,6 +12,9 @@
     "half=upper,sunflower_rotation=evening,seeds=false": {
       "model": "spawn:block/sunflower_top_evening"
     },
+    "half=upper,sunflower_rotation=night,seeds=false": {
+      "model": "spawn:block/sunflower_top_night"
+    },
     "half=upper,sunflower_rotation=morning,seeds=true": {
       "model": "spawn:block/sunflower_top_morning_seeds"
     },
@@ -21,8 +24,8 @@
     "half=upper,sunflower_rotation=evening,seeds=true": {
       "model": "spawn:block/sunflower_top_evening_seeds"
     },
-    "half=upper,sunflower_rotation=night": {
-      "model": "spawn:block/sunflower_top_night_seeds"
+    "half=upper,sunflower_rotation=night,seeds=true": {
+      "model": "spawn:block/sunflower_top_night"
     }
   }
 }

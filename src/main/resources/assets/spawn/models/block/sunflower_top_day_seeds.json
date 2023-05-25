@@ -4,7 +4,7 @@
 		"cross": "spawn:block/sunflower_top",
 		"back": "spawn:block/sunflower_back",
 		"particle": "spawn:block/sunflower_front_seeds",
-		"front": "spawn:block/sunflower_front"
+		"front": "spawn:block/sunflower_front_seeds"
 	},
 	"elements": [
 		{

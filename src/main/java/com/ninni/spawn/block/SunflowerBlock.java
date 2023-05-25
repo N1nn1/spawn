@@ -5,6 +5,8 @@ import com.ninni.spawn.block.state.properties.SunflowerRotation;
 import com.ninni.spawn.registry.SpawnItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -37,7 +39,9 @@ public class SunflowerBlock extends DoublePlantBlock {
         if (blockState.getValue(ROTATION) != SunflowerRotation.NIGHT && blockState.getValue(SEEDS) && blockState.getValue(HALF) == DoubleBlockHalf.UPPER) {
             level.setBlock(blockPos, blockState.setValue(SEEDS, false), 3);
             int j = 1 + level.random.nextInt(2);
+            level.playSound(null, blockPos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4f);
             SunflowerBlock.popResource(level, blockPos, new ItemStack(SpawnItems.SUNFLOWER_SEEDS, j));
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
     }

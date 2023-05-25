@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "spawn:block/sunflower_front"
+    "layer0": "spawn:block/sunflower_front_seeds"
   }
 }
