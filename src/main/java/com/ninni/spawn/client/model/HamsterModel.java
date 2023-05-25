@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 
 import static net.minecraft.client.model.geom.PartNames.*;
 
@@ -179,7 +180,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                         .addBox(-1.5F, -1.0F, 0.0F, 3.0F, 2.0F, 1.0F),
                 PartPose.offset(-0.25F, 1.0F, 4.5F)
         );
-        
+
         PartDefinition rightEar = body.addOrReplaceChild(
                 RIGHT_EAR,
                 CubeListBuilder.create()
@@ -187,7 +188,7 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                         .addBox(-2.0F, -1.0F, 0.0F, 2.0F, 2.0F, 0.0F),
                 PartPose.offsetAndRotation(-3.75F, -6.5F, -0.5F, 0.0F, 0.7854F, 0.0F)
         );
-        
+
         PartDefinition leftEar = body.addOrReplaceChild(
                 LEFT_EAR,
                 CubeListBuilder.create()
@@ -242,22 +243,16 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
         float speed = 1.0f;
         float degree = 1.0f;
         float pi = ((float)Math.PI);
+        float q = entity.getCheekPuffAnimationProgress(animationProgress - (float)entity.tickCount);
 
-        if (!entity.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty()) {
-            this.leftCheek.xScale = 2f;
-            this.leftCheek.zScale = 2f;
-            this.leftCheek.yScale = 2f;
-            this.rightCheek.xScale = 2f;
-            this.rightCheek.zScale = 2f;
-            this.rightCheek.yScale = 2f;
-        } else {
-            this.leftCheek.xScale = 0f;
-            this.leftCheek.zScale = 0f;
-            this.leftCheek.yScale = 0f;
-            this.rightCheek.xScale = 0f;
-            this.rightCheek.zScale = 0f;
-            this.rightCheek.yScale = 0f;
-        }
+
+        this.leftCheek.xScale = 2f * q;
+        this.leftCheek.zScale = 2f * q;
+        this.leftCheek.yScale = 2f * q;
+        this.rightCheek.xScale = 2f * q;
+        this.rightCheek.zScale = 2f * q;
+        this.rightCheek.yScale = 2f * q;
+
 
         this.leftEar.yRot = Mth.cos(animationProgress * speed * 0.2F) * degree * 0.6F * 0.25F - 0.6F;
         this.rightEar.yRot = Mth.cos(animationProgress * speed * 0.2F + pi) * degree * 0.6F * 0.25F + 0.6F;

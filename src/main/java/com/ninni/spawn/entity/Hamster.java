@@ -6,12 +6,14 @@ import com.ninni.spawn.registry.SpawnEntityType;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
@@ -60,7 +62,9 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Hamster.class, EntityDataSerializers.BYTE);
     static final Predicate<ItemEntity> ALLOWED_ITEMS = itemEntity -> !itemEntity.hasPickUpDelay() && itemEntity.isAlive();
-    private final SimpleContainer inventory = new SimpleContainer(12);
+    public final SimpleContainer inventory = new SimpleContainer(12);
+    private float cheekPuffingAnimationTicks;
+    private float cheekPuffingAnimationTicks0;
 
     public Hamster(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -106,7 +110,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
-        if (!this.level.isClientSide && player.isSecondaryUseActive() && player instanceof HamsterOpenContainer hamsterOpenContainer) {
+        if (!this.level.isClientSide && player.isSecondaryUseActive() && player instanceof HamsterOpenContainer && this.isOwnedBy(player)) {
             this.openCustomInventoryScreen(player);
             return InteractionResult.SUCCESS;
         }
@@ -144,8 +148,25 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     }
 
     @Override
+    public void tick() {
+        if (this.level.isClientSide) {
+            this.cheekPuffingAnimationTicks0 = this.cheekPuffingAnimationTicks;
+            this.cheekPuffingAnimationTicks = hasFilledSlots() ? Mth.clamp(this.cheekPuffingAnimationTicks + 1.0f, 0.0f, 5.0f) : Mth.clamp(this.cheekPuffingAnimationTicks - 1.0f, 0.0f, 5.0f);
+        }
+        super.tick();
+    }
+
+    public boolean hasFilledSlots() {
+        for (int i = 2; i < this.inventory.getContainerSize(); ++i) {
+            ItemStack itemStack = this.inventory.getItem(i);
+            if (!itemStack.isEmpty()) return true;
+        }
+        return false;
+    }
+
+    @Override
     public void aiStep() {
-        if (this.isStanding()) {
+        if (this.isStanding() || this.isInSittingPose()) {
                 this.jumping = false;
                 this.xxa = 0.0f;
                 this.zza = 0.0f;
@@ -181,7 +202,11 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     boolean canMove() {
         return !this.isStanding() && !this.isInSittingPose() && !this.isImmobile();
     }
-    
+
+    public float getCheekPuffAnimationProgress(float f) {
+        return Mth.lerp(f, this.cheekPuffingAnimationTicks0, this.cheekPuffingAnimationTicks) / 5.0f;
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -227,9 +252,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     }
 
     @Override
-    public void containerChanged(Container container) {
-
-    }
+    public void containerChanged(Container container) {}
 
     @Override
     public void openCustomInventoryScreen(Player player) {
@@ -343,6 +366,16 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         this.writeInventoryToTag(compoundTag);
         compoundTag.putInt("Variant", this.getVariant().id());
         compoundTag.putBoolean("Standing", this.isStanding());
+        ListTag listTag = new ListTag();
+        for (int i = 2; i < this.inventory.getContainerSize(); ++i) {
+            ItemStack itemStack = this.inventory.getItem(i);
+            if (itemStack.isEmpty()) continue;
+            CompoundTag compoundTag2 = new CompoundTag();
+            compoundTag2.putByte("Slot", (byte)i);
+            itemStack.save(compoundTag2);
+            listTag.add(compoundTag2);
+        }
+        compoundTag.put("Items", listTag);
     }
 
     @Override
@@ -351,6 +384,13 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         this.readInventoryFromTag(compoundTag);
         this.setVariant(HamsterVariant.byId(compoundTag.getInt("Variant")));
         this.setStanding(compoundTag.getBoolean("Standing"));
+        ListTag listTag = compoundTag.getList("Items", 10);
+        for (int i = 0; i < listTag.size(); ++i) {
+            CompoundTag compoundTag2 = listTag.getCompound(i);
+            int j = compoundTag2.getByte("Slot") & 0xFF;
+            if (j < 2 || j >= this.inventory.getContainerSize()) continue;
+            this.inventory.setItem(j, ItemStack.of(compoundTag2));
+        }
     }
 
     public static boolean canSpawn(EntityType<Hamster> hamsterEntityType, ServerLevelAccessor world, MobSpawnType mobSpawnType, BlockPos pos, RandomSource randomSource) {
