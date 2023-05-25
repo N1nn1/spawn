@@ -6,7 +6,8 @@
   "mixins": [
     "AbstractFishMixin",
     "MobBucketItemAccessor",
-    "MobBucketItemMixin"
+    "MobBucketItemMixin",
+    "ServerPlayerMixin"
   ],
   "client": [
   ],
