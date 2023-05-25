@@ -58,5 +58,9 @@
   "subtitles.entity.snail.lay_eggs": "Snail lays Eggs",
   "subtitles.entity.snail.slide": "Snail slides",
 
-  "entity.spawn.hamster": "Hamster"
+  "entity.spawn.hamster": "Hamster",
+  "item.spawn.hamster_spawn_egg": "Hamster Spawn Egg",
+  "block.spawn.sunflower": "Sunflower",
+  "item.spawn.sunflower_seeds": "Sunflower Seeds",
+  "item.spawn.roasted_sunflower_seeds": "Roasted Sunflower Seeds"
 }

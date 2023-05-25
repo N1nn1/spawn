@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "half=lower,sunflower_rotation=morning": {
+      "model": "spawn:block/sunflower_bottom"
+    },
+    "half=lower,sunflower_rotation=day": {
+      "model": "spawn:block/sunflower_bottom"
+    },
+    "half=lower,sunflower_rotation=evening": {
+      "model": "spawn:block/sunflower_bottom"
+    },
+    "half=lower,sunflower_rotation=night": {
+      "model": "spawn:block/sunflower_bottom"
+    },
+    "half=upper,sunflower_rotation=morning": {
+      "model": "spawn:block/sunflower_top_morning"
+    },
+    "half=upper,sunflower_rotation=day": {
+      "model": "spawn:block/sunflower_top_day"
+    },
+    "half=upper,sunflower_rotation=evening": {
+      "model": "spawn:block/sunflower_top_evening"
+    },
+    "half=upper,sunflower_rotation=night": {
+      "model": "spawn:block/sunflower_top_night"
+    }
+  }
+}

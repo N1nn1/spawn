@@ -44,7 +44,8 @@ public class SpawnClient implements ClientModInitializer {
 				SpawnBlocks.SNAIL_EGGS
 		);
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
-				SpawnBlocks.POTTED_SWEET_BERRY_BUSH
+				SpawnBlocks.POTTED_SWEET_BERRY_BUSH,
+				SpawnBlocks.SUNFLOWER
 		);
 
 		ParticleFactoryRegistry.getInstance().register(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, GlowParticle.GlowSquidProvider::new);

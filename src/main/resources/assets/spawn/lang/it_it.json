@@ -56,5 +56,11 @@
   "subtitles.entity.snail.hurt_hidden": "Chiocciola deflette",
   "subtitles.entity.snail.shell_grow": "Guscio di chiocciola cresce",
   "subtitles.entity.snail.lay_eggs": "Chiocciola depone uova",
-  "subtitles.entity.snail.slide": "Chiocciola striscia"
+  "subtitles.entity.snail.slide": "Chiocciola striscia",
+
+  "entity.spawn.hamster": "Criceto",
+  "item.spawn.hamster_spawn_egg": "Uovo generatore di criceto",
+  "block.spawn.sunflower": "Girasole",
+  "item.spawn.sunflower_seeds": "Semi di girasole",
+  "item.spawn.roasted_sunflower_seeds": "Semi di girasole tostati"
 }

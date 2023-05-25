@@ -32,6 +32,8 @@ public class SpawnCreativeModeTab {
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> {
+            entries.addBefore(Items.LILAC, SUNFLOWER);
+            entries.addAfter(Items.BEETROOT_SEEDS, SUNFLOWER_SEEDS);
             entries.addAfter(Items.HONEY_BLOCK, MUCUS_BLOCK, BIG_SNAIL_SHELL);
             entries.addAfter(Items.FROGSPAWN, SNAIL_EGGS);
         });
@@ -42,6 +44,7 @@ public class SpawnCreativeModeTab {
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
+            entries.addAfter(Items.MELON_SLICE, ROASTED_SUNFLOWER_SEEDS);
             entries.addAfter(Items.PUFFERFISH, ESCARGOT);
             entries.addAfter(Items.COOKED_SALMON,
                     TUNA_CHUNK,
@@ -96,6 +99,9 @@ public class SpawnCreativeModeTab {
 
             // hamster
             output.accept(HAMSTER_SPAWN_EGG);
+            output.accept(SUNFLOWER);
+            output.accept(SUNFLOWER_SEEDS);
+            output.accept(ROASTED_SUNFLOWER_SEEDS);
 
         }).build();
     }

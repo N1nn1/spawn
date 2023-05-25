@@ -135,7 +135,7 @@
 	},
 	"block.snail_eggs.hatch": {
 	"sounds": [
-		"spawn:entity/block/snail_eggs/hatch"
+		"spawn:block/snail_eggs/hatch"
 	],
 	"subtitle": "subtitles.block.snail_eggs.hatch"
 	},
