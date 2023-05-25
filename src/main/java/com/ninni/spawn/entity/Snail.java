@@ -171,7 +171,7 @@ public class Snail extends Animal {
         ItemStack itemStack = player.getItemInHand(hand);
 
         if (this.isFood(itemStack) && this.getAge() == 0) {
-            this.playSound(SpawnSoundEvents.ENTITY_SNAIL_EAT, 1, 1);
+            this.playSound(SpawnSoundEvents.SNAIL_EAT, 1, 1);
         }
 
         if (itemStack.is(Items.WATER_BUCKET) && !this.isScared() && this.getWetTicks() == 0) {
@@ -226,7 +226,7 @@ public class Snail extends Animal {
             int shellGrowthTicks = this.getShellGrowthTicks();
             if (shellGrowthTicks > 0 && !this.isBaby()) {
                 if (shellGrowthTicks == 1) {
-                    this.playSound(SpawnSoundEvents.ENTITY_SNAIL_SHELL_GROW, 1.0F, 1.0F);
+                    this.playSound(SpawnSoundEvents.SNAIL_SHELL_GROW, 1.0F, 1.0F);
                 }
                 this.setShellGrowthTicks(shellGrowthTicks - 1);
             }
@@ -249,7 +249,7 @@ public class Snail extends Animal {
             if (source.is(DamageTypeTags.IS_PROJECTILE)) {
                 if (!this.isScared()) {
                     this.spawnAtLocation(new ItemStack(SpawnItems.SNAIL_SHELL), 0.1F);
-                    this.playSound(SpawnSoundEvents.ENTITY_SNAIL_HURT_HIDDEN, 1.0F, 1.0F);
+                    this.playSound(SpawnSoundEvents.SNAIL_HURT_HIDDEN, 1.0F, 1.0F);
                     this.setShellGrowthTicks(this.regrowthTicks.sample(this.random));
                 }
                 return false;
@@ -260,7 +260,7 @@ public class Snail extends Animal {
 
         if (source.getEntity() instanceof LivingEntity && amount < 12 && !level.isClientSide) {
             if (this.isScared()) {
-                playSound(SpawnSoundEvents.ENTITY_SNAIL_HURT_HIDDEN, 1, 1);
+                playSound(SpawnSoundEvents.SNAIL_HURT_HIDDEN, 1, 1);
                 return false;
             }
         }
@@ -291,18 +291,18 @@ public class Snail extends Animal {
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SpawnSoundEvents.ENTITY_SNAIL_HURT;
+        return SpawnSoundEvents.SNAIL_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return this.isScared() ? SpawnSoundEvents.ENTITY_SNAIL_DEATH_HIDDEN : SpawnSoundEvents.ENTITY_SNAIL_DEATH;
+        return this.isScared() ? SpawnSoundEvents.SNAIL_DEATH_HIDDEN : SpawnSoundEvents.SNAIL_DEATH;
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SpawnSoundEvents.ENTITY_SNAIL_SLIDE, 0.15f, 1.0f);
+        this.playSound(SpawnSoundEvents.SNAIL_SLIDE, 0.15f, 1.0f);
     }
 
 
@@ -344,7 +344,7 @@ public class Snail extends Animal {
                 Vec3 vec3d = Vec3.atCenterOf(this.layPos);
                 double distance = Mth.sqrt((float) this.snail.distanceToSqr(vec3d));
                 if (distance <= 2) {
-                    this.snail.playSound(SpawnSoundEvents.ENTITY_SNAIL_LAY_EGGS, 1, 1);
+                    this.snail.playSound(SpawnSoundEvents.SNAIL_LAY_EGGS, 1, 1);
                     this.snail.level.setBlock(this.layPos, SpawnBlocks.SNAIL_EGGS.defaultBlockState().setValue(SnailEggsBlock.getFaceProperty(Direction.DOWN), true), 2);
                     this.snail.setHasEgg(false);
                 }

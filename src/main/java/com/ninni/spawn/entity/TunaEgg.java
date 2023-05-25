@@ -4,8 +4,6 @@ import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnParticles;
 import com.ninni.spawn.registry.SpawnSoundEvents;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -26,7 +24,6 @@ import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -145,7 +142,7 @@ public class TunaEgg extends Mob implements Bucketable {
     }
 
     public void broken() {
-        this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SpawnSoundEvents.ENTITY_TUNA_EGG_BROKEN, this.getSoundSource(), 1.0f, 1.0f);
+        this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SpawnSoundEvents.TUNA_EGG_BROKEN, this.getSoundSource(), 1.0f, 1.0f);
         if (this.level instanceof ServerLevel) {
             ((ServerLevel)this.level).sendParticles(SpawnParticles.TUNA_EGG, this.getX(), this.getY() + 0.25F, this.getZ(), 10, this.getBbWidth(), this.getBbHeight(), this.getBbWidth(), 0.5);
         }
@@ -175,7 +172,7 @@ public class TunaEgg extends Mob implements Bucketable {
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.ENTITY_TUNA_EGG_HIT;
+        return SpawnSoundEvents.TUNA_EGG_HIT;
     }
 
     @Override

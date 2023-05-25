@@ -44,7 +44,7 @@ public class SnailEggsBlock extends MultifaceBlock {
     @Override
     public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         world.destroyBlock(pos, false);
-        world.playSound(null, pos, SpawnSoundEvents.BLOCK_SNAIL_EGGS_HATCH, SoundSource.BLOCKS, 1.0f, 1.0f);
+        world.playSound(null, pos, SpawnSoundEvents.SNAIL_EGGS_HATCH, SoundSource.BLOCKS, 1.0f, 1.0f);
         this.spawnSnails(world, pos, random);
     }
 

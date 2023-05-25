@@ -1,7 +1,6 @@
 package com.ninni.spawn.entity;
 
 import com.ninni.spawn.SpawnTags;
-import com.ninni.spawn.client.model.TunaEggModel;
 import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -170,28 +169,28 @@ public class Tuna extends Animal {
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpawnSoundEvents.ENTITY_FISH_DEATH;
+        return SpawnSoundEvents.FISH_DEATH;
     }
 
     @Override
     protected SoundEvent getSwimSound() {
-        return SpawnSoundEvents.ENTITY_BIG_FISH_SWIM;
+        return SpawnSoundEvents.BIG_FISH_SWIM;
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpawnSoundEvents.ENTITY_FISH_AMBIENT;
+        return SpawnSoundEvents.FISH_AMBIENT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.ENTITY_FISH_HURT;
+        return SpawnSoundEvents.FISH_HURT;
     }
 
     protected SoundEvent getFlopSound() {
-        return SpawnSoundEvents.ENTITY_FISH_FLOP;
+        return SpawnSoundEvents.FISH_FLOP;
     }
 
     @Override

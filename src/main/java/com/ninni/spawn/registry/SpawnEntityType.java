@@ -87,6 +87,8 @@ public class SpawnEntityType {
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.TUNA_SPAWNS), MobCategory.WATER_CREATURE, SpawnEntityType.TUNA, 15, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.SEAHORSE_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.SEAHORSE, 20, 1, 3);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.SNAIL_SPAWNS), MobCategory.CREATURE, SpawnEntityType.SNAIL, 12, 1, 3);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.HAMSTER_SPAWNS), MobCategory.CREATURE, SpawnEntityType.HAMSTER, 35, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.HAMSTER_FREQUENTLY_SPAWNS), MobCategory.CREATURE, SpawnEntityType.HAMSTER, 80, 1, 1);
     }
 
     private static <T extends Entity> EntityType<T> register(String id, FabricEntityTypeBuilder<T> entityType) {

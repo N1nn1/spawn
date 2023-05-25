@@ -68,7 +68,7 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
             if (deflated && !this.lastDeflated) {
                 long time = this.level.getGameTime();
                 if (this.lastDeflationSound == 0 || time - this.lastDeflationSound >= 15) {
-                    this.level.playSound(null, this, SpawnSoundEvents.ENTITY_ANGLER_FISH_DEFLATE, this.getSoundSource(), this.getSoundVolume(), this.getVoicePitch());
+                    this.level.playSound(null, this, SpawnSoundEvents.ANGLER_FISH_DEFLATE, this.getSoundSource(), this.getSoundVolume(), this.getVoicePitch());
                     this.lastDeflationSound = time;
                 }
             }
@@ -96,14 +96,14 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
                     if (!player.getAbilities().instabuild) stack.shrink(1);
 
                     // add visual effects
-                    this.playSound(SpawnSoundEvents.ENTITY_ANGLER_FISH_EFFECT_GIVE);
+                    this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_GIVE);
                     if (this.level instanceof ServerLevel world) {
                         world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.1F), this.getY(0.5F), this.getRandomZ(0.1F), 40, 25F, 25F, 25F, 0F);
                     }
 
                     this.lastEffectGiven = time;
                 } else {
-                    this.playSound(SpawnSoundEvents.ENTITY_ANGLER_FISH_EFFECT_DENY);
+                    this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_DENY);
                     if (this.level instanceof ServerLevel world) {
                         world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.05F), this.getY(0.5F), this.getRandomZ(0.05F), 10, 25F, 25F, 25F, 0F);
                     }
@@ -135,29 +135,29 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpawnSoundEvents.ENTITY_FISH_DEATH;
+        return SpawnSoundEvents.FISH_DEATH;
     }
 
     @Override
     protected SoundEvent getSwimSound() {
-        return SpawnSoundEvents.ENTITY_FISH_SWIM;
+        return SpawnSoundEvents.FISH_SWIM;
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpawnSoundEvents.ENTITY_FISH_AMBIENT;
+        return SpawnSoundEvents.FISH_AMBIENT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.ENTITY_FISH_HURT;
+        return SpawnSoundEvents.FISH_HURT;
     }
 
     @Override
     protected SoundEvent getFlopSound() {
-        return SpawnSoundEvents.ENTITY_FISH_FLOP;
+        return SpawnSoundEvents.FISH_FLOP;
     }
 
     @Override

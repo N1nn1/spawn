@@ -3,6 +3,7 @@ package com.ninni.spawn.entity;
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.entity.variant.HamsterVariant;
 import com.ninni.spawn.registry.SpawnEntityType;
+import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -12,6 +13,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
@@ -20,6 +22,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -27,8 +30,11 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +42,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -69,16 +76,19 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new PanicGoal(this, 1.2));
-        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, true));
-        this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.1, 7f, 2.0f, false));
-        this.goalSelector.addGoal(6, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
-        this.goalSelector.addGoal(7, new FollowParentGoal(this, 1));
-        this.goalSelector.addGoal(8, new HamsterSearchForItemsGoal());
-        this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Player.class, 6));
-        this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(12, new StandGoal());
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 24.0f, 1.1, 1.3));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Cat.class, 24.0f, 1.1, 1.3));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Fox.class, 24.0f, 1.1, 1.3));
+        this.goalSelector.addGoal(4, new BreedGoal(this, 1.0F));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0, true));
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0, 7f, 2.0f, false));
+        this.goalSelector.addGoal(7, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
+        this.goalSelector.addGoal(8, new FollowParentGoal(this, 1));
+        this.goalSelector.addGoal(9, new HamsterSearchForItemsGoal());
+        this.goalSelector.addGoal(10, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
+        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(13, new StandGoal());
     }
 
     private boolean getTerritorialTarget(LivingEntity livingEntity) {
@@ -292,6 +302,29 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
                 Hamster.this.getNavigation().moveTo(list.get(0), 1.2f);
             }
         }
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return SpawnSoundEvents.HAMSTER_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return this.getInventory().isEmpty() ? SpawnSoundEvents.HAMSTER_AMBIENT : SpawnSoundEvents.HAMSTER_AMBIENT_FULL;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpawnSoundEvents.HAMSTER_DEATH;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos blockPos, BlockState blockState) {
+        this.playSound(SpawnSoundEvents.HAMSTER_STEP, 0.15f, 1.0f);
     }
 
     class StandGoal extends Goal {

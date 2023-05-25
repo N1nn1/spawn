@@ -91,31 +91,31 @@ public class Seahorse extends AbstractFish implements Bucketable {
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpawnSoundEvents.ENTITY_SEAHORSE_DEATH;
+        return SpawnSoundEvents.SEAHORSE_DEATH;
     }
 
     @Override
     protected SoundEvent getSwimSound() {
-        return SpawnSoundEvents.ENTITY_FISH_SWIM;
+        return SpawnSoundEvents.FISH_SWIM;
     }
 
     @Override
     public @Nullable SoundEvent getAmbientSound() {
         return this.isUnderWater() ? (this.random.nextInt(3) == 0
-                ? SpawnSoundEvents.ENTITY_SEAHORSE_GROWL
-                : SpawnSoundEvents.ENTITY_SEAHORSE_CLICK
+                ? SpawnSoundEvents.SEAHORSE_GROWL
+                : SpawnSoundEvents.SEAHORSE_CLICK
         ) : null;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.ENTITY_SEAHORSE_HURT;
+        return SpawnSoundEvents.SEAHORSE_HURT;
     }
 
     @Override
     protected SoundEvent getFlopSound() {
-        return SpawnSoundEvents.ENTITY_FISH_FLOP;
+        return SpawnSoundEvents.FISH_FLOP;
     }
 
     @Override

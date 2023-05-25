@@ -3,6 +3,7 @@ package com.ninni.spawn.block;
 import com.ninni.spawn.SpawnProperties;
 import com.ninni.spawn.block.state.properties.SunflowerRotation;
 import com.ninni.spawn.registry.SpawnItems;
+import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -42,7 +43,7 @@ public class SunflowerBlock extends DoublePlantBlock implements BonemealableBloc
         if (blockState.getValue(ROTATION) != SunflowerRotation.NIGHT && blockState.getValue(SEEDS) && blockState.getValue(HALF) == DoubleBlockHalf.UPPER) {
             level.setBlock(blockPos, blockState.setValue(SEEDS, false), 3);
             int j = 1 + level.random.nextInt(2);
-            level.playSound(null, blockPos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4f);
+            level.playSound(null, blockPos, SpawnSoundEvents.SUNFLOWER_SEED_PICKUP, SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4f);
             SunflowerBlock.popResource(level, blockPos, new ItemStack(SpawnItems.SUNFLOWER_SEEDS, j));
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
