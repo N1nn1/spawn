@@ -133,17 +133,19 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
             return InteractionResult.SUCCESS;
         }
         if (!itemStack.is(SpawnTags.HAMSTER_FEEDS)) return super.mobInteract(player, interactionHand);
-        if (!player.getAbilities().instabuild) itemStack.shrink(1);
+        if (!player.getAbilities().instabuild) {
+            this.playSound(SpawnSoundEvents.HAMSTER_EAT, 1.0f, 1.0f);
+            itemStack.shrink(1);
+        }
         if (this.random.nextInt(3) == 0) {
+            this.playSound(SpawnSoundEvents.HAMSTER_EAT, 1.0f, 1.0f);
             this.tame(player);
             this.navigation.stop();
             this.setTarget(null);
             this.setOrderedToSit(true);
             this.level.broadcastEntityEvent(this, (byte)7);
             return InteractionResult.SUCCESS;
-        } else {
-            this.level.broadcastEntityEvent(this, (byte)6);
-        }
+        } else this.level.broadcastEntityEvent(this, (byte)6);
         return InteractionResult.SUCCESS;
     }
 
@@ -157,12 +159,8 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
             float puffTicks = this.entityData.get(PUFF_TICKS);
             float change = 0.2F;
             if (!this.getInventory().isEmpty()) {
-                if (puffTicks < 1) {
-                    this.entityData.set(PUFF_TICKS, puffTicks + change);
-                }
-            } else if (puffTicks > 0) {
-                this.entityData.set(PUFF_TICKS, puffTicks - change);
-            }
+                if (puffTicks < 1) this.entityData.set(PUFF_TICKS, puffTicks + change);
+            } else if (puffTicks > 0) this.entityData.set(PUFF_TICKS, puffTicks - change);
         }
         super.tick();
     }
@@ -183,6 +181,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
 
     @Override
     protected void pickUpItem(ItemEntity itemEntity) {
+        this.playSound(SpawnSoundEvents.HAMSTER_EAT, 1.0f, 1.0f);
         InventoryCarrier.pickUpItem(this, this, itemEntity);
     }
 

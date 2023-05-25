@@ -101,6 +101,13 @@ public class Tuna extends Animal {
     }
 
     @Override
+    public void baseTick() {
+        int i = this.getAirSupply();
+        super.baseTick();
+        this.handleAirSupply(i);
+    }
+
+    @Override
     public void aiStep() {
         if (!this.isInWater() && this.onGround && this.verticalCollision) {
             this.setDeltaMovement(this.getDeltaMovement().add((this.random.nextFloat() * 2.0f - 1.0f) * 0.05f, 0.6f, (this.random.nextFloat() * 2.0f - 1.0f) * 0.05f));
@@ -119,6 +126,18 @@ public class Tuna extends Animal {
     @Override
     protected float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
         return entityDimensions.height * 0.5f;
+    }
+
+    protected void handleAirSupply(int i) {
+        if (this.isAlive() && !this.isInWaterOrBubble()) {
+            this.setAirSupply(i - 1);
+            if (this.getAirSupply() == -20) {
+                this.setAirSupply(0);
+                this.hurt(this.damageSources().drown(), 2.0f);
+            }
+        } else {
+            this.setAirSupply(300);
+        }
     }
 
     @Override
