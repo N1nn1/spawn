@@ -54,10 +54,7 @@ public class SunflowerBlock extends DoublePlantBlock {
         SunflowerRotation sunflowerRotation = this.getRotationType(serverLevel);
         SunflowerRotation currentRotation = blockState.getValue(ROTATION);
         if (currentRotation != sunflowerRotation) {
-            boolean flag = false;
-            if (currentRotation == SunflowerRotation.NIGHT && sunflowerRotation == SunflowerRotation.MORNING) {
-                flag = true;
-            }
+            boolean flag = blockState.getValue(SEEDS) || currentRotation == SunflowerRotation.NIGHT && sunflowerRotation == SunflowerRotation.MORNING;
             serverLevel.setBlock(blockPos, blockState.setValue(ROTATION, sunflowerRotation).setValue(SEEDS, flag), 2);
         }
         serverLevel.scheduleTick(blockPos, this, 20);
