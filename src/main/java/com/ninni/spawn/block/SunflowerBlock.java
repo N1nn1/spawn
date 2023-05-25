@@ -50,6 +50,10 @@ public class SunflowerBlock extends DoublePlantBlock implements BonemealableBloc
         return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
     }
 
+    @Override
+    public void onPlace(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
+    }
+
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
@@ -69,18 +73,14 @@ public class SunflowerBlock extends DoublePlantBlock implements BonemealableBloc
     }
 
     public static SunflowerRotation getRotationType(ServerLevel serverLevel) {
-        if (serverLevel.dimension() != Level.OVERWORLD) {
+        if (serverLevel.isNight() || serverLevel.dimension() != Level.OVERWORLD) {
             return SunflowerRotation.NIGHT;
+        } else if (serverLevel.dayTime() < 2000) {
+            return SunflowerRotation.MORNING;
+        } else if (serverLevel.dayTime() >= 7000) {
+            return SunflowerRotation.EVENING;
         } else {
-            if (serverLevel.isNight()) {
-                return SunflowerRotation.NIGHT;
-            } else if (serverLevel.dayTime() < 2000) {
-                return SunflowerRotation.MORNING;
-            } else if (serverLevel.dayTime() >= 7000) {
-                return SunflowerRotation.EVENING;
-            } else {
-                return SunflowerRotation.DAY;
-            }
+            return SunflowerRotation.DAY;
         }
     }
 
