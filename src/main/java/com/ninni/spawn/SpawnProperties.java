@@ -6,5 +6,6 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 public interface SpawnProperties {
     BooleanProperty SOLID = BooleanProperty.create("solid");
+    BooleanProperty SEEDS = BooleanProperty.create("seeds");
     EnumProperty<SunflowerRotation> SUNFLOWER_ROTATION = EnumProperty.create("sunflower_rotation", SunflowerRotation.class);
 }

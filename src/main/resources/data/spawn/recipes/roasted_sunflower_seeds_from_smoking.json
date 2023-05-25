@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "cookingtime": 70,
+  "experience": 0.35,
+  "ingredient": {
+    "item": "spawn:sunflower_seeds"
+  },
+  "result": "spawn:roasted_sunflower_seeds"
+}
