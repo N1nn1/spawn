@@ -1,6 +1,7 @@
 package com.ninni.spawn;
 
 import com.google.common.reflect.Reflection;
+import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnBlocks;
 import com.ninni.spawn.registry.SpawnCreativeModeTab;
 import com.ninni.spawn.registry.SpawnEntityType;
@@ -25,6 +26,7 @@ public class Spawn implements ModInitializer {
 				SpawnSoundEvents.class,
 				SpawnEntityType.class,
 				SpawnFeatures.class,
+				SpawnBlockEntityTypes.class,
 				SpawnCreativeModeTab.class,
 				SpawnItems.class,
 				SpawnBlocks.class

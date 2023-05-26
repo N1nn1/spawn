@@ -2,23 +2,26 @@ package com.ninni.spawn.block;
 
 import com.ninni.spawn.SpawnProperties;
 import com.ninni.spawn.block.state.properties.SunflowerRotation;
+import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -29,7 +32,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
-public class SunflowerBlock extends DoublePlantBlock implements BonemealableBlock {
+public class SunflowerBlock extends DoublePlantBlock implements BonemealableBlock, EntityBlock {
     public static final EnumProperty<SunflowerRotation> ROTATION = SpawnProperties.SUNFLOWER_ROTATION;
     public static final BooleanProperty SEEDS = SpawnProperties.SEEDS;
 
@@ -50,34 +53,12 @@ public class SunflowerBlock extends DoublePlantBlock implements BonemealableBloc
         return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
     }
 
-    @Override
-    public void onPlace(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        blockPlaceContext.getLevel().scheduleTick(blockPlaceContext.getClickedPos().above(), this, 20);
-        return super.getStateForPlacement(blockPlaceContext);
-    }
-
-    @Override
-    public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
-        SunflowerRotation sunflowerRotation = getRotationType(serverLevel);
-        SunflowerRotation currentRotation = blockState.getValue(ROTATION);
-        if (currentRotation != sunflowerRotation) {
-            boolean flag = blockState.getValue(SEEDS) || currentRotation == SunflowerRotation.NIGHT && sunflowerRotation == SunflowerRotation.MORNING;
-            serverLevel.setBlock(blockPos, blockState.setValue(ROTATION, sunflowerRotation).setValue(SEEDS, flag), 2);
-        }
-        serverLevel.scheduleTick(blockPos, this, 20);
-    }
-
-    public static SunflowerRotation getRotationType(ServerLevel serverLevel) {
-        if (serverLevel.isNight() || serverLevel.dimension() != Level.OVERWORLD) {
+    public static SunflowerRotation getRotationType(Level world) {
+        if (world.isNight() || world.dimension() != Level.OVERWORLD) {
             return SunflowerRotation.NIGHT;
-        } else if (serverLevel.dayTime() < 2000) {
+        } else if (world.dayTime() < 2000) {
             return SunflowerRotation.MORNING;
-        } else if (serverLevel.dayTime() >= 7000) {
+        } else if (world.dayTime() >= 7000) {
             return SunflowerRotation.EVENING;
         } else {
             return SunflowerRotation.DAY;
@@ -104,4 +85,22 @@ public class SunflowerBlock extends DoublePlantBlock implements BonemealableBloc
         serverLevel.setBlock(blockPos, blockState2, 2);
         serverLevel.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(blockState2));
     }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new SunflowerBlockEntity(blockPos, blockState);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return !level.isClientSide && blockState.getValue(SunflowerBlock.HALF) == DoubleBlockHalf.UPPER ? createTickerHelper(blockEntityType, SpawnBlockEntityTypes.SUNFLOWER, SunflowerBlockEntity::tick) : null;
+    }
+
+    @Nullable
+    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> blockEntityType, BlockEntityType<E> blockEntityType2, BlockEntityTicker<? super E> blockEntityTicker) {
+        return blockEntityType2 == blockEntityType ? (BlockEntityTicker<A>) blockEntityTicker : null;
+    }
+
 }
