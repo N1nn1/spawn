@@ -20,6 +20,7 @@ public interface SpawnEntityModelLayers {
     ModelLayerLocation SNAIL = main("snail", SnailModel::getLayerDefinition);
     ModelLayerLocation HAMSTER = main("hamster", HamsterModel::getLayerDefinition);
     ModelLayerLocation HAMSTER_STANDING = main("hamster_standing", HamsterModel::getStandingLayerDefinition);
+    ModelLayerLocation ANT = main("ant", AntModel::getLayerDefinition);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

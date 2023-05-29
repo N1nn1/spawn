@@ -16,12 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Container;
-import net.minecraft.world.ContainerListener;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -31,9 +26,7 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
@@ -78,12 +71,11 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         this.goalSelector.addGoal(2, new PanicGoal(this, 1.2));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 24.0f, 1.1, 1.3));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Cat.class, 24.0f, 1.1, 1.3));
-        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Fox.class, 24.0f, 1.1, 1.3));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Hamster.class, 24.0f, 1.1, 1.3));
         this.goalSelector.addGoal(4, new BreedGoal(this, 1.0F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0, 7f, 2.0f, false));
         this.goalSelector.addGoal(7, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
-        this.goalSelector.addGoal(8, new FollowParentGoal(this, 1));
         this.goalSelector.addGoal(9, new HamsterSearchForItemsGoal());
         this.goalSelector.addGoal(10, new WaterAvoidingRandomStrollGoal(this, 1));
         this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
@@ -92,7 +84,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     }
 
     private boolean getTerritorialTarget(LivingEntity livingEntity) {
-        return livingEntity instanceof Hamster hamster && hamster.isTame() && this.isTame() && hamster.getOwnerUUID() == this.getOwnerUUID();
+        return livingEntity instanceof Hamster hamster && hamster.isTame() && !hamster.isInSittingPose() && !this.isInSittingPose() && this.isTame() && hamster.getOwnerUUID() == this.getOwnerUUID();
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -110,7 +102,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
-        if (!this.level.isClientSide && player.isSecondaryUseActive() && player instanceof HamsterOpenContainer && this.isOwnedBy(player)) {
+        if (!this.level.isClientSide && player.isSecondaryUseActive() && player instanceof HamsterOpenContainer && this.isOwnedBy(player) && !this.isBaby()) {
             this.openCustomInventoryScreen(player);
             return InteractionResult.SUCCESS;
         }
@@ -163,16 +155,6 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
             } else if (puffTicks > 0) this.entityData.set(PUFF_TICKS, puffTicks - change);
         }
         super.tick();
-    }
-
-    @Override
-    public void aiStep() {
-        if (this.isStanding() || this.isInSittingPose()) {
-                this.jumping = false;
-                this.xxa = 0.0f;
-                this.zza = 0.0f;
-        }
-        super.aiStep();
     }
 
     public SimpleContainer getInventory() {
@@ -340,9 +322,8 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         public boolean canUse() {
             return Hamster.this.getLastHurtByMob() == null
                     && Hamster.this.getRandom().nextFloat() < 0.02f
-                    && Hamster.this.getNavigation().isDone()
-                    && !Hamster.this.isInSittingPose()
-                    && Hamster.this.isOnGround();
+                    && Hamster.this.getTarget() == null
+                    && Hamster.this.getNavigation().isDone() ;
         }
 
         @Override
@@ -370,7 +351,6 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
                 --this.looksRemaining;
                 this.resetLook();
             }
-
             Hamster.this.getLookControl().setLookAt(Hamster.this.getX() + this.relX, Hamster.this.getEyeY(), Hamster.this.getZ() + this.relZ, Hamster.this.getMaxHeadYRot(), Hamster.this.getMaxHeadXRot());
         }
 

@@ -4,12 +4,7 @@ import com.google.common.reflect.Reflection;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
 import com.ninni.spawn.client.particles.TunaEggParticle;
-import com.ninni.spawn.client.renderer.entity.AnglerFishRenderer;
-import com.ninni.spawn.client.renderer.entity.HamsterRenderer;
-import com.ninni.spawn.client.renderer.entity.SeahorseRenderer;
-import com.ninni.spawn.client.renderer.entity.SnailRenderer;
-import com.ninni.spawn.client.renderer.entity.TunaEggRenderer;
-import com.ninni.spawn.client.renderer.entity.TunaRenderer;
+import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.entity.Hamster;
 import com.ninni.spawn.registry.SpawnBlocks;
 import com.ninni.spawn.registry.SpawnEntityModelLayers;
@@ -59,6 +54,7 @@ public class SpawnClient implements ClientModInitializer {
 		EntityRendererRegistry.register(SpawnEntityType.SEAHORSE, SeahorseRenderer::new);
 		EntityRendererRegistry.register(SpawnEntityType.SNAIL, SnailRenderer::new);
 		EntityRendererRegistry.register(SpawnEntityType.HAMSTER, HamsterRenderer::new);
+		EntityRendererRegistry.register(SpawnEntityType.ANT, AntRenderer::new);
 
 		ClientPlayNetworking.registerGlobalReceiver(OPEN_HAMSTER_SCREEN, (client, handler, buf, responseSender) -> {
 			int id = buf.readInt();

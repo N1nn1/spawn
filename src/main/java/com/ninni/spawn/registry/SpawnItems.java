@@ -50,6 +50,8 @@ public class SpawnItems {
     public static final Item SUNFLOWER_SEEDS = register("sunflower_seeds", new ItemNameBlockItem(SpawnBlocks.SUNFLOWER_PLANT, new FabricItemSettings()));
     public static final Item ROASTED_SUNFLOWER_SEEDS = register("roasted_sunflower_seeds", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.2f).fast().build())));
 
+    public static final Item ANT_SPAWN_EGG = register("ant_spawn_egg", new SpawnEggItem(SpawnEntityType.ANT, 0x3C3436, 0x282527, new Item.Properties().stacksTo(64)));
+
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spawn.MOD_ID, id), item);
     }

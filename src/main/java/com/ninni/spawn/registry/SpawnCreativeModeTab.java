@@ -103,6 +103,9 @@ public class SpawnCreativeModeTab {
             output.accept(SUNFLOWER_SEEDS);
             output.accept(ROASTED_SUNFLOWER_SEEDS);
 
+            // hamster
+            output.accept(ANT_SPAWN_EGG);
+
         }).build();
     }
 }
