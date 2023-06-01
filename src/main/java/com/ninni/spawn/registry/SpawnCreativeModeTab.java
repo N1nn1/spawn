@@ -105,6 +105,7 @@ public class SpawnCreativeModeTab {
 
             // hamster
             output.accept(ANT_SPAWN_EGG);
+            output.accept(ANT_PUPA);
 
         }).build();
     }

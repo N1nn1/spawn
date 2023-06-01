@@ -1,6 +1,7 @@
 package com.ninni.spawn.client.renderer.entity;
 
 import com.ninni.spawn.client.model.AntModel;
+import com.ninni.spawn.client.renderer.entity.feature.AbdomenLayer;
 import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import net.fabricmc.api.EnvType;
@@ -18,6 +19,7 @@ public class AntRenderer<T extends LivingEntity> extends MobRenderer<Ant, AntMod
 
     public AntRenderer(EntityRendererProvider.Context ctx) {
         super(ctx, new AntModel<>(ctx.bakeLayer(SpawnEntityModelLayers.ANT)), 0.3F);
+        this.addLayer(new AbdomenLayer(this));
     }
 
     @Override

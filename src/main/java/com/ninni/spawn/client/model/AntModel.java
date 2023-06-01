@@ -194,27 +194,27 @@ public class AntModel<E extends Ant> extends AgeableListModel<E> {
 
         if (entity.isInSittingPose()) {
             body.y = 22.5F;
-            leftForeLeg.y =23.5F;
+            leftForeLeg.y = 23.5F;
             leftMidLeg.y = 23.5F;
-            leftBackLeg.y =23.5F;
-            rightForeLeg.y =23.5F;
+            leftBackLeg.y = 23.5F;
+            rightForeLeg.y = 23.5F;
             rightMidLeg.y = 23.5F;
-            rightBackLeg.y =23.5F;
-            leftForeLeg.zRot =0;
+            rightBackLeg.y = 23.5F;
+            leftForeLeg.zRot = 0;
             leftMidLeg.zRot = 0;
-            leftBackLeg.zRot =0;
-            rightForeLeg.zRot =0;
+            leftBackLeg.zRot = 0;
+            rightForeLeg.zRot = 0;
             rightMidLeg.zRot = 0;
-            rightBackLeg.zRot =0;
+            rightBackLeg.zRot = 0;
 
         } else {
             body.y = 20.5F;
-            leftForeLeg.y =21.5F;
+            leftForeLeg.y = 21.5F;
             leftMidLeg.y = 21.5F;
-            leftBackLeg.y =21.5F;
-            rightForeLeg.y =21.5F;
+            leftBackLeg.y = 21.5F;
+            rightForeLeg.y = 21.5F;
             rightMidLeg.y = 21.5F;
-            rightBackLeg.y =21.5F;
+            rightBackLeg.y = 21.5F;
             leftForeLeg.zRot = 0.7854F;
             leftMidLeg.zRot = 0.7854F;
             leftBackLeg.zRot = 0.7854F;
