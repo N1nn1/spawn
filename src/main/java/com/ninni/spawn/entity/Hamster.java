@@ -102,11 +102,11 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
-        if (!this.level.isClientSide && player.isSecondaryUseActive() && player instanceof HamsterOpenContainer && this.isOwnedBy(player) && !this.isBaby()) {
+        if (!this.level().isClientSide && player.isSecondaryUseActive() && player instanceof HamsterOpenContainer && this.isOwnedBy(player) && !this.isBaby()) {
             this.openCustomInventoryScreen(player);
             return InteractionResult.SUCCESS;
         }
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             boolean bl = this.isOwnedBy(player) || this.isTame() || itemStack.is(SpawnTags.HAMSTER_FEEDS) && !this.isTame();
             return bl ? InteractionResult.CONSUME : InteractionResult.PASS;
         }
@@ -135,9 +135,9 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
             this.navigation.stop();
             this.setTarget(null);
             this.setOrderedToSit(true);
-            this.level.broadcastEntityEvent(this, (byte)7);
+            this.level().broadcastEntityEvent(this, (byte)7);
             return InteractionResult.SUCCESS;
-        } else this.level.broadcastEntityEvent(this, (byte)6);
+        } else this.level().broadcastEntityEvent(this, (byte)6);
         return InteractionResult.SUCCESS;
     }
 
@@ -147,7 +147,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
 
     @Override
     public void tick() {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             float puffTicks = this.entityData.get(PUFF_TICKS);
             float change = 0.2F;
             if (!this.getInventory().isEmpty()) {
@@ -263,13 +263,13 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
             if (Hamster.this.getTarget() != null || Hamster.this.getLastHurtByMob() != null) return false;
             if (!Hamster.this.canMove()) return false;
             if (Hamster.this.getRandom().nextInt(Hamster.HamsterSearchForItemsGoal.reducedTickDelay(10)) != 0) return false;
-            List<ItemEntity> list = Hamster.this.level.getEntitiesOfClass(ItemEntity.class, Hamster.this.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS);
+            List<ItemEntity> list = Hamster.this.level().getEntitiesOfClass(ItemEntity.class, Hamster.this.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS);
             return !list.isEmpty() && Hamster.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty();
         }
 
         @Override
         public void tick() {
-            List<ItemEntity> list = Hamster.this.level.getEntitiesOfClass(ItemEntity.class, Hamster.this.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS);
+            List<ItemEntity> list = Hamster.this.level().getEntitiesOfClass(ItemEntity.class, Hamster.this.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS);
             ItemStack itemStack = Hamster.this.getItemBySlot(EquipmentSlot.MAINHAND);
             if (itemStack.isEmpty() && !list.isEmpty()) {
                 Hamster.this.getNavigation().moveTo(list.get(0), 1f);
@@ -278,7 +278,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
 
         @Override
         public void start() {
-            List<ItemEntity> list = Hamster.this.level.getEntitiesOfClass(ItemEntity.class, Hamster.this.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS);
+            List<ItemEntity> list = Hamster.this.level().getEntitiesOfClass(ItemEntity.class, Hamster.this.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS);
             if (!list.isEmpty()) {
                 Hamster.this.getNavigation().moveTo(list.get(0), 1.2f);
             }

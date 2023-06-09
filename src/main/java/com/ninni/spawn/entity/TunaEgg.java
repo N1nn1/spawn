@@ -60,12 +60,12 @@ public class TunaEgg extends Mob implements Bucketable {
     }
     @Override
     public boolean hurt(DamageSource damageSource, float f) {
-        long l = this.level.getGameTime();
+        long l = this.level().getGameTime();
         boolean bl = damageSource.getDirectEntity() instanceof AbstractArrow;
         if (l - this.lastHit <= 5L || bl) {
             this.broken();
         } else {
-            this.level.broadcastEntityEvent(this, (byte)32);
+            this.level().broadcastEntityEvent(this, (byte)32);
             this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
             this.lastHit = l;
         }
@@ -138,13 +138,13 @@ public class TunaEgg extends Mob implements Bucketable {
     public void aiStep() {
         super.aiStep();
         if (this.getHatchTicks() > 0) this.setHatchTicks(this.getHatchTicks() - 1);
-        if (this.getHatchTicks() == 0 && this.getLevel() instanceof ServerLevel serverLevel) this.hatch(serverLevel);
+        if (this.getHatchTicks() == 0 && this.level() instanceof ServerLevel serverLevel) this.hatch(serverLevel);
     }
 
     public void broken() {
-        this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SpawnSoundEvents.TUNA_EGG_BROKEN, this.getSoundSource(), 1.0f, 1.0f);
-        if (this.level instanceof ServerLevel) {
-            ((ServerLevel)this.level).sendParticles(SpawnParticles.TUNA_EGG, this.getX(), this.getY() + 0.25F, this.getZ(), 10, this.getBbWidth(), this.getBbHeight(), this.getBbWidth(), 0.5);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SpawnSoundEvents.TUNA_EGG_BROKEN, this.getSoundSource(), 1.0f, 1.0f);
+        if (this.level() instanceof ServerLevel) {
+            ((ServerLevel)this.level()).sendParticles(SpawnParticles.TUNA_EGG, this.getX(), this.getY() + 0.25F, this.getZ(), 10, this.getBbWidth(), this.getBbHeight(), this.getBbWidth(), 0.5);
         }
         this.remove(RemovalReason.DISCARDED);
     }

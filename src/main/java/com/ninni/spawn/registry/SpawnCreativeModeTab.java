@@ -66,13 +66,13 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.TROPICAL_FISH_SPAWN_EGG, TUNA_SPAWN_EGG);
         });
 
-        FabricItemGroup.builder(new ResourceLocation(MOD_ID,"item_group")).icon(SPAWN::getDefaultInstance).displayItems((featureFlagSet, output) -> {
-            //angler fish
+        FabricItemGroup.builder().icon(SPAWN::getDefaultInstance).displayItems((featureFlagSet, output) -> {
+            // angler fish
             output.accept(ANGLER_FISH_SPAWN_EGG);
             output.accept(ANGLER_FISH_BUCKET);
             output.accept(ANGLER_FISH);
 
-            //tuna
+            // tuna
             output.accept(TUNA_SPAWN_EGG);
             output.accept(TUNA_CHUNK);
             output.accept(COOKED_TUNA_CHUNK);
@@ -103,7 +103,7 @@ public class SpawnCreativeModeTab {
             output.accept(SUNFLOWER_SEEDS);
             output.accept(ROASTED_SUNFLOWER_SEEDS);
 
-            // hamster
+            // ant
             output.accept(ANT_SPAWN_EGG);
             output.accept(ANT_PUPA);
 

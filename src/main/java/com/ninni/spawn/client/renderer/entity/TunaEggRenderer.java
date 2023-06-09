@@ -25,7 +25,7 @@ public class TunaEggRenderer extends MobRenderer<TunaEgg, TunaEggModel> {
     @Override
     protected void setupRotations(TunaEgg egg, PoseStack poseStack, float f, float g, float h) {
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - g));
-        float i = (float)(egg.level.getGameTime() - egg.lastHit) + h;
+        float i = (float)(egg.level().getGameTime() - egg.lastHit) + h;
         if (i < 5.0f) {
             poseStack.mulPose(Axis.YP.rotationDegrees(Mth.sin(i / 1.5f * (float)Math.PI) * 3.0f));
         }

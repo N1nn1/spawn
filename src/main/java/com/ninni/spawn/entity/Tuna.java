@@ -88,14 +88,14 @@ public class Tuna extends Animal {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide && this.isInWater() && this.getDeltaMovement().lengthSqr() > 0.03) {
+        if (this.level().isClientSide && this.isInWater() && this.getDeltaMovement().lengthSqr() > 0.03) {
             Vec3 vec3 = this.getViewVector(0.0f);
             float f = Mth.cos(this.getYRot() * ((float)Math.PI / 180)) * 0.3f;
             float g = Mth.sin(this.getYRot() * ((float)Math.PI / 180)) * 0.3f;
             float h = 1.2f - this.random.nextFloat() * 0.7f;
             for (int i = 0; i < 2; ++i) {
-                this.level.addParticle(ParticleTypes.DOLPHIN, this.getX() - vec3.x * (double)h + (double)f, this.getY() + 0.4F, this.getZ() - vec3.z * (double)h + (double)g, 0.0, 0.0, 0.0);
-                this.level.addParticle(ParticleTypes.DOLPHIN, this.getX() - vec3.x * (double)h - (double)f, this.getY() + 0.4F, this.getZ() - vec3.z * (double)h - (double)g, 0.0, 0.0, 0.0);
+                this.level().addParticle(ParticleTypes.DOLPHIN, this.getX() - vec3.x * (double)h + (double)f, this.getY() + 0.4F, this.getZ() - vec3.z * (double)h + (double)g, 0.0, 0.0, 0.0);
+                this.level().addParticle(ParticleTypes.DOLPHIN, this.getX() - vec3.x * (double)h - (double)f, this.getY() + 0.4F, this.getZ() - vec3.z * (double)h - (double)g, 0.0, 0.0, 0.0);
             }
         }
     }
@@ -109,9 +109,9 @@ public class Tuna extends Animal {
 
     @Override
     public void aiStep() {
-        if (!this.isInWater() && this.onGround && this.verticalCollision) {
+        if (!this.isInWater() && this.onGround() && this.verticalCollision) {
             this.setDeltaMovement(this.getDeltaMovement().add((this.random.nextFloat() * 2.0f - 1.0f) * 0.05f, 0.6f, (this.random.nextFloat() * 2.0f - 1.0f) * 0.05f));
-            this.onGround = false;
+            this.setOnGround(false);
             this.hasImpulse = true;
             this.playSound(this.getFlopSound(), this.getSoundVolume(), this.getVoicePitch());
         }
@@ -172,7 +172,7 @@ public class Tuna extends Animal {
 
     @Override
     public int getExperienceReward() {
-        return 1 + this.level.random.nextInt(3);
+        return 1 + this.level().random.nextInt(3);
     }
 
     @Override

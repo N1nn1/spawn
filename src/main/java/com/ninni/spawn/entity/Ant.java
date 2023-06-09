@@ -1,5 +1,6 @@
 package com.ninni.spawn.entity;
 
+import com.google.common.collect.Maps;
 import com.ninni.spawn.SpawnTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -31,8 +32,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class Ant extends TamableAnimal {
     private static final EntityDataAccessor<Integer> DATA_ABDOMEN_COLOR = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
+    private static final Map<DyeColor, float[]> COLORARRAY_BY_COLOR = Maps.newEnumMap(Arrays.stream(DyeColor.values()).collect(Collectors.toMap(dyeColor -> dyeColor, Ant::createAbdomenColor)));
 
     public Ant(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -43,7 +49,7 @@ public class Ant extends TamableAnimal {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Mth.nextInt(random, 4, 8));
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Mth.nextInt(random, 1, 3));
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Mth.nextDouble(random, 0.225, 0.275));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Mth.nextDouble(random, 0.225, 0.3));
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
     }
 
@@ -78,6 +84,14 @@ public class Ant extends TamableAnimal {
         this.entityData.define(DATA_ABDOMEN_COLOR, DyeColor.RED.getId());
     }
 
+    private static float[] createAbdomenColor(DyeColor dyeColor) {
+        if (dyeColor == DyeColor.WHITE) return new float[]{0.9019608f, 0.9019608f, 0.9019608f};
+        float[] fs = dyeColor.getTextureDiffuseColors();
+        return new float[]{fs[0] * 0.75f, fs[1] * 0.75f, fs[2] * 0.75f};
+    }
+    public static float[] getColorArray(DyeColor dyeColor) {
+        return COLORARRAY_BY_COLOR.get(dyeColor);
+    }
     public DyeColor getAbdomenColor() {
         return DyeColor.byId(this.entityData.get(DATA_ABDOMEN_COLOR));
     }

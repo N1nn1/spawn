@@ -63,12 +63,12 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
     public void tick() {
         super.tick();
 
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             boolean deflated = this.isDeflated();
             if (deflated && !this.lastDeflated) {
-                long time = this.level.getGameTime();
+                long time = this.level().getGameTime();
                 if (this.lastDeflationSound == 0 || time - this.lastDeflationSound >= 15) {
-                    this.level.playSound(null, this, SpawnSoundEvents.ANGLER_FISH_DEFLATE, this.getSoundSource(), this.getSoundVolume(), this.getVoicePitch());
+                    this.level().playSound(null, this, SpawnSoundEvents.ANGLER_FISH_DEFLATE, this.getSoundSource(), this.getSoundVolume(), this.getVoicePitch());
                     this.lastDeflationSound = time;
                 }
             }
@@ -80,7 +80,7 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
     public void aiStep() {
         super.aiStep();
         if (this.isUnderWater() && this.tickCount % 4 == 0) {
-            this.level.addParticle(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.15D), this.getY(1.25D), this.getRandomZ(0.15D), 0.0D, 0.0D, 0.0D);
+            this.level().addParticle(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.15D), this.getY(1.25D), this.getRandomZ(0.15D), 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -88,23 +88,23 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (stack.is(SpawnTags.ANGLER_FISH_LIKES) && !this.isDeflated() && !player.hasEffect(MobEffects.NIGHT_VISION)) {
-                long time = this.level.getGameTime();
+                long time = this.level().getGameTime();
                 if (this.lastEffectGiven == 0 || time - this.lastEffectGiven > EFFECT_DELAY * 20) {
                     player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, EFFECT_DURATION * 20, 0, false, true));
                     if (!player.getAbilities().instabuild) stack.shrink(1);
 
                     // add visual effects
                     this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_GIVE);
-                    if (this.level instanceof ServerLevel world) {
+                    if (this.level() instanceof ServerLevel world) {
                         world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.1F), this.getY(0.5F), this.getRandomZ(0.1F), 40, 25F, 25F, 25F, 0F);
                     }
 
                     this.lastEffectGiven = time;
                 } else {
                     this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_DENY);
-                    if (this.level instanceof ServerLevel world) {
+                    if (this.level() instanceof ServerLevel world) {
                         world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.05F), this.getY(0.5F), this.getRandomZ(0.05F), 10, 25F, 25F, 25F, 0F);
                     }
                 }

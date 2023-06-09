@@ -42,6 +42,7 @@ public class TunaEggParticle  extends TextureSheetParticle {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected int getLightColor(float f) {
         BlockPos blockPos = new BlockPos((int)this.x, (int)this.y, (int)this.z);
         if (this.level.hasChunkAt(blockPos)) {

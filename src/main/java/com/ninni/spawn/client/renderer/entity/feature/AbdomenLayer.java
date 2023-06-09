@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.layers.WolfCollarLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 
@@ -23,9 +24,30 @@ public class AbdomenLayer extends RenderLayer<Ant, AntModel<Ant>> {
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, Ant ant, float f, float g, float h, float j, float k, float l) {
+        float u;
+        float t;
+        float s;
         if (!ant.isTame() || ant.isInvisible()) return;
-        float[] fs = ant.getAbdomenColor().getTextureDiffuseColors();
-        WolfCollarLayer.renderColoredCutoutModel(this.getParentModel(), ANT_ABDOMEN_LOCATION, poseStack, multiBufferSource, i, ant, fs[0], fs[1], fs[2]);
+
+        if (ant.hasCustomName() && "jeb_".equals(ant.getName().getString())) {
+            int m = 25;
+            int n = ant.tickCount / 25 + ant.getId();
+            int o = DyeColor.values().length;
+            int p = n % o;
+            int q = (n + 1) % o;
+            float r = ((float)(ant.tickCount % 25) + h) / 25.0f;
+            float[] fs = Ant.getColorArray(DyeColor.byId(p));
+            float[] gs = Ant.getColorArray(DyeColor.byId(q));
+            s = fs[0] * (1.0f - r) + gs[0] * r;
+            t = fs[1] * (1.0f - r) + gs[1] * r;
+            u = fs[2] * (1.0f - r) + gs[2] * r;
+        } else {
+            float[] hs = Ant.getColorArray(ant.getAbdomenColor());
+            s = hs[0];
+            t = hs[1];
+            u = hs[2];
+        }
+        WolfCollarLayer.renderColoredCutoutModel(this.getParentModel(), ANT_ABDOMEN_LOCATION, poseStack, multiBufferSource, i, ant, s, t, u);
     }
 }
 

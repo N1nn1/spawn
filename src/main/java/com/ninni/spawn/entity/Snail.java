@@ -175,7 +175,7 @@ public class Snail extends Animal {
         }
 
         if (itemStack.is(Items.WATER_BUCKET) && !this.isScared() && this.getWetTicks() == 0) {
-            if (!this.level.isClientSide) {
+            if (!this.level().isClientSide) {
                 if (!player.getAbilities().instabuild) player.setItemInHand(player.getUsedItemHand(), Items.BUCKET.getDefaultInstance());
                 this.addWetTicks(300);
                 this.playSound(SoundEvents.BUCKET_EMPTY, 1, 1);
@@ -193,36 +193,36 @@ public class Snail extends Animal {
         if (getWetTicks() > 0) {
             this.addWetTicks(-1);
             if (random.nextInt(10) == 0) {
-                level.addParticle(ParticleTypes.FALLING_WATER, this.getRandomX(0.6), this.getY() + random.nextDouble(), this.getRandomZ(0.6), 0.0, 0.0, 0.0);
+                level().addParticle(ParticleTypes.FALLING_WATER, this.getRandomX(0.6), this.getY() + random.nextDouble(), this.getRandomZ(0.6), 0.0, 0.0, 0.0);
             }
         }
         if (this.getBlockStateOn().is(SpawnTags.MUCUS_SOLIDIFIER) || this.isInWaterOrRain()) this.addWetTicks(1);
 
-        if (!this.level.isClientSide && this.isOnGround() && this.getWetTicks() > 0) {
+        if (!this.level().isClientSide && this.onGround() && this.getWetTicks() > 0) {
             BlockState blockState = SpawnBlocks.MUCUS.defaultBlockState();
             for (int l = 0; l < 4; ++l) {
                 if (cooldown < 0) {
                     int i = Mth.floor(this.getX() + (double)((float)(l % 2 * 2 - 1) * 0.25f));
                     BlockPos blockPos2 = new BlockPos(i, Mth.floor(this.getY()), Mth.floor(this.getZ() + (double)((float)(l / 2 % 2 * 2 - 1) * 0.25f)));
-                    if (!this.level.getBlockState(blockPos2).isAir() || !blockState.canSurvive(this.level, blockPos2)) continue;
-                    this.level.setBlockAndUpdate(blockPos2, blockState);
+                    if (!this.level().getBlockState(blockPos2).isAir() || !blockState.canSurvive(this.level(), blockPos2)) continue;
+                    this.level().setBlockAndUpdate(blockPos2, blockState);
                     cooldown = 10;
                     this.playStepSound(blockPos2, blockState);
-                    this.level.gameEvent(GameEvent.BLOCK_PLACE, blockPos2, GameEvent.Context.of(this, blockState));
+                    this.level().gameEvent(GameEvent.BLOCK_PLACE, blockPos2, GameEvent.Context.of(this, blockState));
                 }
             }
             cooldown--;
         }
 
         //code snatched with permission from orcinus (ily)
-        this.level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(2D), this::isValidEntity).forEach(player -> this.setScaredTicks(100));
+        this.level().getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(2D), this::isValidEntity).forEach(player -> this.setScaredTicks(100));
 
         if (this.getScaredTicks() > 0) {
             this.getNavigation().stop();
             this.setScaredTicks(this.getScaredTicks() - 1);
         }
 
-        if (!this.level.isClientSide()) {
+        if (!this.level().isClientSide()) {
             int shellGrowthTicks = this.getShellGrowthTicks();
             if (shellGrowthTicks > 0 && !this.isBaby()) {
                 if (shellGrowthTicks == 1) {
@@ -245,7 +245,7 @@ public class Snail extends Animal {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         //code snatched with permission from lunarbunten (ily)
-        if (!this.level.isClientSide && this.getShellGrowthTicks() == 0) {
+        if (!this.level().isClientSide && this.getShellGrowthTicks() == 0) {
             if (source.is(DamageTypeTags.IS_PROJECTILE)) {
                 if (!this.isScared()) {
                     this.spawnAtLocation(new ItemStack(SpawnItems.SNAIL_SHELL), 0.1F);
@@ -258,7 +258,7 @@ public class Snail extends Animal {
             }
         }
 
-        if (source.getEntity() instanceof LivingEntity && amount < 12 && !level.isClientSide) {
+        if (source.getEntity() instanceof LivingEntity && amount < 12 && !level().isClientSide) {
             if (this.isScared()) {
                 playSound(SpawnSoundEvents.SNAIL_HURT_HIDDEN, 1, 1);
                 return false;
@@ -325,7 +325,7 @@ public class Snail extends Animal {
 
         @Override
         public boolean canContinueToUse() {
-            return this.layPos != null && this.snail.level.getBlockState(this.layPos).is(BlockTags.DIRT) && this.snail.level.getBlockState(this.layPos.above()).isAir();
+            return this.layPos != null && this.snail.level().getBlockState(this.layPos).is(BlockTags.DIRT) && this.snail.level().getBlockState(this.layPos.above()).isAir();
         }
 
 
@@ -345,7 +345,7 @@ public class Snail extends Animal {
                 double distance = Mth.sqrt((float) this.snail.distanceToSqr(vec3d));
                 if (distance <= 2) {
                     this.snail.playSound(SpawnSoundEvents.SNAIL_LAY_EGGS, 1, 1);
-                    this.snail.level.setBlock(this.layPos, SpawnBlocks.SNAIL_EGGS.defaultBlockState().setValue(SnailEggsBlock.getFaceProperty(Direction.DOWN), true), 2);
+                    this.snail.level().setBlock(this.layPos, SpawnBlocks.SNAIL_EGGS.defaultBlockState().setValue(SnailEggsBlock.getFaceProperty(Direction.DOWN), true), 2);
                     this.snail.setHasEgg(false);
                 }
             }
@@ -358,7 +358,7 @@ public class Snail extends Animal {
             for (int x = -range; x <= range; x++) {
                 for (int z = -range; z <= range; z++) {
                     BlockPos position = new BlockPos((int)this.snail.getX() + x, (int)this.snail.getY(), (int)this.snail.getZ() + z);
-                    if (this.snail.level.getBlockState(position.below()).is(BlockTags.DIRT) && this.snail.level.getBlockState(position).isAir()) {
+                    if (this.snail.level().getBlockState(position.below()).is(BlockTags.DIRT) && this.snail.level().getBlockState(position).isAir()) {
                         list.add(position);
                     }
                 }
