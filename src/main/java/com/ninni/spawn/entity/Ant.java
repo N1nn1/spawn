@@ -1,6 +1,5 @@
 package com.ninni.spawn.entity;
 
-import com.google.common.collect.Maps;
 import com.ninni.spawn.SpawnTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -14,10 +13,25 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
@@ -32,13 +46,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 public class Ant extends TamableAnimal {
     private static final EntityDataAccessor<Integer> DATA_ABDOMEN_COLOR = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
-    private static final Map<DyeColor, float[]> COLORARRAY_BY_COLOR = Maps.newEnumMap(Arrays.stream(DyeColor.values()).collect(Collectors.toMap(dyeColor -> dyeColor, Ant::createAbdomenColor)));
 
     public Ant(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -84,13 +93,12 @@ public class Ant extends TamableAnimal {
         this.entityData.define(DATA_ABDOMEN_COLOR, DyeColor.RED.getId());
     }
 
-    private static float[] createAbdomenColor(DyeColor dyeColor) {
-        if (dyeColor == DyeColor.WHITE) return new float[]{0.9019608f, 0.9019608f, 0.9019608f};
-        float[] fs = dyeColor.getTextureDiffuseColors();
-        return new float[]{fs[0] * 0.75f, fs[1] * 0.75f, fs[2] * 0.75f};
-    }
     public static float[] getColorArray(DyeColor dyeColor) {
-        return COLORARRAY_BY_COLOR.get(dyeColor);
+        if (dyeColor == DyeColor.WHITE) {
+            return new float[]{0.9019608F, 0.9019608F, 0.9019608F};
+        }
+        float[] fs = dyeColor.getTextureDiffuseColors();
+        return new float[]{fs[0] * 0.75F, fs[1] * 0.75F, fs[2] * 0.75F};
     }
     public DyeColor getAbdomenColor() {
         return DyeColor.byId(this.entityData.get(DATA_ABDOMEN_COLOR));

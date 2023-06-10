@@ -8,7 +8,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.entity.layers.WolfCollarLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 
@@ -27,7 +26,7 @@ public class AbdomenLayer extends RenderLayer<Ant, AntModel<Ant>> {
         float u;
         float t;
         float s;
-        if (!ant.isTame() || ant.isInvisible()) return;
+        if (ant.isInvisible()) return;
 
         if (ant.hasCustomName() && "jeb_".equals(ant.getName().getString())) {
             int m = 25;
@@ -47,7 +46,7 @@ public class AbdomenLayer extends RenderLayer<Ant, AntModel<Ant>> {
             t = hs[1];
             u = hs[2];
         }
-        WolfCollarLayer.renderColoredCutoutModel(this.getParentModel(), ANT_ABDOMEN_LOCATION, poseStack, multiBufferSource, i, ant, s, t, u);
+        renderColoredCutoutModel(this.getParentModel(), ANT_ABDOMEN_LOCATION, poseStack, multiBufferSource, i, ant, s, t, u);
     }
 }
 

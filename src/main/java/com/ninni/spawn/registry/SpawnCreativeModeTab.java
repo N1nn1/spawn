@@ -2,6 +2,7 @@ package com.ninni.spawn.registry;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Items;
@@ -66,7 +67,7 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.TROPICAL_FISH_SPAWN_EGG, TUNA_SPAWN_EGG);
         });
 
-        FabricItemGroup.builder().icon(SPAWN::getDefaultInstance).displayItems((featureFlagSet, output) -> {
+        FabricItemGroup.builder().icon(SPAWN::getDefaultInstance).title(Component.translatable("spawn.item_group")).displayItems((featureFlagSet, output) -> {
             // angler fish
             output.accept(ANGLER_FISH_SPAWN_EGG);
             output.accept(ANGLER_FISH_BUCKET);
