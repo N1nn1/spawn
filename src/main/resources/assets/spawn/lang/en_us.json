@@ -1,5 +1,5 @@
 {
-  "itemGroup.spawn.item_group": "Spawn",
+  "spawn.item_group": "Spawn",
   "item.spawn.spawn": "Spawn",
 
   "subtitles.entity.spawn.fish.flop": "Fish flops",

@@ -1,13 +1,16 @@
 package com.ninni.spawn.registry;
 
+import com.ninni.spawn.Spawn;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Items;
 
-import static com.ninni.spawn.Spawn.MOD_ID;
 import static com.ninni.spawn.registry.SpawnItems.*;
 
 public class SpawnCreativeModeTab {
@@ -66,48 +69,53 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.SLIME_SPAWN_EGG, SNAIL_SPAWN_EGG);
             entries.addAfter(Items.TROPICAL_FISH_SPAWN_EGG, TUNA_SPAWN_EGG);
         });
+    }
 
-        FabricItemGroup.builder().icon(SPAWN::getDefaultInstance).title(Component.translatable("spawn.item_group")).displayItems((featureFlagSet, output) -> {
-            // angler fish
-            output.accept(ANGLER_FISH_SPAWN_EGG);
-            output.accept(ANGLER_FISH_BUCKET);
-            output.accept(ANGLER_FISH);
+    public static final CreativeModeTab ITEM_GROUP = register("item_group", FabricItemGroup.builder().icon(SPAWN::getDefaultInstance).title(Component.translatable("spawn.item_group")).displayItems((featureFlagSet, output) -> {
+        // angler fish
+        output.accept(ANGLER_FISH_SPAWN_EGG);
+        output.accept(ANGLER_FISH_BUCKET);
+        output.accept(ANGLER_FISH);
 
-            // tuna
-            output.accept(TUNA_SPAWN_EGG);
-            output.accept(TUNA_CHUNK);
-            output.accept(COOKED_TUNA_CHUNK);
-            output.accept(TUNA_SANDWICH);
-            output.accept(TUNA_EGG_BUCKET);
+        // tuna
+        output.accept(TUNA_SPAWN_EGG);
+        output.accept(TUNA_CHUNK);
+        output.accept(COOKED_TUNA_CHUNK);
+        output.accept(TUNA_SANDWICH);
+        output.accept(TUNA_EGG_BUCKET);
 
-            // seahorse
-            output.accept(SEAHORSE_SPAWN_EGG);
-            output.accept(SEAHORSE_BUCKET);
+        // seahorse
+        output.accept(SEAHORSE_SPAWN_EGG);
+        output.accept(SEAHORSE_BUCKET);
 
-            // snail
-            output.accept(SNAIL_SPAWN_EGG);
-            output.accept(SNAIL_SHELL);
-            output.accept(ESCARGOT);
-            output.accept(POTTED_SWEET_BERRIES);
-            output.accept(BIG_SNAIL_SHELL);
-            output.accept(SNAIL_SHELL_TILES);
-            output.accept(SNAIL_SHELL_TILE_STAIRS);
-            output.accept(SNAIL_SHELL_TILE_SLAB);
-            output.accept(SNAIL_EGGS);
-            output.accept(MUCUS);
-            output.accept(MUCUS_BLOCK);
-            output.accept(GHOSTLY_MUCUS_BLOCK);
+        // snail
+        output.accept(SNAIL_SPAWN_EGG);
+        output.accept(SNAIL_SHELL);
+        output.accept(ESCARGOT);
+        output.accept(POTTED_SWEET_BERRIES);
+        output.accept(BIG_SNAIL_SHELL);
+        output.accept(SNAIL_SHELL_TILES);
+        output.accept(SNAIL_SHELL_TILE_STAIRS);
+        output.accept(SNAIL_SHELL_TILE_SLAB);
+        output.accept(SNAIL_EGGS);
+        output.accept(MUCUS);
+        output.accept(MUCUS_BLOCK);
+        output.accept(GHOSTLY_MUCUS_BLOCK);
 
-            // hamster
-            output.accept(HAMSTER_SPAWN_EGG);
-            output.accept(SUNFLOWER);
-            output.accept(SUNFLOWER_SEEDS);
-            output.accept(ROASTED_SUNFLOWER_SEEDS);
+        // hamster
+        output.accept(HAMSTER_SPAWN_EGG);
+        output.accept(SUNFLOWER);
+        output.accept(SUNFLOWER_SEEDS);
+        output.accept(ROASTED_SUNFLOWER_SEEDS);
 
-            // ant
-            output.accept(ANT_SPAWN_EGG);
-            output.accept(ANT_PUPA);
+        // ant
+        output.accept(ANT_SPAWN_EGG);
+        output.accept(ANT_PUPA);
 
-        }).build();
+    }).build()
+    );
+
+    private static CreativeModeTab register(String id, CreativeModeTab tab) {
+        return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(Spawn.MOD_ID, id), tab);
     }
 }
