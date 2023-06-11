@@ -32,7 +32,7 @@ public class SpawnBlocks {
 
     // ant
     public static final Block ANTHILL = register("anthill", new Block(FabricBlockSettings.copyOf(Blocks.COARSE_DIRT)));
-    public static final Block ANT_MOUND = register("ant_mound", new BrushableBlock(Blocks.COARSE_DIRT, FabricBlockSettings.copyOf(ANTHILL).strength(0.25f).pushReaction(PushReaction.DESTROY).sound(SoundType.SUSPICIOUS_GRAVEL), SoundEvents.BRUSH_GRAVEL, SoundEvents.BRUSH_GRAVEL_COMPLETED));
+    public static final Block ANT_MOUND = register("ant_mound", new BrushableStableBlock(Blocks.COARSE_DIRT, FabricBlockSettings.copyOf(ANTHILL).strength(0.25f).pushReaction(PushReaction.DESTROY).sound(SoundType.SUSPICIOUS_GRAVEL), SoundEvents.BRUSH_GRAVEL, SoundEvents.BRUSH_GRAVEL_COMPLETED));
 
     private static Block register(String id, Block block) { 
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Spawn.MOD_ID, id), block); 

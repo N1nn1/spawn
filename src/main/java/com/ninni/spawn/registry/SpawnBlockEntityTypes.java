@@ -1,7 +1,7 @@
 package com.ninni.spawn.registry;
 
 import com.ninni.spawn.Spawn;
-import com.ninni.spawn.block.SunflowerBlockEntity;
+import com.ninni.spawn.block.entity.SunflowerBlockEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

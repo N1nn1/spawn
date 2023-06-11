@@ -1,5 +1,6 @@
-package com.ninni.spawn.block;
+package com.ninni.spawn.block.entity;
 
+import com.ninni.spawn.block.SunflowerBlock;
 import com.ninni.spawn.block.state.properties.SunflowerRotation;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnBlocks;
