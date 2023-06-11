@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -28,6 +29,10 @@ public class SpawnBlocks {
     // hamster
     public static final Block SUNFLOWER = register("sunflower", new SunflowerBlock(FabricBlockSettings.copyOf(Blocks.SUNFLOWER).randomTicks()));
     public static final Block SUNFLOWER_PLANT = register("sunflower_plant", new SunflowerPlantBlock(FabricBlockSettings.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)));
+
+    // ant
+    public static final Block ANTHILL = register("anthill", new Block(FabricBlockSettings.copyOf(Blocks.COARSE_DIRT)));
+    public static final Block ANT_MOUND = register("ant_mound", new BrushableBlock(Blocks.COARSE_DIRT, FabricBlockSettings.copyOf(ANTHILL).strength(0.25f).pushReaction(PushReaction.DESTROY).sound(SoundType.SUSPICIOUS_GRAVEL), SoundEvents.BRUSH_GRAVEL, SoundEvents.BRUSH_GRAVEL_COMPLETED));
 
     private static Block register(String id, Block block) { 
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Spawn.MOD_ID, id), block); 

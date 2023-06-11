@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
-      "model": "spawn:block/ant_mound"
+    "dusted=0": {
+      "model": "spawn:block/ant_mound_0"
+    },
+    "dusted=1": {
+      "model": "spawn:block/ant_mound_1"
+    },
+    "dusted=2": {
+      "model": "spawn:block/ant_mound_2"
+    },
+    "dusted=3": {
+      "model": "spawn:block/ant_mound_3"
     }
   }
 }

@@ -62,5 +62,11 @@
   "item.spawn.hamster_spawn_egg": "Hamster Spawn Egg",
   "block.spawn.sunflower": "Sunflower",
   "item.spawn.sunflower_seeds": "Sunflower Seeds",
-  "item.spawn.roasted_sunflower_seeds": "Roasted Sunflower Seeds"
+  "item.spawn.roasted_sunflower_seeds": "Roasted Sunflower Seeds",
+
+  "entity.spawn.ant": "Ant",
+  "item.spawn.ant_spawn_egg": "Ant Spawn Egg",
+  "item.spawn.anthill": "Anthill",
+  "item.spawn.ant_mound": "Ant Mound",
+  "item.spawn.ant_pupa": "Ant Pupa"
 }

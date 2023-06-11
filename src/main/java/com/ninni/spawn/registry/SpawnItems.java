@@ -57,6 +57,8 @@ public class SpawnItems {
 
     // ant
     public static final Item ANT_SPAWN_EGG = register("ant_spawn_egg", new SpawnEggItem(SpawnEntityType.ANT, 0x3C3436, 0x282527, new Item.Properties()));
+    public static final Item ANTHILL = register("anthill", new BlockItem(SpawnBlocks.ANTHILL, new FabricItemSettings()));
+    public static final Item ANT_MOUND = register("ant_mound", new BlockItem(SpawnBlocks.ANT_MOUND, new FabricItemSettings()));
     public static final Item ANT_PUPA = register("ant_pupa", new AntPupaItem(new Item.Properties()));
 
     private static Item register(String id, Item item) {

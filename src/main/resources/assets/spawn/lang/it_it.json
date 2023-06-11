@@ -62,5 +62,11 @@
   "item.spawn.hamster_spawn_egg": "Uovo generatore di criceto",
   "block.spawn.sunflower": "Girasole",
   "item.spawn.sunflower_seeds": "Semi di girasole",
-  "item.spawn.roasted_sunflower_seeds": "Semi di girasole tostati"
+  "item.spawn.roasted_sunflower_seeds": "Semi di girasole tostati",
+
+  "entity.spawn.ant": "Formica",
+  "item.spawn.ant_spawn_egg": "Uovo generatore di formica",
+  "item.spawn.anthill": "Formicaio",
+  "item.spawn.ant_mound": "Camera del formicaio",
+  "item.spawn.ant_pupa": "Pupa di formica"
 }

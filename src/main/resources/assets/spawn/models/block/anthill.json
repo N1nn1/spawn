@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "side": "spawn:block/ant_mound",
+    "side": "spawn:block/ant_mound_0",
     "top": "spawn:block/anthill",
-    "bottom": "spawn:block/ant_mound"
+    "bottom": "spawn:block/ant_mound_0"
   }
 }
