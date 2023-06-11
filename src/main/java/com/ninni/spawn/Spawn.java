@@ -1,14 +1,7 @@
 package com.ninni.spawn;
 
 import com.google.common.reflect.Reflection;
-import com.ninni.spawn.registry.SpawnBlockEntityTypes;
-import com.ninni.spawn.registry.SpawnBlocks;
-import com.ninni.spawn.registry.SpawnCreativeModeTab;
-import com.ninni.spawn.registry.SpawnEntityType;
-import com.ninni.spawn.registry.SpawnFeatures;
-import com.ninni.spawn.registry.SpawnItems;
-import com.ninni.spawn.registry.SpawnPlacedFeatures;
-import com.ninni.spawn.registry.SpawnSoundEvents;
+import com.ninni.spawn.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
@@ -28,6 +21,7 @@ public class Spawn implements ModInitializer {
 				SpawnFeatures.class,
 				SpawnBlockEntityTypes.class,
 				SpawnCreativeModeTab.class,
+				SpawnDecoratedPotPatterns.class,
 				SpawnItems.class,
 				SpawnBlocks.class
 		);

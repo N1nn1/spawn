@@ -29,6 +29,7 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.SALMON_BUCKET, TUNA_EGG_BUCKET);
             entries.addAfter(Items.COD_BUCKET, ANGLER_FISH_BUCKET);
             entries.addAfter(Items.TROPICAL_FISH_BUCKET, SEAHORSE_BUCKET);
+            entries.addAfter(Items.MILK_BUCKET, ANT_PUPA);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(entries -> {
@@ -40,11 +41,13 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.BEETROOT_SEEDS, SUNFLOWER_SEEDS);
             entries.addAfter(Items.HONEY_BLOCK, MUCUS_BLOCK, BIG_SNAIL_SHELL);
             entries.addAfter(Items.FROGSPAWN, SNAIL_EGGS);
+            entries.addAfter(Items.HONEYCOMB_BLOCK, ANTHILL, ANT_MOUND);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
             entries.addAfter(Items.GLOW_LICHEN, MUCUS);
             entries.addAfter(Items.DECORATED_POT, POTTED_SWEET_BERRIES);
+            entries.addAfter(Items.SUSPICIOUS_GRAVEL, ANT_MOUND);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
@@ -59,12 +62,13 @@ public class SpawnCreativeModeTab {
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(entries -> {
+            entries.addAfter(Items.BURN_POTTERY_SHERD, CROWN_POTTERY_SHERD);
             entries.addAfter(Items.HONEYCOMB, SNAIL_SHELL);
             entries.addAfter(Items.SCUTE, MUCUS);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> {
-            entries.addAfter(Items.ALLAY_SPAWN_EGG, ANGLER_FISH_SPAWN_EGG);
+            entries.addAfter(Items.ALLAY_SPAWN_EGG, ANGLER_FISH_SPAWN_EGG, ANT_SPAWN_EGG);
             entries.addAfter(Items.SALMON_SPAWN_EGG, SEAHORSE_SPAWN_EGG);
             entries.addAfter(Items.SLIME_SPAWN_EGG, SNAIL_SPAWN_EGG);
             entries.addAfter(Items.TROPICAL_FISH_SPAWN_EGG, TUNA_SPAWN_EGG);
@@ -113,6 +117,7 @@ public class SpawnCreativeModeTab {
                 output.accept(ANTHILL);
                 output.accept(ANT_MOUND);
                 output.accept(ANT_PUPA);
+                output.accept(CROWN_POTTERY_SHERD);
 
             }).build()
     );

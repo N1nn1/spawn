@@ -6,6 +6,7 @@
   "mixins": [
     "AbstractFishMixin",
     "CreativeModTabMixin",
+    "DecoratedPotPatternsMixin",
     "MobBucketItemAccessor",
     "MobBucketItemMixin",
     "ServerPlayerMixin"
