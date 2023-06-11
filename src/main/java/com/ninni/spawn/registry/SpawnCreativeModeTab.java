@@ -63,6 +63,7 @@ public class SpawnCreativeModeTab {
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(entries -> {
             entries.addAfter(Items.BURN_POTTERY_SHERD, CROWN_POTTERY_SHERD);
+            entries.addAfter(Items.SNORT_POTTERY_SHERD, SPADE_POTTERY_SHERD);
             entries.addAfter(Items.HONEYCOMB, SNAIL_SHELL);
             entries.addAfter(Items.SCUTE, MUCUS);
         });
@@ -118,6 +119,7 @@ public class SpawnCreativeModeTab {
                 output.accept(ANT_MOUND);
                 output.accept(ANT_PUPA);
                 output.accept(CROWN_POTTERY_SHERD);
+                output.accept(SPADE_POTTERY_SHERD);
 
             }).build()
     );

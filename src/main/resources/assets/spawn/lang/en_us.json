@@ -69,5 +69,6 @@
   "block.spawn.anthill": "Anthill",
   "block.spawn.ant_mound": "Ant Mound",
   "item.spawn.ant_pupa": "Ant Pupa",
-  "item.spawn.crown_pottery_sherd": "Crown Pottery Sherd"
+  "item.spawn.crown_pottery_sherd": "Crown Pottery Sherd",
+  "item.spawn.spade_pottery_sherd": "Spade Pottery Sherd"
 }

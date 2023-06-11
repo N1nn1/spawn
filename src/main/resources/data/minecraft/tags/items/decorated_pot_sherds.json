@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "spawn:crown_pottery_sherd"
+    "spawn:crown_pottery_sherd",
+    "spawn:spade_pottery_sherd"
   ]
 }

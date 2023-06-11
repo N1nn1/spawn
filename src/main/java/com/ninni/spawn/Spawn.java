@@ -25,6 +25,7 @@ public class Spawn implements ModInitializer {
 				SpawnCreativeModeTab.class,
 				SpawnItems.class,
 				SpawnBlocks.class,
+				SpawnPointsOfInterests.class,
 				SpawnDecoratedPotPatterns.class
 		);
 

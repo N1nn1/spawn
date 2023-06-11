@@ -15,11 +15,14 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 
 public class SpawnDecoratedPotPatterns {
     public static final ResourceKey<String> CROWN = register("crown_pottery_pattern");
+    public static final ResourceKey<String> SPADE = register("spade_pottery_pattern");
     @Unique public static final Map<Item, ResourceKey<String>> S$ITEM_TO_POT_TEXTURE = new HashMap<>();
 
     static {
         S$ITEM_TO_POT_TEXTURE.put(SpawnItems.CROWN_POTTERY_SHERD, CROWN);
+        S$ITEM_TO_POT_TEXTURE.put(SpawnItems.SPADE_POTTERY_SHERD, SPADE);
         Registry.register(BuiltInRegistries.DECORATED_POT_PATTERNS, CROWN, "crown_pottery_pattern");
+        Registry.register(BuiltInRegistries.DECORATED_POT_PATTERNS, SPADE, "spade_pottery_pattern");
     }
 
     public static ResourceKey<String> register(String string) {
