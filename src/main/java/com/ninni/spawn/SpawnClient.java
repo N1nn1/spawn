@@ -26,7 +26,6 @@ import net.minecraft.world.level.Level;
 import java.util.Optional;
 
 public class SpawnClient implements ClientModInitializer {
-
 	public static final ResourceLocation OPEN_HAMSTER_SCREEN = new ResourceLocation(Spawn.MOD_ID, "open_hamster_screen");
 
 	@Override
@@ -67,9 +66,9 @@ public class SpawnClient implements ClientModInitializer {
 					LocalPlayer clientPlayerEntity = client.player;
 					SimpleContainer simpleInventory = new SimpleContainer(slotCount);
 					assert clientPlayerEntity != null;
-					HamsterInventoryMenu reindeerScreenHandler = new HamsterInventoryMenu(syncId, clientPlayerEntity.getInventory(), simpleInventory, hamster);
-					clientPlayerEntity.containerMenu = reindeerScreenHandler;
-					client.execute(() -> client.setScreen(new HamsterInventoryScreen(reindeerScreenHandler, clientPlayerEntity.getInventory(), hamster)));
+					HamsterInventoryMenu hamsterInventoryMenu = new HamsterInventoryMenu(syncId, clientPlayerEntity.getInventory(), simpleInventory, hamster);
+					clientPlayerEntity.containerMenu = hamsterInventoryMenu;
+					client.execute(() -> client.setScreen(new HamsterInventoryScreen(hamsterInventoryMenu, clientPlayerEntity.getInventory(), hamster)));
 				}
 			});
 		});
