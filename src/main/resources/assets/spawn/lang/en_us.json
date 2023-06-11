@@ -66,8 +66,8 @@
 
   "entity.spawn.ant": "Ant",
   "item.spawn.ant_spawn_egg": "Ant Spawn Egg",
-  "item.spawn.anthill": "Anthill",
-  "item.spawn.ant_mound": "Ant Mound",
+  "block.spawn.anthill": "Anthill",
+  "block.spawn.ant_mound": "Ant Mound",
   "item.spawn.ant_pupa": "Ant Pupa",
   "item.spawn.crown_pottery_sherd": "Crown Pottery Sherd"
 }

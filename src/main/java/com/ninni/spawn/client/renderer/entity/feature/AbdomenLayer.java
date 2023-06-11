@@ -26,7 +26,7 @@ public class AbdomenLayer extends RenderLayer<Ant, AntModel<Ant>> {
         float u;
         float t;
         float s;
-        if (ant.isInvisible()) return;
+        if (ant.isInvisible() || !ant.isTame()) return;
 
         if (ant.hasCustomName() && "jeb_".equals(ant.getName().getString())) {
             int m = 25;
