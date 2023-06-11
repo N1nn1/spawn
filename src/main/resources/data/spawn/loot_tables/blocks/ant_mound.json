@@ -1,4 +1,4 @@
 {
   "type": "minecraft:block",
-  "random_sequence": "minecraft:blocks/suspicious_gravel"
+  "random_sequence": "spawn:blocks/ant_mound"
 }

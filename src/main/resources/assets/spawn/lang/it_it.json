@@ -68,5 +68,7 @@
   "item.spawn.ant_spawn_egg": "Uovo generatore di formica",
   "block.spawn.anthill": "Formicaio",
   "block.spawn.ant_mound": "Camera del formicaio",
-  "item.spawn.ant_pupa": "Pupa di formica"
+  "item.spawn.ant_pupa": "Pupa di formica",
+  "item.spawn.crown_pottery_sherd": "Coccio con corona",
+  "item.spawn.spade_pottery_sherd": "Coccio con pala"
 }
