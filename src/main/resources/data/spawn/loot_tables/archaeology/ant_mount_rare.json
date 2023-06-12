@@ -57,6 +57,10 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:plenty_pottery_sherd"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "spawn:ant_pupa"
         }
       ],
       "rolls": 1.0

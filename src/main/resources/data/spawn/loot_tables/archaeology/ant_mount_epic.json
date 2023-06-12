@@ -6,15 +6,16 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "spawn:ant_pupa",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
           "name": "spawn:crown_pottery_sherd"
         },
         {
           "type": "minecraft:item",
           "name": "spawn:spade_pottery_sherd"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "spawn:ant_pupa"
         }
       ],
       "rolls": 1.0

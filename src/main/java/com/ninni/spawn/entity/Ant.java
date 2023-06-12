@@ -87,7 +87,6 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.goalSelector.addGoal(6, new EnterAnthillGoal());
         this.moveToAnthillGoal = new MoveToAnthillGoal();
         this.goalSelector.addGoal(7, this.moveToAnthillGoal);
-        this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0, 7f, 2.0f, false));
         this.goalSelector.addGoal(9, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
         this.goalSelector.addGoal(10, new AntComeBackToAnthillGoal());
         this.goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1));
