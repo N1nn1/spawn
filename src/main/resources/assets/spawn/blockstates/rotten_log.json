@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "axis=x": [
+      {
+        "model": "spawn:block/rotten_log",
+        "x": 90,
+        "y": 90
+      }
+    ],
+    "axis=y": [
+      {
+        "model": "spawn:block/rotten_log"
+      }
+    ],
+    "axis=z": [
+      {
+        "model": "spawn:block/rotten_log",
+        "x": 90
+      }
+    ]
+  }
+}

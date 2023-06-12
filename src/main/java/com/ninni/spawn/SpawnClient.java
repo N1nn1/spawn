@@ -6,22 +6,22 @@ import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
 import com.ninni.spawn.client.particles.TunaEggParticle;
 import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.entity.Hamster;
-import com.ninni.spawn.registry.SpawnBlocks;
-import com.ninni.spawn.registry.SpawnEntityModelLayers;
-import com.ninni.spawn.registry.SpawnEntityType;
-import com.ninni.spawn.registry.SpawnParticles;
+import com.ninni.spawn.registry.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.particle.GlowParticle;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BrushableBlockRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.Optional;
 

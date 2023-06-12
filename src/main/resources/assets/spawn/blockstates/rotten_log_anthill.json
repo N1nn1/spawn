@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "spawn:block/rotten_log_anthill",
+      "y": 90,
+      "uvlock": false
+    },
+    "facing=north": {
+      "model": "spawn:block/rotten_log_anthill",
+      "uvlock": false
+    },
+    "facing=south": {
+      "model": "spawn:block/rotten_log_anthill",
+      "y": 180,
+      "uvlock": false
+    },
+    "facing=west": {
+      "model": "spawn:block/rotten_log_anthill",
+      "y": 270,
+      "uvlock": false
+    }
+  }
+}

@@ -117,6 +117,8 @@ public class SpawnCreativeModeTab {
                 output.accept(ANT_SPAWN_EGG);
                 output.accept(ANTHILL);
                 output.accept(ANT_MOUND);
+                output.accept(ROTTEN_LOG);
+                output.accept(ROTTEN_LOG_ANTHILL);
                 output.accept(ANT_PUPA);
                 output.accept(CROWN_POTTERY_SHERD);
                 output.accept(SPADE_POTTERY_SHERD);

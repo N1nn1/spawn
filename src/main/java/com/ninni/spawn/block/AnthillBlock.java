@@ -4,6 +4,7 @@ import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -15,17 +16,18 @@ import net.minecraft.world.entity.projectile.WitherSkull;
 import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.BeehiveBlock;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
@@ -35,10 +37,11 @@ import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class AnthillBlock extends BaseEntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public AnthillBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.registerDefaultState(this.stateDefinition.any());
+        this.registerDefaultState(((this.stateDefinition.any())).setValue(FACING, Direction.NORTH));
     }
     
     @Override
@@ -88,7 +91,7 @@ public class AnthillBlock extends BaseEntityBlock {
             boolean bl = !blockEntity1.hasNoAnts();
             if (bl) {
                 CompoundTag nbtCompound = new CompoundTag();
-                nbtCompound.put("Birts", blockEntity1.getAnts());
+                nbtCompound.put("Ants", blockEntity1.getAnts());
                 BlockItem.setBlockEntityData(itemStack, SpawnBlockEntityTypes.ANTHILL, nbtCompound);
                 nbtCompound = new CompoundTag();
                 itemStack.addTagElement("BlockStateTag", nbtCompound);
@@ -109,5 +112,15 @@ public class AnthillBlock extends BaseEntityBlock {
             blockEntity1.angerAnts(null, state, AnthillBlockEntity.AntState.EMERGENCY);
         }
         return super.getDrops(state, builder);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+        return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
     }
 }

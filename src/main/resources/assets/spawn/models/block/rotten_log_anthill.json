@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "north": "spawn:block/rotten_log_top",
+    "south": "spawn:block/rotten_log_top",
+    "east": "spawn:block/rotten_log_anthill",
+    "west": "spawn:block/rotten_log_anthill",
+    "up": "spawn:block/rotten_log_anthill_top",
+    "down": "spawn:block/rotten_log_anthill",
+    "particle": "spawn:block/rotten_log_anthill"
+  }
+}

@@ -59,6 +59,8 @@ public class SpawnItems {
     public static final Item ANT_SPAWN_EGG = register("ant_spawn_egg", new SpawnEggItem(SpawnEntityType.ANT, 0x3C3436, 0x282527, new Item.Properties()));
     public static final Item ANTHILL = register("anthill", new BlockItem(SpawnBlocks.ANTHILL, new FabricItemSettings()));
     public static final Item ANT_MOUND = register("ant_mound", new BlockItem(SpawnBlocks.ANT_MOUND, new FabricItemSettings()));
+    public static final Item ROTTEN_LOG = register("rotten_log", new BlockItem(SpawnBlocks.ROTTEN_LOG, new FabricItemSettings()));
+    public static final Item ROTTEN_LOG_ANTHILL = register("rotten_log_anthill", new BlockItem(SpawnBlocks.ROTTEN_LOG_ANTHILL, new FabricItemSettings()));
     public static final Item ANT_PUPA = register("ant_pupa", new AntPupaItem(new Item.Properties()));
     public static final Item CROWN_POTTERY_SHERD = register("crown_pottery_sherd", new Item(new Item.Properties()));
     public static final Item SPADE_POTTERY_SHERD = register("spade_pottery_sherd", new Item(new Item.Properties()));

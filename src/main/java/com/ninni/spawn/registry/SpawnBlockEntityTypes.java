@@ -14,13 +14,17 @@ public class SpawnBlockEntityTypes {
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
             new ResourceLocation(Spawn.MOD_ID, "sunflower"),
             BlockEntityType.Builder.of(SunflowerBlockEntity::new,
-                    SpawnBlocks.SUNFLOWER).build(null)
+                    SpawnBlocks.SUNFLOWER
+            ).build(null)
     );
 
     public static final BlockEntityType<AnthillBlockEntity> ANTHILL = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
             new ResourceLocation(Spawn.MOD_ID, "anthill"),
             BlockEntityType.Builder.of(AnthillBlockEntity::new,
-                    SpawnBlocks.ANTHILL).build(null)
+                    SpawnBlocks.ANTHILL,
+                    SpawnBlocks.ROTTEN_LOG_ANTHILL
+            ).build(null)
     );
+
 }

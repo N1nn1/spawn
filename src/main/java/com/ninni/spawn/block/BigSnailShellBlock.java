@@ -21,6 +21,7 @@ public class BigSnailShellBlock extends HorizontalDirectionalBlock {
         return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
