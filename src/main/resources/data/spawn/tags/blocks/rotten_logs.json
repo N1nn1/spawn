@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+        "spawn:rotten_log",
+        "spawn:rotten_wood",
+        "spawn:stripped_rotten_log",
+        "spawn:stripped_rotten_wood"
+    ]
+}

@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Block;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 
+@SuppressWarnings("unused")
 public interface SpawnTags {
 
     //Item tags
@@ -19,10 +20,12 @@ public interface SpawnTags {
     TagKey<Item> SNAIL_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "snail_tempts"));
     TagKey<Item> HAMSTER_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "hamster_tempts"));
     TagKey<Item> HAMSTER_FEEDS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "hamster_feeds"));
+    TagKey<Item> ROTTEN_LOGS_ITEM = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "rotten_logs"));
 
     //Block tags
     TagKey<Block> MUCUS_SOLIDIFIER = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mucus_solidifier"));
     TagKey<Block> MUCUS_SOLIDIFICATION_SPREADER = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mucus_solidification_spreader"));
+    TagKey<Block> ROTTEN_LOGS_BLOCK = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "rotten_logs"));
 
     //Biome tags
     TagKey<Biome> SNAIL_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "snail_spawns"));

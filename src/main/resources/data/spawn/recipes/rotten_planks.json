@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "spawn:rotten_logs"
+    }
+  ],
+  "result": {
+    "item": "spawn:rotten_planks",
+    "count": 4
+  }
+}

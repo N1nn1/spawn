@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "spawn:block/rotten_slab"
+    },
+    "type=double": {
+      "model": "spawn:block/rotten_planks"
+    },
+    "type=top": {
+      "model": "spawn:block/rotten_slab_top"
+    }
+  }
+}

@@ -29,11 +29,6 @@ public class Spawn implements ModInitializer {
 				SpawnDecoratedPotPatterns.class
 		);
 
-		BiomeModifications.create(new ResourceLocation(Spawn.MOD_ID, "replace_sunflower_patch")).add(ModificationPhase.REPLACEMENTS, biomeSelectionContext -> biomeSelectionContext.hasPlacedFeature(VegetationPlacements.PATCH_SUNFLOWER), biomeModificationContext -> {
-			BiomeModificationContext.GenerationSettingsContext generationSettings = biomeModificationContext.getGenerationSettings();
-			if (generationSettings.removeFeature(VegetationPlacements.PATCH_SUNFLOWER)) {
-				generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, SpawnPlacedFeatures.PATCH_SUNFLOWER);
-			}
-		});
+		SpawnVanillaIntegration.serverInit();
 	}
 }

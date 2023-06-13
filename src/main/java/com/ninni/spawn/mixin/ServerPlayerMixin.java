@@ -4,6 +4,7 @@ import com.ninni.spawn.SpawnClient;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.entity.Hamster;
 import com.ninni.spawn.entity.HamsterOpenContainer;
+import com.ninni.spawn.registry.SpawnVanillaIntegration;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,7 +34,7 @@ public abstract class ServerPlayerMixin implements HamsterOpenContainer {
         buf.writeInt(hamster.getId());
         buf.writeInt(container.getContainerSize());
         buf.writeInt(this.containerCounter);
-        ServerPlayNetworking.send($this, SpawnClient.OPEN_HAMSTER_SCREEN, buf);
+        ServerPlayNetworking.send($this, SpawnVanillaIntegration.OPEN_HAMSTER_SCREEN, buf);
         $this.connection.send(new ClientboundHorseScreenOpenPacket(this.containerCounter, container.getContainerSize(), hamster.getId()));
         $this.containerMenu = new HamsterInventoryMenu(this.containerCounter, $this.getInventory(), container, hamster);
         this.initMenu($this.containerMenu);

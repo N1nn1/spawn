@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "spawn:block/stripped_rotten_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "spawn:block/stripped_rotten_wood"
+    },
+    "axis=z": {
+      "model": "spawn:block/stripped_rotten_wood",
+      "x": 90
+    }
+  }
+}

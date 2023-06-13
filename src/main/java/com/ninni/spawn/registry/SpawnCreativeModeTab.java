@@ -23,6 +23,20 @@ public class SpawnCreativeModeTab {
                     SNAIL_SHELL_TILE_STAIRS,
                     SNAIL_SHELL_TILE_SLAB
             );
+            entries.addAfter(Items.CHERRY_BUTTON,
+                    ROTTEN_LOG,
+                    ROTTEN_WOOD,
+                    STRIPPED_ROTTEN_LOG,
+                    STRIPPED_ROTTEN_WOOD,
+                    ROTTEN_PLANKS,
+                    CRACKED_ROTTEN_PLANKS,
+                    ROTTEN_STAIRS,
+                    ROTTEN_SLAB,
+                    ROTTEN_FENCE,
+                    ROTTEN_FENCE_GATE,
+                    ROTTEN_DOOR,
+                    ROTTEN_TRAPDOOR
+            );
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
@@ -41,14 +55,15 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.BEETROOT_SEEDS, SUNFLOWER_SEEDS);
             entries.addAfter(Items.HONEY_BLOCK, MUCUS_BLOCK, BIG_SNAIL_SHELL);
             entries.addAfter(Items.FROGSPAWN, SNAIL_EGGS);
-            entries.addAfter(Items.HONEYCOMB_BLOCK, ANTHILL, ANT_MOUND);
+            entries.addAfter(Items.HONEYCOMB_BLOCK, ANTHILL, ROTTEN_LOG_ANTHILL, ANT_MOUND);
+            entries.addAfter(Items.CHERRY_LOG, ROTTEN_LOG);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
             entries.addAfter(Items.GLOW_LICHEN, MUCUS);
             entries.addAfter(Items.DECORATED_POT, POTTED_SWEET_BERRIES);
-            entries.addAfter(Items.BEE_NEST, ANTHILL, ROTTEN_LOG_ANTHILL, ANT_FARM);
-            entries.addAfter(Items.SUSPICIOUS_GRAVEL, ANT_MOUND);
+            entries.addAfter(Items.BEE_NEST, ANTHILL, ROTTEN_LOG_ANTHILL);
+            entries.addAfter(Items.BEEHIVE, ANT_FARM, ANT_MOUND);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
@@ -116,15 +131,25 @@ public class SpawnCreativeModeTab {
 
                 // ant
                 output.accept(ANT_SPAWN_EGG);
-                output.accept(ANTHILL);
                 output.accept(ANT_MOUND);
-                output.accept(ROTTEN_LOG);
+                output.accept(ANTHILL);
                 output.accept(ROTTEN_LOG_ANTHILL);
                 output.accept(ANT_FARM);
+                output.accept(ROTTEN_LOG);
+                output.accept(ROTTEN_WOOD);
+                output.accept(STRIPPED_ROTTEN_LOG);
+                output.accept(STRIPPED_ROTTEN_WOOD);
+                output.accept(ROTTEN_PLANKS);
+                output.accept(CRACKED_ROTTEN_PLANKS);
+                output.accept(ROTTEN_STAIRS);
+                output.accept(ROTTEN_SLAB);
+                output.accept(ROTTEN_FENCE);
+                output.accept(ROTTEN_FENCE_GATE);
+                output.accept(ROTTEN_DOOR);
+                output.accept(ROTTEN_TRAPDOOR);
                 output.accept(ANT_PUPA);
                 output.accept(CROWN_POTTERY_SHERD);
                 output.accept(SPADE_POTTERY_SHERD);
-
             }).build()
     );
 

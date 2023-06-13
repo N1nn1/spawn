@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "spawn:block/stripped_rotten_log_top",
+    "side": "spawn:block/stripped_rotten_log"
+  }
+}

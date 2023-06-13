@@ -14,9 +14,9 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.material.Fluids;
 
-@SuppressWarnings("unused")
 public class SpawnItems {
 
+    @SuppressWarnings("unused")
     public static final Item SPAWN = register("spawn", new Item(new FabricItemSettings().maxCount(1).rarity(Rarity.EPIC).fireproof()));
 
     // angler fish
@@ -39,29 +39,47 @@ public class SpawnItems {
     public static final Item SNAIL_SPAWN_EGG = register("snail_spawn_egg", new SpawnEggItem(SpawnEntityType.SNAIL, 0x5D3F30, 0xF6DEA2, new Item.Properties()));
     public static final Item SNAIL_EGGS = register("snail_eggs", new BlockItem(SpawnBlocks.SNAIL_EGGS, new FabricItemSettings()));
     public static final Item SNAIL_SHELL = register("snail_shell", new Item(new FabricItemSettings()));
+    // snail shell blocks
     public static final Item BIG_SNAIL_SHELL = register("big_snail_shell", new BlockItem(SpawnBlocks.BIG_SNAIL_SHELL, new FabricItemSettings()));
     public static final Item SNAIL_SHELL_TILES = register("snail_shell_tiles", new BlockItem(SpawnBlocks.SNAIL_SHELL_TILES, new FabricItemSettings()));
     public static final Item SNAIL_SHELL_TILE_STAIRS = register("snail_shell_tile_stairs", new BlockItem(SpawnBlocks.SNAIL_SHELL_TILE_STAIRS, new FabricItemSettings()));
     public static final Item SNAIL_SHELL_TILE_SLAB = register("snail_shell_tile_slab", new BlockItem(SpawnBlocks.SNAIL_SHELL_TILE_SLAB, new FabricItemSettings()));
+    // misc snail blocks
     public static final Item ESCARGOT = register("escargot", new EscargotItem(new FabricItemSettings().recipeRemainder(SNAIL_SHELL).maxCount(1).food(new FoodProperties.Builder().nutrition(4).saturationMod(0.8f).build())));
     public static final Item POTTED_SWEET_BERRIES = register("potted_sweet_berries", new BlockItem(SpawnBlocks.POTTED_SWEET_BERRY_BUSH, new FabricItemSettings().recipeRemainder(SNAIL_SHELL).maxCount(16)));
+    // snail mucus blocks
     public static final Item MUCUS = register("mucus", new BlockItem(SpawnBlocks.MUCUS, new FabricItemSettings()));
     public static final Item MUCUS_BLOCK = register("mucus_block", new BlockItem(SpawnBlocks.MUCUS_BLOCK, new FabricItemSettings()));
     public static final Item GHOSTLY_MUCUS_BLOCK = register("ghostly_mucus_block", new BlockItem(SpawnBlocks.GHOSTLY_MUCUS_BLOCK, new FabricItemSettings()));
 
     // hamster
     public static final Item HAMSTER_SPAWN_EGG = register("hamster_spawn_egg", new SpawnEggItem(SpawnEntityType.HAMSTER, 0x92816C, 0xFFFFFF, new Item.Properties()));
+    // sunflowers
     public static final Item SUNFLOWER = register("sunflower", new BlockItem(SpawnBlocks.SUNFLOWER, new FabricItemSettings()));
     public static final Item SUNFLOWER_SEEDS = register("sunflower_seeds", new ItemNameBlockItem(SpawnBlocks.SUNFLOWER_PLANT, new FabricItemSettings()));
     public static final Item ROASTED_SUNFLOWER_SEEDS = register("roasted_sunflower_seeds", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(3).saturationMod(0.2f).fast().build())));
 
     // ant
     public static final Item ANT_SPAWN_EGG = register("ant_spawn_egg", new SpawnEggItem(SpawnEntityType.ANT, 0x3C3436, 0x282527, new Item.Properties()));
-    public static final Item ANTHILL = register("anthill", new BlockItem(SpawnBlocks.ANTHILL, new FabricItemSettings()));
+    // ant blocks
     public static final Item ANT_MOUND = register("ant_mound", new BlockItem(SpawnBlocks.ANT_MOUND, new FabricItemSettings()));
-    public static final Item ROTTEN_LOG = register("rotten_log", new BlockItem(SpawnBlocks.ROTTEN_LOG, new FabricItemSettings()));
+    public static final Item ANTHILL = register("anthill", new BlockItem(SpawnBlocks.ANTHILL, new FabricItemSettings()));
     public static final Item ROTTEN_LOG_ANTHILL = register("rotten_log_anthill", new BlockItem(SpawnBlocks.ROTTEN_LOG_ANTHILL, new FabricItemSettings()));
     public static final Item ANT_FARM = register("ant_farm", new BlockItem(SpawnBlocks.ANT_FARM, new FabricItemSettings()));
+    // rotten wood
+    public static final Item ROTTEN_LOG = register("rotten_log", new BlockItem(SpawnBlocks.ROTTEN_LOG, new FabricItemSettings()));
+    public static final Item ROTTEN_WOOD = register("rotten_wood", new BlockItem(SpawnBlocks.ROTTEN_WOOD, new FabricItemSettings()));
+    public static final Item STRIPPED_ROTTEN_LOG = register("stripped_rotten_log", new BlockItem(SpawnBlocks.STRIPPED_ROTTEN_LOG, new FabricItemSettings()));
+    public static final Item STRIPPED_ROTTEN_WOOD = register("stripped_rotten_wood", new BlockItem(SpawnBlocks.STRIPPED_ROTTEN_WOOD, new FabricItemSettings()));
+    public static final Item ROTTEN_PLANKS = register("rotten_planks", new BlockItem(SpawnBlocks.ROTTEN_PLANKS, new FabricItemSettings()));
+    public static final Item CRACKED_ROTTEN_PLANKS = register("cracked_rotten_planks", new BlockItem(SpawnBlocks.CRACKED_ROTTEN_PLANKS, new FabricItemSettings()));
+    public static final Item ROTTEN_STAIRS = register("rotten_stairs", new BlockItem(SpawnBlocks.ROTTEN_STAIRS, new FabricItemSettings()));
+    public static final Item ROTTEN_SLAB = register("rotten_slab", new BlockItem(SpawnBlocks.ROTTEN_SLAB, new FabricItemSettings()));
+    public static final Item ROTTEN_FENCE = register("rotten_fence", new BlockItem(SpawnBlocks.ROTTEN_FENCE, new FabricItemSettings()));
+    public static final Item ROTTEN_FENCE_GATE = register("rotten_fence_gate", new BlockItem(SpawnBlocks.ROTTEN_FENCE_GATE, new FabricItemSettings()));
+    public static final Item ROTTEN_DOOR = register("rotten_door", new DoubleHighBlockItem(SpawnBlocks.ROTTEN_DOOR, new FabricItemSettings()));
+    public static final Item ROTTEN_TRAPDOOR = register("rotten_trapdoor", new BlockItem(SpawnBlocks.ROTTEN_TRAPDOOR, new FabricItemSettings()));
+    // ant mount loot
     public static final Item ANT_PUPA = register("ant_pupa", new AntPupaItem(new Item.Properties()));
     public static final Item CROWN_POTTERY_SHERD = register("crown_pottery_sherd", new Item(new Item.Properties()));
     public static final Item SPADE_POTTERY_SHERD = register("spade_pottery_sherd", new Item(new Item.Properties()));
