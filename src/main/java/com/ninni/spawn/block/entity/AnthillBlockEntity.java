@@ -1,15 +1,19 @@
 package com.ninni.spawn.block.entity;
 
 import com.google.common.collect.Lists;
+import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -52,6 +56,10 @@ public class AnthillBlockEntity extends BlockEntity {
                 ant.setCannotEnterAnthillTicks(400);
             }
         }
+    }
+
+    public void storeAnt(CompoundTag compoundTag, int i, boolean bl) {
+        this.ants.add(new AnthillBlockEntity.Ant(compoundTag, i, bl ? 2400 : 600));
     }
 
     private List<Entity> tryReleaseAnt(BlockState state, AntState antState) {
@@ -113,6 +121,9 @@ public class AnthillBlockEntity extends BlockEntity {
             } else return false;
             //world.playSound(null, pos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);
             world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(newAnt, world.getBlockState(pos)));
+            if (world instanceof ServerLevel serverLevel) {
+                releasedAnt.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(releasedAnt.blockPosition()), MobSpawnType.EVENT, null, nbtCompound);
+            }
             return world.addFreshEntity(newAnt);
         }
         return false;

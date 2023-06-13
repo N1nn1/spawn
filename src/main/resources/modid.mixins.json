@@ -10,6 +10,7 @@
     "DecoratedPotPatternsMixin",
     "MobBucketItemAccessor",
     "MobBucketItemMixin",
+    "OverworldBiomeBuilderMixin",
     "ServerPlayerMixin"
   ],
   "client": [
