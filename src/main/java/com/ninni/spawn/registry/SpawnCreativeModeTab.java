@@ -47,6 +47,7 @@ public class SpawnCreativeModeTab {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
             entries.addAfter(Items.GLOW_LICHEN, MUCUS);
             entries.addAfter(Items.DECORATED_POT, POTTED_SWEET_BERRIES);
+            entries.addAfter(Items.BEE_NEST, ANTHILL, ROTTEN_LOG_ANTHILL, ANT_FARM);
             entries.addAfter(Items.SUSPICIOUS_GRAVEL, ANT_MOUND);
         });
 
@@ -119,6 +120,7 @@ public class SpawnCreativeModeTab {
                 output.accept(ANT_MOUND);
                 output.accept(ROTTEN_LOG);
                 output.accept(ROTTEN_LOG_ANTHILL);
+                output.accept(ANT_FARM);
                 output.accept(ANT_PUPA);
                 output.accept(CROWN_POTTERY_SHERD);
                 output.accept(SPADE_POTTERY_SHERD);

@@ -15,6 +15,7 @@ public class SpawnPointsOfInterests {
 
     public static final PoiType ANTHILL = register("anthill", getAllStatesOf(SpawnBlocks.ANTHILL), 0, 1);
     public static final PoiType ROTTEN_LOG_ANTHILL = register("rotten_log_anthill", getAllStatesOf(SpawnBlocks.ROTTEN_LOG_ANTHILL), 0, 1);
+    public static final PoiType ANT_FARM = register("ant_farm", getAllStatesOf(SpawnBlocks.ANT_FARM), 0, 1);
 
     private static Set<BlockState> getAllStatesOf(Block block) {
         return ImmutableSet.copyOf(block.getStateDefinition().getPossibleStates());

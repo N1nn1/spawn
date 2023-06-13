@@ -38,6 +38,7 @@ public class SpawnBlocks {
     public static final Block ANT_MOUND = register("ant_mound", new AntMoundBlock(Blocks.COARSE_DIRT, FabricBlockSettings.copyOf(ANTHILL).strength(0.25f).pushReaction(PushReaction.DESTROY).sound(SoundType.SUSPICIOUS_GRAVEL), SoundEvents.BRUSH_GRAVEL, SoundEvents.BRUSH_GRAVEL_COMPLETED));
     public static final Block ROTTEN_LOG = register("rotten_log", new RotatedPillarBlock(FabricBlockSettings.copyOf(Blocks.OAK_LOG).strength(1.0f).pushReaction(PushReaction.DESTROY)));
     public static final Block ROTTEN_LOG_ANTHILL = register("rotten_log_anthill", new AnthillBlock(FabricBlockSettings.create().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).ignitedByLava().strength(1.6f)));
+    public static final Block ANT_FARM = register("ant_farm", new AnthillBlock(FabricBlockSettings.create().mapColor(MapColor.GRASS).nonOpaque().strength(2.0f).sound(SoundType.GLASS)));
 
     private static Block register(String id, Block block) { 
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Spawn.MOD_ID, id), block); 

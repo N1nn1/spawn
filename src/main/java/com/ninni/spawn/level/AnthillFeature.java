@@ -36,10 +36,10 @@ public class AnthillFeature extends Feature<NoneFeatureConfiguration> {
                 world.setBlock(pos, Blocks.COARSE_DIRT.defaultBlockState(), 3);
             }
         });
-        if (randomSource.nextInt(25) == 0) {
+        if (randomSource.nextInt(50) == 0) {
             world.setBlock(blockPos.below(), SpawnBlocks.ANTHILL.defaultBlockState(), 2);
             world.getBlockEntity(blockPos.below(), SpawnBlockEntityTypes.ANTHILL).ifPresent(anthillBlockEntity -> {
-                int i = 2 + randomSource.nextInt(2);
+                int i = 1 + randomSource.nextInt(3);
                 for (int j = 0; j < i; ++j) {
                     CompoundTag compoundTag = new CompoundTag();
                     compoundTag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(SpawnEntityType.ANT).toString());

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#T#",
+    "TCT",
+    "#T#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:glass"
+    },
+    "T": {
+      "item": "spawn:ant_pupa"
+    },
+    "C": {
+      "item": "minecraft:coarse_dirt"
+    }
+  },
+  "result": {
+    "item": "spawn:ant_farm",
+    "count": 1
+  }
+}

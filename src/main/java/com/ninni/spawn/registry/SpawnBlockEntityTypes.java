@@ -23,6 +23,7 @@ public class SpawnBlockEntityTypes {
             new ResourceLocation(Spawn.MOD_ID, "anthill"),
             BlockEntityType.Builder.of(AnthillBlockEntity::new,
                     SpawnBlocks.ANTHILL,
+                    SpawnBlocks.ANT_FARM,
                     SpawnBlocks.ROTTEN_LOG_ANTHILL
             ).build(null)
     );

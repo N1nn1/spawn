@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "spawn:block/ant_farm",
+      "uvlock": false
+    },
+    "facing=north": {
+      "model": "spawn:block/ant_farm",
+      "uvlock": false
+    },
+    "facing=south": {
+      "model": "spawn:block/ant_farm",
+      "uvlock": false
+    },
+    "facing=west": {
+      "model": "spawn:block/ant_farm",
+      "uvlock": false
+    }
+  }
+}
