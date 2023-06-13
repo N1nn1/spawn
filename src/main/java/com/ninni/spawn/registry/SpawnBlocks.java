@@ -9,6 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -54,10 +55,11 @@ public class SpawnBlocks {
     public static final Block CRACKED_ROTTEN_PLANKS = register("cracked_rotten_planks", new Block(FabricBlockSettings.create().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.8f, 0.0f).sound(SoundType.WOOD).ignitedByLava()));
     public static final Block ROTTEN_STAIRS = register("rotten_stairs", new StairBlock(ROTTEN_PLANKS.defaultBlockState(), FabricBlockSettings.copyOf(ROTTEN_PLANKS)));
     public static final Block ROTTEN_SLAB = register("rotten_slab", new SlabBlock(FabricBlockSettings.copyOf(ROTTEN_PLANKS)));
-    public static final Block ROTTEN_FENCE = register("rotten_fence", new FenceBlock(BlockBehaviour.Properties.copy(ROTTEN_PLANKS).forceSolidOn()));
-    public static final Block ROTTEN_FENCE_GATE = register("rotten_fence_gate", new FenceGateBlock(BlockBehaviour.Properties.copy(ROTTEN_PLANKS).forceSolidOn(), SpawnWoodType.ROTTEN));
-    public static final Block ROTTEN_DOOR = register("rotten_door", new DoorBlock(BlockBehaviour.Properties.copy(ROTTEN_PLANKS).noOcclusion(), SpawnBlockSetType.ROTTEN));
-    public static final Block ROTTEN_TRAPDOOR = register("rotten_trapdoor", new TrapDoorBlock(BlockBehaviour.Properties.copy(ROTTEN_PLANKS).noOcclusion().isValidSpawn(SpawnBlocks::never), SpawnBlockSetType.ROTTEN));
+    public static final Block ROTTEN_FENCE = register("rotten_fence", new FenceBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).forceSolidOn()));
+    public static final Block ROTTEN_FENCE_GATE = register("rotten_fence_gate", new FenceGateBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).forceSolidOn(), SpawnWoodType.ROTTEN));
+    public static final Block ROTTEN_DOOR = register("rotten_door", new DoorBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).noOcclusion(), SpawnBlockSetType.ROTTEN));
+    public static final Block ROTTEN_TRAPDOOR = register("rotten_trapdoor", new TrapDoorBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).noOcclusion().isValidSpawn(SpawnBlocks::never), SpawnBlockSetType.ROTTEN));
+    public static final Block FALLEN_LEAVES = register("fallen_leaves", new FallenLeavesBlock(FabricBlockSettings.create().noOcclusion().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY).mapColor(DyeColor.BROWN).noCollission()));
 
     private static Block register(String id, Block block) {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Spawn.MOD_ID, id), block);

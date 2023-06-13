@@ -1,0 +1,72 @@
+{
+  "variants": {
+    "leaves=1": [
+      {
+        "model": "spawn:block/fallen_leaves0"
+      },
+      {
+        "model": "spawn:block/fallen_leaves0",
+        "y": 90
+      },
+      {
+        "model": "spawn:block/fallen_leaves0",
+        "y": 180
+      },
+      {
+        "model": "spawn:block/fallen_leaves0",
+        "y": 270
+      }
+    ],
+    "leaves=2": [
+      {
+        "model": "spawn:block/fallen_leaves1"
+      },
+      {
+        "model": "spawn:block/fallen_leaves1",
+        "y": 90
+      },
+      {
+        "model": "spawn:block/fallen_leaves1",
+        "y": 180
+      },
+      {
+        "model": "spawn:block/fallen_leaves1",
+        "y": 270
+      }
+    ],
+    "leaves=3": [
+      {
+        "model": "spawn:block/fallen_leaves2"
+      },
+      {
+        "model": "spawn:block/fallen_leaves2",
+        "y": 90
+      },
+      {
+        "model": "spawn:block/fallen_leaves2",
+        "y": 180
+      },
+      {
+        "model": "spawn:block/fallen_leaves2",
+        "y": 270
+      }
+    ],
+    "leaves=4": [
+      {
+        "model": "spawn:block/fallen_leaves3"
+      },
+      {
+        "model": "spawn:block/fallen_leaves3",
+        "y": 90
+      },
+      {
+        "model": "spawn:block/fallen_leaves3",
+        "y": 180
+      },
+      {
+        "model": "spawn:block/fallen_leaves3",
+        "y": 270
+      }
+    ]
+  }
+}

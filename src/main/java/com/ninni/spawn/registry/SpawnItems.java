@@ -79,6 +79,7 @@ public class SpawnItems {
     public static final Item ROTTEN_FENCE_GATE = register("rotten_fence_gate", new BlockItem(SpawnBlocks.ROTTEN_FENCE_GATE, new FabricItemSettings()));
     public static final Item ROTTEN_DOOR = register("rotten_door", new DoubleHighBlockItem(SpawnBlocks.ROTTEN_DOOR, new FabricItemSettings()));
     public static final Item ROTTEN_TRAPDOOR = register("rotten_trapdoor", new BlockItem(SpawnBlocks.ROTTEN_TRAPDOOR, new FabricItemSettings()));
+    public static final Item FALLEN_LEAVES = register("fallen_leaves", new BlockItem(SpawnBlocks.FALLEN_LEAVES, new FabricItemSettings()));
     // ant mount loot
     public static final Item ANT_PUPA = register("ant_pupa", new AntPupaItem(new Item.Properties()));
     public static final Item CROWN_POTTERY_SHERD = register("crown_pottery_sherd", new Item(new Item.Properties()));

@@ -67,6 +67,7 @@ public class SpawnVanillaIntegration {
 
     private static void registerFlammables() {
         FlammableBlockRegistry defaultInstance = FlammableBlockRegistry.getDefaultInstance();
+        defaultInstance.add(SpawnBlocks.FALLEN_LEAVES, 60, 100);
         defaultInstance.add(SpawnBlocks.SUNFLOWER, 60, 100);
         defaultInstance.add(SpawnBlocks.ROTTEN_LOG, 5, 5);
         defaultInstance.add(SpawnBlocks.ROTTEN_WOOD, 5, 5);
@@ -82,6 +83,7 @@ public class SpawnVanillaIntegration {
 
     private static void registerCompostables() {
         CompostingChanceRegistry defaultInstance = CompostingChanceRegistry.INSTANCE;
+        defaultInstance.add(SpawnItems.FALLEN_LEAVES, 0.25F);
         defaultInstance.add(SpawnItems.SUNFLOWER, 0.65F);
         defaultInstance.add(SpawnItems.TUNA_SANDWICH, 0.8F);
         defaultInstance.add(SpawnItems.SNAIL_SHELL, 0.8F);
@@ -123,6 +125,7 @@ public class SpawnVanillaIntegration {
                 SpawnBlocks.SNAIL_EGGS
         );
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
+                SpawnBlocks.FALLEN_LEAVES,
                 SpawnBlocks.ANT_FARM,
                 SpawnBlocks.POTTED_SWEET_BERRY_BUSH,
                 SpawnBlocks.SUNFLOWER,
