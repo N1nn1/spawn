@@ -27,7 +27,9 @@
     ],
     [
       "minecraft:amethyst_geode",
-      "spawn:anthill"
+      "spawn:anthill",
+      "spawn:rotten_log",
+      "spawn:rotten_log_stump"
     ],
     [
       "minecraft:monster_room",
@@ -79,7 +81,8 @@
       "minecraft:brown_mushroom_normal",
       "minecraft:red_mushroom_normal",
       "minecraft:patch_sugar_cane",
-      "minecraft:patch_pumpkin"
+      "minecraft:patch_pumpkin",
+      "spawn:fallen_leaves"
     ],
     [
       "minecraft:freeze_top_layer"
