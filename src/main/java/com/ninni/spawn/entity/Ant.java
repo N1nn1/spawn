@@ -3,9 +3,11 @@ package com.ninni.spawn.entity;
 import com.google.common.collect.Lists;
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
+import com.ninni.spawn.entity.ai.AntNavigation;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -24,10 +26,13 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
 import net.minecraft.world.entity.ai.util.AirRandomPos;
 import net.minecraft.world.entity.ai.util.HoverRandomPos;
@@ -43,6 +48,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +61,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
     private static final EntityDataAccessor<Integer> DATA_ABDOMEN_COLOR = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
+    private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BYTE);
     @Nullable
     private UUID angryAt;
     private int cannotEnterAnthillTicks;
@@ -65,6 +72,11 @@ public class Ant extends TamableAnimal implements NeutralMob {
 
     public Ant(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0f);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0f);
+        this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 16.0f);
+        this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0f);
+        this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0f);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -106,10 +118,29 @@ public class Ant extends TamableAnimal implements NeutralMob {
     }
 
     @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new AntNavigation(this, level);
+    }
+
+
+
+    @Override
+    protected void jumpFromGround() {}
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide) {
+            this.setClimbing(this.horizontalCollision);
+        }
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANGER, 0);
         this.entityData.define(DATA_ABDOMEN_COLOR, DyeColor.RED.getId());
+        this.entityData.define(DATA_FLAGS_ID, (byte)0);
     }
 
     public static float[] getColorArray(DyeColor dyeColor) {
@@ -198,6 +229,21 @@ public class Ant extends TamableAnimal implements NeutralMob {
     @VisibleForDebug
     public BlockPos getAnthillPos() {
         return this.anthillPos;
+    }
+
+    @Override
+    public boolean onClimbable() {
+        return this.isClimbing();
+    }
+
+    public boolean isClimbing() {
+        return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
+    }
+
+    public void setClimbing(boolean bl) {
+        byte b = this.entityData.get(DATA_FLAGS_ID);
+        b = bl ? (byte)(b | 1) : (byte)(b & 0xFFFFFFFE);
+        this.entityData.set(DATA_FLAGS_ID, b);
     }
 
 
@@ -528,6 +574,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
         return null;
     }
 
+    @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Ant> ant, ServerLevelAccessor world, MobSpawnType mobSpawnType, BlockPos pos, RandomSource randomSource) {
         return world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && Animal.isBrightEnoughToSpawn(world, pos);
     }
