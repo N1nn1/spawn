@@ -34,7 +34,6 @@ public abstract class ServerPlayerMixin implements HamsterOpenContainer {
         buf.writeInt(container.getContainerSize());
         buf.writeInt(this.containerCounter);
         ServerPlayNetworking.send($this, SpawnVanillaIntegration.OPEN_HAMSTER_SCREEN, buf);
-        $this.connection.send(new ClientboundHorseScreenOpenPacket(this.containerCounter, container.getContainerSize(), hamster.getId()));
         $this.containerMenu = new HamsterInventoryMenu(this.containerCounter, $this.getInventory(), container, hamster);
         this.initMenu($this.containerMenu);
     }

@@ -1,5 +1,6 @@
 package com.ninni.spawn.entity.ai;
 
+import com.ninni.spawn.entity.Ant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -42,16 +43,18 @@ public class AntNavigation extends GroundPathNavigation {
         if (this.isDone()) {
             if (this.pathToPosition != null) {
                 if (this.pathToPosition.closerToCenterThan(this.mob.position(), this.mob.getBbWidth())
-                        || this.mob.getY() > (double)this.pathToPosition.getY() && BlockPos.containing(this.pathToPosition.getX(), this.mob.getY(), this.pathToPosition.getZ()).closerToCenterThan(this.mob.position(), this.mob.getBbWidth())
-                        || !this.mob.level().getBlockState(this.mob.blockPosition().above()).isAir()
-                        || !this.mob.level().getBlockState(this.mob.blockPosition()).isAir()
+                        || this.mob.getY() > (double) this.pathToPosition.getY() && BlockPos.containing(this.pathToPosition.getX(), this.mob.getY(), this.pathToPosition.getZ()).closerToCenterThan(this.mob.position(), this.mob.getBbWidth())
                 ) {
                     this.pathToPosition = null;
+                    return;
                 } else {
                     this.mob.getMoveControl().setWantedPosition(this.pathToPosition.getX(), this.pathToPosition.getY(), this.pathToPosition.getZ(), this.speedModifier);
                 }
             }
-            return;
+            if (!this.mob.level().getBlockState(this.mob.blockPosition().above()).isAir()) {
+                this.pathToPosition = null;
+                return;
+            }
         }
         super.tick();
     }
