@@ -1,6 +1,5 @@
 package com.ninni.spawn.mixin;
 
-import com.ninni.spawn.SpawnClient;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.entity.Hamster;
 import com.ninni.spawn.entity.HamsterOpenContainer;

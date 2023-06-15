@@ -7,7 +7,6 @@ import com.ninni.spawn.entity.ai.AntNavigation;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -26,16 +25,15 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.JumpControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
 import net.minecraft.world.entity.ai.util.AirRandomPos;
 import net.minecraft.world.entity.ai.util.HoverRandomPos;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.animal.Animal;
@@ -100,10 +98,9 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.moveToAnthillGoal = new MoveToAnthillGoal();
         this.goalSelector.addGoal(7, this.moveToAnthillGoal);
         this.goalSelector.addGoal(9, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
-        this.goalSelector.addGoal(10, new AntComeBackToAnthillGoal());
-        this.goalSelector.addGoal(11, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(12, new LookAtPlayerGoal(this, Player.class, 6));
-        this.goalSelector.addGoal(13, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(10, new AntWaderAroundGoal());
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
+        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -270,10 +267,9 @@ public class Ant extends TamableAnimal implements NeutralMob {
         }
     }
 
+    class AntWaderAroundGoal extends Goal {
 
-    class AntComeBackToAnthillGoal extends Goal {
-
-        AntComeBackToAnthillGoal() {
+        AntWaderAroundGoal() {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
@@ -298,17 +294,8 @@ public class Ant extends TamableAnimal implements NeutralMob {
 
         @Nullable
         private Vec3 getRandomLocation() {
-            Vec3 vec3d2;
-            assert Ant.this.anthillPos != null;
-            if (Ant.this.isAnthillValid() && !Ant.this.isWithinDistance(Ant.this.anthillPos, 22)) {
-                Vec3 vec3d = Vec3.atCenterOf(Ant.this.anthillPos);
-                vec3d2 = vec3d.subtract(Ant.this.position()).normalize();
-            } else {
-                vec3d2 = Ant.this.getViewVector(0.0F);
-            }
-
-            Vec3 vec3d3 = HoverRandomPos.getPos(Ant.this, 12, 5, vec3d2.x, vec3d2.z, 1.5707964F, 3, 1);
-            return vec3d3 != null ? vec3d3 : AirAndWaterRandomPos.getPos(Ant.this, 12, 2, -2, vec3d2.x, vec3d2.z, 1.5707963705062866);
+            Vec3 vec3d3 = LandRandomPos.getPos(Ant.this, 5, 12);
+            return vec3d3 != null ? vec3d3 : LandRandomPos.getPos(Ant.this, 12, 2);
         }
     }
     class EnterAnthillGoal extends Ant.NotAngryGoal {
@@ -317,7 +304,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
         }
 
         @Override
-        public boolean canBirtStart() {
+        public boolean canAntStart() {
             if (Ant.this.hasAnthill() && Ant.this.canEnterDwelling()) {
                 assert Ant.this.anthillPos != null;
                 if (Ant.this.anthillPos.closerToCenterThan(Ant.this.position(), 2.0)) {
@@ -336,15 +323,15 @@ public class Ant extends TamableAnimal implements NeutralMob {
         }
 
         @Override
-        public boolean canBirtContinue() {
+        public boolean canAntContinue() {
             return false;
         }
 
         @Override
         public void start() {
             BlockEntity blockEntity = Ant.this.level().getBlockEntity(Ant.this.anthillPos);
-            if (blockEntity instanceof AnthillBlockEntity birtDwellingBlockEntity) {
-                birtDwellingBlockEntity.tryEnterAnthill(Ant.this);
+            if (blockEntity instanceof AnthillBlockEntity anthillBlockEntity) {
+                anthillBlockEntity.tryEnterAnthill(Ant.this);
             }
 
         }
@@ -356,12 +343,12 @@ public class Ant extends TamableAnimal implements NeutralMob {
         }
 
         @Override
-        public boolean canBirtStart() {
+        public boolean canAntStart() {
             return Ant.this.ticksLeftToFindDwelling == 0 && !Ant.this.hasAnthill() && Ant.this.canEnterDwelling();
         }
 
         @Override
-        public boolean canBirtContinue() {
+        public boolean canAntContinue() {
             return false;
         }
 
@@ -411,13 +398,13 @@ public class Ant extends TamableAnimal implements NeutralMob {
         }
 
         @Override
-        public boolean canBirtStart() {
+        public boolean canAntStart() {
             return Ant.this.anthillPos != null && !Ant.this.hasRestriction() && Ant.this.canEnterDwelling() && !this.isCloseEnough(Ant.this.anthillPos) && Ant.this.level().getBlockState(Ant.this.anthillPos).is(SpawnBlocks.ANTHILL);
         }
 
         @Override
-        public boolean canBirtContinue() {
-            return this.canBirtStart();
+        public boolean canAntContinue() {
+            return this.canAntStart();
         }
 
         @Override
@@ -519,14 +506,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
 
     void startMovingTo(BlockPos pos) {
         Vec3 vec3d = Vec3.atBottomCenterOf(pos);
-        int i = 0;
         BlockPos blockPos = this.blockPosition();
-        int j = (int)vec3d.y - blockPos.getY();
-        if (j > 2) {
-            i = 4;
-        } else if (j < -2) {
-            i = -4;
-        }
 
         int k = 6;
         int l = 8;
@@ -536,7 +516,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
             l = m / 2;
         }
 
-        Vec3 vec3d2 = AirRandomPos.getPosTowards(this, k, l, i, vec3d, 0.3141592741012573);
+        Vec3 vec3d2 = LandRandomPos.getPosTowards(this, k, l, vec3d);
         if (vec3d2 != null) {
             this.navigation.setMaxVisitedNodesMultiplier(0.5F);
             this.navigation.moveTo(vec3d2.x, vec3d2.y, vec3d2.z, 1.0);
@@ -547,18 +527,18 @@ public class Ant extends TamableAnimal implements NeutralMob {
         NotAngryGoal() {
         }
 
-        public abstract boolean canBirtStart();
+        public abstract boolean canAntStart();
 
-        public abstract boolean canBirtContinue();
+        public abstract boolean canAntContinue();
 
         @Override
         public boolean canUse() {
-            return this.canBirtStart() && !Ant.this.isAngry();
+            return this.canAntStart() && !Ant.this.isAngry();
         }
 
         @Override
         public boolean canContinueToUse() {
-            return this.canBirtContinue() && !Ant.this.isAngry();
+            return this.canAntContinue() && !Ant.this.isAngry();
         }
     }
 
