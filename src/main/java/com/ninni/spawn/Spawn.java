@@ -15,6 +15,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 public class Spawn implements ModInitializer {
 	public static final String MOD_ID = "spawn";
 
+	//TODO: Make Ant Gardens a bit bigger and generate a bit more ant mounds
 	@Override
 	public void onInitialize() {
 		Reflection.initialize(

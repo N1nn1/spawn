@@ -22,17 +22,29 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
-import net.minecraft.world.entity.ai.util.AirRandomPos;
-import net.minecraft.world.entity.ai.util.HoverRandomPos;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
@@ -51,7 +63,12 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,6 +77,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
     private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> HAS_RESOURCE = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BOOLEAN);
     @Nullable
     private UUID angryAt;
     private int cannotEnterAnthillTicks;
@@ -138,6 +156,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.entityData.define(ANGER, 0);
         this.entityData.define(DATA_ABDOMEN_COLOR, DyeColor.RED.getId());
         this.entityData.define(DATA_FLAGS_ID, (byte)0);
+        this.entityData.define(HAS_RESOURCE, false);
     }
 
     public static float[] getColorArray(DyeColor dyeColor) {
@@ -249,6 +268,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putByte("AbdomenColor", (byte)this.getAbdomenColor().getId());
         compoundTag.putInt("CannotEnterAnthillTicks", this.cannotEnterAnthillTicks);
+        compoundTag.putBoolean("HasResource", this.hasResource());
         if (this.hasAnthill()) {
             assert this.getAnthillPos() != null;
             compoundTag.put("AnthillPos", NbtUtils.writeBlockPos(this.getAnthillPos()));
@@ -261,10 +281,19 @@ public class Ant extends TamableAnimal implements NeutralMob {
         if (compoundTag.contains("AbdomenColor", 99)) {
             this.setAbdomenColor(DyeColor.byId(compoundTag.getInt("AbdomenColor")));
         }
+        this.setHasResource(compoundTag.getBoolean("HasResource"));
         this.cannotEnterAnthillTicks = compoundTag.getInt("CannotEnterAnthillTicks");
         if (compoundTag.contains("AnthillPos")) {
             this.anthillPos = NbtUtils.readBlockPos(compoundTag.getCompound("AnthillPos"));
         }
+    }
+
+    public boolean hasResource() {
+        return this.entityData.get(HAS_RESOURCE);
+    }
+
+    public void setHasResource(boolean hasResource) {
+        this.entityData.set(HAS_RESOURCE, hasResource);
     }
 
     class AntWaderAroundGoal extends Goal {

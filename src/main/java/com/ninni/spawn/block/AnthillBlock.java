@@ -1,11 +1,16 @@
 package com.ninni.spawn.block;
 
+import com.ninni.spawn.SpawnProperties;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
+import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -28,6 +33,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
@@ -38,12 +44,13 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class AnthillBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final IntegerProperty RESOURCE_LEVEL = SpawnProperties.RESOURCE_LEVEL;
 
     public AnthillBlock(BlockBehaviour.Properties settings) {
         super(settings);
-        this.registerDefaultState(((this.stateDefinition.any())).setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(((this.stateDefinition.any())).setValue(FACING, Direction.NORTH).setValue(RESOURCE_LEVEL, 0));
     }
-    
+
     @Override
     public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
         super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
@@ -104,6 +111,34 @@ public class AnthillBlock extends BaseEntityBlock {
     }
 
     @Override
+    public boolean isRandomlyTicking(BlockState blockState) {
+        return blockState.getValue(RESOURCE_LEVEL) == 5;
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource randomSource) {
+        boolean shouldReset = false;
+        int range = 1;
+        for (int x = -range; x <= range; x++) {
+            for (int z = -range; z <= range; z++) {
+                BlockPos blockPos = new BlockPos(pos.getX() + x, pos.getY() - range, pos.getZ() + z);
+                BlockState belowState = world.getBlockState(blockPos);
+                if (belowState.is(BlockTags.OVERWORLD_NATURAL_LOGS)) {
+                    world.setBlock(blockPos, SpawnBlocks.ROTTEN_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, belowState.getValue(RotatedPillarBlock.AXIS)), 2);
+                    shouldReset = true;
+                }
+                if (belowState.is(BlockTags.DIRT) && !belowState.is(SpawnBlocks.ANT_MOUND)) {
+                    world.setBlock(blockPos, SpawnBlocks.ANT_MOUND.defaultBlockState(), 2);
+                    shouldReset = true;
+                }
+                if (shouldReset) {
+                    world.setBlock(pos, state.setValue(RESOURCE_LEVEL, 0), 2);
+                }
+            }
+        }
+    }
+
+    @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         BlockEntity blockEntity;
         Entity entity = builder.getOptionalParameter(LootContextParams.THIS_ENTITY);
@@ -121,6 +156,6 @@ public class AnthillBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, RESOURCE_LEVEL);
     }
 }
