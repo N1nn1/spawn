@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.entity.ai.AntNavigation;
+import com.ninni.spawn.entity.ai.CollectResourceGoal;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,6 +24,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -49,12 +52,15 @@ import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -72,12 +78,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Ant extends TamableAnimal implements NeutralMob {
+public class Ant extends TamableAnimal implements NeutralMob, InventoryCarrier {
     private static final EntityDataAccessor<Integer> DATA_ABDOMEN_COLOR = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Boolean> HAS_RESOURCE = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BOOLEAN);
+    private final SimpleContainer inventory = new SimpleContainer(1);
     @Nullable
     private UUID angryAt;
     private int cannotEnterAnthillTicks;
@@ -93,6 +99,31 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 16.0f);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0f);
         this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0f);
+    }
+
+    @Override
+    public boolean wantsToPickUp(ItemStack itemStack) {
+        return this.hasAnthill() && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.canAddItem(itemStack);
+    }
+
+    @Override
+    public boolean canPickUpLoot() {
+        return this.hasAnthill();
+    }
+
+    public boolean canAddItem(ItemStack itemStack) {
+        boolean bl = false;
+        for (ItemStack itemStack2 : this.getInventory().items) {
+            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() > 1)) continue;
+            bl = true;
+            break;
+        }
+        return bl;
+    }
+
+    @Override
+    protected void pickUpItem(ItemEntity itemEntity) {
+        InventoryCarrier.pickUpItem(this, this, itemEntity);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -112,6 +143,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.addGoal(5, new FindAnthillGoal());
+        this.goalSelector.addGoal(5, new CollectResourceGoal(this));
         this.goalSelector.addGoal(6, new EnterAnthillGoal());
         this.moveToAnthillGoal = new MoveToAnthillGoal();
         this.goalSelector.addGoal(7, this.moveToAnthillGoal);
@@ -156,7 +188,6 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.entityData.define(ANGER, 0);
         this.entityData.define(DATA_ABDOMEN_COLOR, DyeColor.RED.getId());
         this.entityData.define(DATA_FLAGS_ID, (byte)0);
-        this.entityData.define(HAS_RESOURCE, false);
     }
 
     public static float[] getColorArray(DyeColor dyeColor) {
@@ -206,7 +237,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
     }
 
     boolean canEnterDwelling() {
-        if (this.cannotEnterAnthillTicks <= 0 && this.getTarget() == null) return this.level().isRaining() || this.level().isNight();
+        if (this.cannotEnterAnthillTicks <= 0 && this.getTarget() == null) return this.level().isRaining() || this.level().isNight() || !this.getInventory().isEmpty();
         else return false;
     }
 
@@ -266,9 +297,9 @@ public class Ant extends TamableAnimal implements NeutralMob {
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
+        this.writeInventoryToTag(compoundTag);
         compoundTag.putByte("AbdomenColor", (byte)this.getAbdomenColor().getId());
         compoundTag.putInt("CannotEnterAnthillTicks", this.cannotEnterAnthillTicks);
-        compoundTag.putBoolean("HasResource", this.hasResource());
         if (this.hasAnthill()) {
             assert this.getAnthillPos() != null;
             compoundTag.put("AnthillPos", NbtUtils.writeBlockPos(this.getAnthillPos()));
@@ -278,22 +309,19 @@ public class Ant extends TamableAnimal implements NeutralMob {
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
+        this.readInventoryFromTag(compoundTag);
         if (compoundTag.contains("AbdomenColor", 99)) {
             this.setAbdomenColor(DyeColor.byId(compoundTag.getInt("AbdomenColor")));
         }
-        this.setHasResource(compoundTag.getBoolean("HasResource"));
         this.cannotEnterAnthillTicks = compoundTag.getInt("CannotEnterAnthillTicks");
         if (compoundTag.contains("AnthillPos")) {
             this.anthillPos = NbtUtils.readBlockPos(compoundTag.getCompound("AnthillPos"));
         }
     }
 
-    public boolean hasResource() {
-        return this.entityData.get(HAS_RESOURCE);
-    }
-
-    public void setHasResource(boolean hasResource) {
-        this.entityData.set(HAS_RESOURCE, hasResource);
+    @Override
+    public SimpleContainer getInventory() {
+        return this.inventory;
     }
 
     class AntWaderAroundGoal extends Goal {
@@ -373,7 +401,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
 
         @Override
         public boolean canAntStart() {
-            return Ant.this.ticksLeftToFindDwelling == 0 && !Ant.this.hasAnthill() && Ant.this.canEnterDwelling();
+            return Ant.this.ticksLeftToFindDwelling == 0 && !Ant.this.hasAnthill();
         }
 
         @Override

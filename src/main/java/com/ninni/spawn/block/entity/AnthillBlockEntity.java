@@ -3,20 +3,17 @@ package com.ninni.spawn.block.entity;
 import com.google.common.collect.Lists;
 import com.ninni.spawn.block.AnthillBlock;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
-import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -117,7 +114,6 @@ public class AnthillBlockEntity extends BlockEntity {
             if (newAnt instanceof com.ninni.spawn.entity.Ant releasedAnt) {
                 if (antState == AntState.RESOURCE_DELIVERED) {
                     int i = state.getValue(AnthillBlock.RESOURCE_LEVEL);
-                    releasedAnt.setHasResource(false);
                     if (state.getBlock() instanceof AnthillBlock && i < 5) {
                         world.setBlockAndUpdate(pos, state.setValue(AnthillBlock.RESOURCE_LEVEL, i + 1));
                     }
@@ -127,6 +123,7 @@ public class AnthillBlockEntity extends BlockEntity {
                 double x = (double)pos.getX() + 0.5;
                 double y = (double)pos.getY() + 1;
                 double z = (double)pos.getZ() + 0.5;
+                releasedAnt.getInventory().items.clear();
                 newAnt.moveTo(x, y, z, newAnt.getYRot(), newAnt.getXRot());
             } else return false;
             //world.playSound(null, pos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);
@@ -155,7 +152,8 @@ public class AnthillBlockEntity extends BlockEntity {
         while (iterator.hasNext()) {
             Ant ant = iterator.next();
             if (Ant.ticksInAnthill > ant.minOccupationTicks) {
-                AntState antState = ant.entityData.getBoolean("HasResource") ? AntState.RESOURCE_DELIVERED : AntState.ANT_RELEASED;
+                ItemStack compoundStack = ItemStack.of(ant.entityData.getCompound("Inventory"));
+                AntState antState = compoundStack != ItemStack.EMPTY ? AntState.RESOURCE_DELIVERED : AntState.ANT_RELEASED;
                 if (AnthillBlockEntity.releaseAnt(world, pos, state, ant, null, antState)) {
                     bl = true;
                     iterator.remove();
