@@ -26,6 +26,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
@@ -69,7 +70,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
     @SuppressWarnings("DataFlowIssue")
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Mth.nextInt(random, 4, 8));
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Mth.nextInt(random, 12, 20));
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Mth.nextInt(random, 1, 3));
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Mth.nextDouble(random, 0.225, 0.3));
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
@@ -91,9 +92,14 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
         this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
 
+        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Ant.class, false, this::getTerritorialTarget));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
+    }
+
+    private boolean getTerritorialTarget(LivingEntity livingEntity) {
+        return livingEntity instanceof Ant ant && ant.isTame() && !ant.isInSittingPose() && !this.isInSittingPose() && this.isTame() && ant.getAbdomenColor() != this.getAbdomenColor() && !this.isBaby() && !ant.isBaby();
     }
 
     public static AttributeSupplier.Builder createAttributes() {
