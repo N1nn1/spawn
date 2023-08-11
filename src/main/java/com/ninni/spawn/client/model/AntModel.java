@@ -192,30 +192,6 @@ public class AntModel<E extends Ant> extends AgeableListModel<E> {
         rightBackLeg.zRot = Mth.cos(limbAngle * speed * 1.8F + (float)Math.PI) * degree * 0.25F * limbDistance -0.7854F;
         rightBackLeg.yRot = Mth.sin(animationProgress * speed * 1.8F + (float)Math.PI) * degree * 1F * limbDistance + 0.3927F;
 
-        if (entity.isClimbing()) {
-            abdomen.zRot = Mth.sin(animationProgress * speed * 0.3F) * degree * 0.2F * 0.25F;
-
-            leftForeLeg.zRot = Mth.cos(animationProgress * speed * 1.8F) * degree * 0.25F * 0.25F + 0.7854F;
-            leftForeLeg.yRot = Mth.sin(animationProgress * speed * 1.8F) * degree * 1F * 0.25F + 0.3927F;
-
-            rightForeLeg.zRot = Mth.cos(animationProgress * speed * 1.8F) * degree * 0.25F * 0.25F - 0.7854F;
-            rightForeLeg.yRot = Mth.sin(animationProgress * speed * 1.8F) * degree * 1F * 0.25F - 0.3927F;
-
-
-            leftMidLeg.zRot = Mth.sin(animationProgress * speed * 1.8F) * degree * 0.25F * 0.25F + 0.7854F;
-            leftMidLeg.yRot = Mth.cos(animationProgress * speed * 1.8F) * degree * 1F * 0.25F;
-
-            rightMidLeg.zRot = Mth.sin(animationProgress * speed * 1.8F) * degree * 0.25F * 0.25F - 0.7854F;
-            rightMidLeg.yRot = Mth.cos(animationProgress * speed * 1.8F) * degree * 1F * 0.25F;
-
-
-            leftBackLeg.zRot = Mth.cos(animationProgress * speed * 1.8F + (float)Math.PI) * degree * 0.25F * 0.25F + 0.7854F;
-            leftBackLeg.yRot = Mth.sin(animationProgress * speed * 1.8F + (float)Math.PI) * degree * 1F * 0.25F - 0.3927F;
-
-            rightBackLeg.zRot = Mth.cos(animationProgress * speed * 1.8F + (float)Math.PI) * degree * 0.25F * 0.25F -0.7854F;
-            rightBackLeg.yRot = Mth.sin(animationProgress * speed * 1.8F + (float)Math.PI) * degree * 1F * 0.25F + 0.3927F;
-        }
-
         if (entity.isInSittingPose()) {
             body.y = 22.5F;
             leftForeLeg.y = 23.5F;

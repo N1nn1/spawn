@@ -31,6 +31,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -71,7 +72,6 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         this.goalSelector.addGoal(2, new PanicGoal(this, 1.2));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 24.0f, 1.1, 1.3));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Cat.class, 24.0f, 1.1, 1.3));
-        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Hamster.class, 24.0f, 1.1, 1.3));
         this.goalSelector.addGoal(4, new BreedGoal(this, 1.0F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0, 7f, 2.0f, false));
@@ -150,7 +150,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         if (!this.level().isClientSide) {
             float puffTicks = this.entityData.get(PUFF_TICKS);
             float change = 0.2F;
-            if (!this.getInventory().isEmpty()) {
+            if (!this.getInventory().hasAnyMatching(ItemStack::isEmpty)) {
                 if (puffTicks < 1) this.entityData.set(PUFF_TICKS, puffTicks + change);
             } else if (puffTicks > 0) this.entityData.set(PUFF_TICKS, puffTicks - change);
         }

@@ -4,7 +4,7 @@
   "version": "1.0-fabric",
 
   "name": "Spawn",
-  "description": "An animal mod that focuses not on utility or ambience. But on giving each animal ita niche and personality inside Minecraft’s ecosystems",
+  "description": "An animal mod that focuses not on utility or ambience. But on giving each animal a niche and personality inside Minecraft’s ecosystems",
   "authors": [
     "Ninni"
   ],
@@ -12,7 +12,7 @@
     "issues": "https://github.com/N1nn1/spawn/issues",
     "sources": "https://github.com/N1nn1/spawn"
   },
-  "license": "All Rights Reserved (Assets)",
+  "license": "All Rights Reserved",
   "icon": "assets/spawn/icon.png",
 
   "accessWidener" : "spawn.accesswidener",

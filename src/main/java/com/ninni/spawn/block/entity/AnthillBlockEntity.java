@@ -123,7 +123,6 @@ public class AnthillBlockEntity extends BlockEntity {
                 double x = (double)pos.getX() + 0.5;
                 double y = (double)pos.getY() + 1;
                 double z = (double)pos.getZ() + 0.5;
-                releasedAnt.getInventory().items.clear();
                 newAnt.moveTo(x, y, z, newAnt.getYRot(), newAnt.getXRot());
             } else return false;
             //world.playSound(null, pos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);

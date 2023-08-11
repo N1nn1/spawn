@@ -3,14 +3,11 @@ package com.ninni.spawn.entity;
 import com.google.common.collect.Lists;
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
-import com.ninni.spawn.entity.ai.AntNavigation;
-import com.ninni.spawn.entity.ai.CollectResourceGoal;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -24,66 +21,39 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.NeutralMob;
-import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Ant extends TamableAnimal implements NeutralMob, InventoryCarrier {
+public class Ant extends TamableAnimal implements NeutralMob {
     private static final EntityDataAccessor<Integer> DATA_ABDOMEN_COLOR = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BYTE);
-    private final SimpleContainer inventory = new SimpleContainer(1);
     @Nullable
     private UUID angryAt;
     private int cannotEnterAnthillTicks;
@@ -94,36 +64,6 @@ public class Ant extends TamableAnimal implements NeutralMob, InventoryCarrier {
 
     public Ant(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
-        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0f);
-        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0f);
-        this.setPathfindingMalus(BlockPathTypes.WATER_BORDER, 16.0f);
-        this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0f);
-        this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0f);
-    }
-
-    @Override
-    public boolean wantsToPickUp(ItemStack itemStack) {
-        return this.hasAnthill() && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && this.canAddItem(itemStack);
-    }
-
-    @Override
-    public boolean canPickUpLoot() {
-        return this.hasAnthill();
-    }
-
-    public boolean canAddItem(ItemStack itemStack) {
-        boolean bl = false;
-        for (ItemStack itemStack2 : this.getInventory().items) {
-            if (!itemStack2.isEmpty() && (!ItemStack.isSameItemSameTags(itemStack2, itemStack) || itemStack2.getCount() > 1)) continue;
-            bl = true;
-            break;
-        }
-        return bl;
-    }
-
-    @Override
-    protected void pickUpItem(ItemEntity itemEntity) {
-        InventoryCarrier.pickUpItem(this, this, itemEntity);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -143,12 +83,11 @@ public class Ant extends TamableAnimal implements NeutralMob, InventoryCarrier {
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, true));
         this.goalSelector.addGoal(5, new FindAnthillGoal());
-        this.goalSelector.addGoal(5, new CollectResourceGoal(this));
         this.goalSelector.addGoal(6, new EnterAnthillGoal());
         this.moveToAnthillGoal = new MoveToAnthillGoal();
         this.goalSelector.addGoal(7, this.moveToAnthillGoal);
         this.goalSelector.addGoal(9, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
-        this.goalSelector.addGoal(10, new AntWaderAroundGoal());
+        this.goalSelector.addGoal(10, new WaterAvoidingRandomStrollGoal(this, 1));
         this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
         this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
 
@@ -162,24 +101,6 @@ public class Ant extends TamableAnimal implements NeutralMob, InventoryCarrier {
                 .add(Attributes.MOVEMENT_SPEED, 1.0)
                 .add(Attributes.ATTACK_DAMAGE, 3.0)
                 .add(Attributes.MAX_HEALTH, 10.0);
-    }
-
-    @Override
-    protected PathNavigation createNavigation(Level level) {
-        return new AntNavigation(this, level);
-    }
-
-
-
-    @Override
-    protected void jumpFromGround() {}
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (!this.level().isClientSide) {
-            this.setClimbing(this.horizontalCollision);
-        }
     }
 
     @Override
@@ -237,7 +158,7 @@ public class Ant extends TamableAnimal implements NeutralMob, InventoryCarrier {
     }
 
     boolean canEnterDwelling() {
-        if (this.cannotEnterAnthillTicks <= 0 && this.getTarget() == null) return this.level().isRaining() || this.level().isNight() || !this.getInventory().isEmpty();
+        if (this.cannotEnterAnthillTicks <= 0 && this.getTarget() == null) return this.level().isRaining() || this.level().isNight();
         else return false;
     }
 
@@ -278,26 +199,10 @@ public class Ant extends TamableAnimal implements NeutralMob, InventoryCarrier {
         return this.anthillPos;
     }
 
-    @Override
-    public boolean onClimbable() {
-        return this.isClimbing();
-    }
-
-    public boolean isClimbing() {
-        return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
-    }
-
-    public void setClimbing(boolean bl) {
-        byte b = this.entityData.get(DATA_FLAGS_ID);
-        b = bl ? (byte)(b | 1) : (byte)(b & 0xFFFFFFFE);
-        this.entityData.set(DATA_FLAGS_ID, b);
-    }
-
 
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
-        this.writeInventoryToTag(compoundTag);
         compoundTag.putByte("AbdomenColor", (byte)this.getAbdomenColor().getId());
         compoundTag.putInt("CannotEnterAnthillTicks", this.cannotEnterAnthillTicks);
         if (this.hasAnthill()) {
@@ -309,7 +214,6 @@ public class Ant extends TamableAnimal implements NeutralMob, InventoryCarrier {
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
-        this.readInventoryFromTag(compoundTag);
         if (compoundTag.contains("AbdomenColor", 99)) {
             this.setAbdomenColor(DyeColor.byId(compoundTag.getInt("AbdomenColor")));
         }
@@ -319,42 +223,6 @@ public class Ant extends TamableAnimal implements NeutralMob, InventoryCarrier {
         }
     }
 
-    @Override
-    public SimpleContainer getInventory() {
-        return this.inventory;
-    }
-
-    class AntWaderAroundGoal extends Goal {
-
-        AntWaderAroundGoal() {
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
-        }
-
-        @Override
-        public boolean canUse() {
-            if (Ant.this.onGround()) return Ant.this.navigation.isDone() && Ant.this.random.nextInt(10) == 0;
-            return false;
-        }
-
-        @Override
-        public boolean canContinueToUse() {
-            return Ant.this.navigation.isInProgress();
-        }
-
-        @Override
-        public void start() {
-            Vec3 vec3d = this.getRandomLocation();
-            if (vec3d != null) {
-                Ant.this.navigation.moveTo(Ant.this.navigation.createPath(new BlockPos((int)vec3d.x, (int)vec3d.y, (int)vec3d.z), 1), 1.0);
-            }
-        }
-
-        @Nullable
-        private Vec3 getRandomLocation() {
-            Vec3 vec3d3 = LandRandomPos.getPos(Ant.this, 5, 12);
-            return vec3d3 != null ? vec3d3 : LandRandomPos.getPos(Ant.this, 12, 2);
-        }
-    }
     class EnterAnthillGoal extends Ant.NotAngryGoal {
         EnterAnthillGoal() {
             super();
