@@ -21,10 +21,27 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
@@ -41,12 +58,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,6 +82,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
     @Nullable
     private UUID angryAt;
     private int cannotEnterAnthillTicks;
+    private boolean hasResource;
     int ticksLeftToFindDwelling;
     @Nullable
     BlockPos anthillPos;
@@ -86,7 +111,8 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.goalSelector.addGoal(5, new FindAnthillGoal());
         this.goalSelector.addGoal(6, new EnterAnthillGoal());
         this.moveToAnthillGoal = new MoveToAnthillGoal();
-        this.goalSelector.addGoal(7, this.moveToAnthillGoal);
+        this.goalSelector.addGoal(7, new FindTarget());
+        this.goalSelector.addGoal(8, this.moveToAnthillGoal);
         this.goalSelector.addGoal(9, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
         this.goalSelector.addGoal(10, new WaterAvoidingRandomStrollGoal(this, 1));
         this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
@@ -164,7 +190,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
     }
 
     boolean canEnterDwelling() {
-        if (this.cannotEnterAnthillTicks <= 0 && this.getTarget() == null) return this.level().isRaining() || this.level().isNight();
+        if (this.cannotEnterAnthillTicks <= 0 && this.getTarget() == null) return this.level().isRaining() || this.level().isNight() || this.hasResource;
         else return false;
     }
 
@@ -226,6 +252,88 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.cannotEnterAnthillTicks = compoundTag.getInt("CannotEnterAnthillTicks");
         if (compoundTag.contains("AnthillPos")) {
             this.anthillPos = NbtUtils.readBlockPos(compoundTag.getCompound("AnthillPos"));
+        }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+    }
+
+    class FindTarget extends Ant.NotAngryGoal {
+        @Nullable
+        private BlockPos blockPos;
+        private int ticks = 0;
+
+        @Override
+        public boolean canAntStart() {
+            BlockPos target = this.locateTarget();
+            if (Ant.this.hasResource || Ant.this.level().isRaining() || Ant.this.level().isNight()) {
+                return false;
+            }
+            if (target != null && this.blockPos == null) {
+                this.blockPos = target;
+            }
+            return this.blockPos != null;
+        }
+
+        @Override
+        public boolean canAntContinue() {
+            boolean flag = this.blockPos != null && this.isTarget(Ant.this.level().getBlockState(this.blockPos));
+            if (this.ticks == 10) {
+                this.blockPos = null;
+                Ant.this.hasResource = true;
+                return false;
+            }
+            return flag;
+        }
+
+        @Override
+        public void start() {
+        }
+
+        @Override
+        public void tick() {
+            if (this.blockPos != null && this.isTarget(Ant.this.level().getBlockState(this.blockPos))) {
+                Vec3 vec3 = Vec3.atBottomCenterOf(this.blockPos);
+                Ant.this.getNavigation().moveTo(vec3.x(), vec3.y(), vec3.z(), 1.0D);
+                Ant.this.getLookControl().setLookAt(vec3.x(), vec3.y(), vec3.z());
+                if (this.blockPos.distManhattan(Ant.this.blockPosition()) <= 2.0D && this.ticks < 20) {
+                    this.ticks++;
+                }
+            }
+        }
+
+        @Override
+        public void stop() {
+            Ant.this.hasResource = true;
+            this.blockPos = null;
+        }
+
+        private BlockPos locateTarget() {
+            List<BlockPos> list = Lists.newArrayList();
+            int range = 5;
+            BlockPos blockPos = Ant.this.blockPosition();
+            Level world = Ant.this.level();
+            for (int x = -range; x <= range; x++) {
+                for (int z = -range; z <= range; z++) {
+                    for (int y = -range; y <= range; y++) {
+                        BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
+                        boolean flag = this.isTarget(world.getBlockState(pos));
+                        if (flag) {
+                            list.add(pos);
+                        }
+                    }
+                }
+            }
+            if (list.isEmpty()) {
+                return null;
+            }
+            return list.get(Ant.this.random.nextInt(list.size()));
+        }
+
+        public boolean isTarget(BlockState blockState) {
+            return blockState.is(SpawnTags.ANT_RESOURCE);
         }
     }
 

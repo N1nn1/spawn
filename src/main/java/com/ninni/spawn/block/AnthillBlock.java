@@ -1,5 +1,6 @@
 package com.ninni.spawn.block;
 
+import com.google.common.collect.Lists;
 import com.ninni.spawn.SpawnProperties;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.entity.Ant;
@@ -117,24 +118,27 @@ public class AnthillBlock extends BaseEntityBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource randomSource) {
-        boolean shouldReset = false;
         int range = 1;
+        List<BlockPos> list = Lists.newArrayList();
         for (int x = -range; x <= range; x++) {
             for (int z = -range; z <= range; z++) {
                 BlockPos blockPos = new BlockPos(pos.getX() + x, pos.getY() - range, pos.getZ() + z);
                 BlockState belowState = world.getBlockState(blockPos);
-                if (belowState.is(BlockTags.OVERWORLD_NATURAL_LOGS)) {
-                    world.setBlock(blockPos, SpawnBlocks.ROTTEN_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, belowState.getValue(RotatedPillarBlock.AXIS)), 2);
-                    shouldReset = true;
-                }
-                if (belowState.is(BlockTags.DIRT) && !belowState.is(SpawnBlocks.ANT_MOUND)) {
-                    world.setBlock(blockPos, SpawnBlocks.ANT_MOUND.defaultBlockState(), 2);
-                    shouldReset = true;
-                }
-                if (shouldReset) {
-                    world.setBlock(pos, state.setValue(RESOURCE_LEVEL, 0), 2);
+                if (belowState.is(BlockTags.OVERWORLD_NATURAL_LOGS) || belowState.is(BlockTags.DIRT) && !belowState.is(SpawnBlocks.ANT_MOUND)) {
+                    list.add(blockPos);
                 }
             }
+        }
+        if (!list.isEmpty()) {
+            BlockPos blockPos = list.get(randomSource.nextInt(list.size()));
+            BlockState placeState = null;
+            if (world.getBlockState(blockPos).is(BlockTags.OVERWORLD_NATURAL_LOGS)) {
+                placeState = SpawnBlocks.ROTTEN_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, world.getBlockState(blockPos).getValue(RotatedPillarBlock.AXIS));
+            } else if (world.getBlockState(blockPos).is(BlockTags.DIRT) && !world.getBlockState(blockPos).is(SpawnBlocks.ANT_MOUND)) {
+                placeState = SpawnBlocks.ANT_MOUND.defaultBlockState();
+            }
+            world.setBlock(blockPos, placeState, 2);
+            world.setBlock(pos, state.setValue(RESOURCE_LEVEL, 0), 2);
         }
     }
 

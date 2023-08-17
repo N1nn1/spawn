@@ -26,6 +26,7 @@ public interface SpawnTags {
     TagKey<Block> MUCUS_SOLIDIFIER = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mucus_solidifier"));
     TagKey<Block> MUCUS_SOLIDIFICATION_SPREADER = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mucus_solidification_spreader"));
     TagKey<Block> ROTTEN_LOGS_BLOCK = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "rotten_logs"));
+    TagKey<Block> ANT_RESOURCE = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "ant_resource"));
 
     //Biome tags
     TagKey<Biome> SNAIL_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "snail_spawns"));
