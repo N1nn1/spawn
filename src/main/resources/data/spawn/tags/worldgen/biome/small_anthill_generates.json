@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#c:savanna",
+    "#c:plains",
+    "#minecraft:is_forest"
+  ]
+}

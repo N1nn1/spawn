@@ -2,6 +2,7 @@ package com.ninni.spawn.registry;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.spawn.Spawn;
+import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
 import com.ninni.spawn.client.particles.TunaEggParticle;
@@ -66,7 +67,7 @@ public class SpawnVanillaIntegration {
                 generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, SpawnPlacedFeatures.PATCH_SUNFLOWER);
             }
         });
-        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_FOREST), GenerationStep.Decoration.VEGETAL_DECORATION, SpawnPlacedFeatures.SMALL_ANTHILL);
+        BiomeModifications.addFeature(BiomeSelectors.tag(SpawnTags.SMALL_ANTHILL_GENERATES), GenerationStep.Decoration.VEGETAL_DECORATION, SpawnPlacedFeatures.SMALL_ANTHILL);
     }
 
     private static void registerFlammables() {
