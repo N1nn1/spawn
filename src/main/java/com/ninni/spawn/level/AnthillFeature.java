@@ -9,21 +9,19 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-public class AnthillFeature extends Feature<NoneFeatureConfiguration> {
+public class AnthillFeature extends Feature<AnthillConfig> {
 
-    public AnthillFeature(Codec<NoneFeatureConfiguration> codec) {
+    public AnthillFeature(Codec<AnthillConfig> codec) {
         super(codec);
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> featurePlaceContext) {
+    public boolean place(FeaturePlaceContext<AnthillConfig> featurePlaceContext) {
         WorldGenLevel world = featurePlaceContext.level();
         BlockPos blockPos = featurePlaceContext.origin();
         RandomSource randomSource = featurePlaceContext.random();
@@ -36,7 +34,7 @@ public class AnthillFeature extends Feature<NoneFeatureConfiguration> {
                 world.setBlock(pos, Blocks.COARSE_DIRT.defaultBlockState(), 3);
             }
         });
-        if (randomSource.nextInt(50) == 0) {
+        if (randomSource.nextFloat() <= featurePlaceContext.config().anthill_chance()) {
             world.setBlock(blockPos.below(), SpawnBlocks.ANTHILL.defaultBlockState(), 2);
             world.getBlockEntity(blockPos.below(), SpawnBlockEntityTypes.ANTHILL).ifPresent(anthillBlockEntity -> {
                 int i = 1 + randomSource.nextInt(3);
