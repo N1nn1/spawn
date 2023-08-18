@@ -257,21 +257,20 @@ public class Ant extends TamableAnimal implements NeutralMob {
         }
     }
 
-    @Override
-    public void tick() {
-        super.tick();
+    public void setHasResource(boolean hasResource) {
+        this.hasResource = hasResource;
     }
 
     class FindTarget extends Ant.NotAngryGoal {
         @Nullable
         private BlockPos blockPos;
         private int ticks = 0;
-        private int max = UniformInt.of(200, 300).sample(Ant.this.getRandom());
+        private final int max = UniformInt.of(200, 300).sample(Ant.this.getRandom());
 
         @Override
         public boolean canAntStart() {
             BlockPos target = this.locateTarget();
-            if (Ant.this.hasResource || Ant.this.level().isRaining() || Ant.this.level().isNight()) {
+            if (Ant.this.hasResource || Ant.this.level().isRaining() || Ant.this.level().isNight() || Ant.this.anthillPos == null) {
                 return false;
             }
             if (target != null && this.blockPos == null) {

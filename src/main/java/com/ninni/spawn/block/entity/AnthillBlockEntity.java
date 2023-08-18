@@ -2,6 +2,7 @@ package com.ninni.spawn.block.entity;
 
 import com.google.common.collect.Lists;
 import com.ninni.spawn.block.AnthillBlock;
+import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
@@ -116,6 +117,7 @@ public class AnthillBlockEntity extends BlockEntity {
         if (newAnt != null) {
             if (newAnt instanceof com.ninni.spawn.entity.Ant releasedAnt) {
                 if (antState == AntState.RESOURCE_DELIVERED) {
+                    ((com.ninni.spawn.entity.Ant) newAnt).setHasResource(false);
                     int i = state.getValue(AnthillBlock.RESOURCE_LEVEL);
                     if (state.getBlock() instanceof AnthillBlock && i < 5) {
                         world.setBlockAndUpdate(pos, state.setValue(AnthillBlock.RESOURCE_LEVEL, i + 1));
