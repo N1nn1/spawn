@@ -153,7 +153,7 @@ public class AnthillBlockEntity extends BlockEntity {
         Iterator<Ant> iterator = ants.iterator();
         while (iterator.hasNext()) {
             Ant ant = iterator.next();
-            if (Ant.ticksInAnthill > 20) {
+            if (Ant.ticksInAnthill > ant.minOccupationTicks) {
                 ItemStack compoundStack = ItemStack.of(ant.entityData.getCompound("Inventory"));
                 AntState antState = compoundStack != ItemStack.EMPTY ? AntState.RESOURCE_DELIVERED : AntState.ANT_RELEASED;
                 if (AnthillBlockEntity.releaseAnt(world, pos, state, ant, null, antState)) {

@@ -237,6 +237,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putByte("AbdomenColor", (byte)this.getAbdomenColor().getId());
         compoundTag.putInt("CannotEnterAnthillTicks", this.cannotEnterAnthillTicks);
+        compoundTag.putBoolean("HasResource", this.hasResource);
         if (this.hasAnthill()) {
             assert this.getAnthillPos() != null;
             compoundTag.put("AnthillPos", NbtUtils.writeBlockPos(this.getAnthillPos()));
@@ -250,6 +251,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
             this.setAbdomenColor(DyeColor.byId(compoundTag.getInt("AbdomenColor")));
         }
         this.cannotEnterAnthillTicks = compoundTag.getInt("CannotEnterAnthillTicks");
+        this.hasResource = compoundTag.getBoolean("HasResource");
         if (compoundTag.contains("AnthillPos")) {
             this.anthillPos = NbtUtils.readBlockPos(compoundTag.getCompound("AnthillPos"));
         }
@@ -264,6 +266,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
         @Nullable
         private BlockPos blockPos;
         private int ticks = 0;
+        private int max = UniformInt.of(200, 300).sample(Ant.this.getRandom());
 
         @Override
         public boolean canAntStart() {
@@ -280,7 +283,7 @@ public class Ant extends TamableAnimal implements NeutralMob {
         @Override
         public boolean canAntContinue() {
             boolean flag = this.blockPos != null && this.isTarget(Ant.this.level().getBlockState(this.blockPos));
-            if (this.ticks == 10) {
+            if (this.ticks == this.max) {
                 this.blockPos = null;
                 Ant.this.hasResource = true;
                 return false;
@@ -289,16 +292,12 @@ public class Ant extends TamableAnimal implements NeutralMob {
         }
 
         @Override
-        public void start() {
-        }
-
-        @Override
         public void tick() {
             if (this.blockPos != null && this.isTarget(Ant.this.level().getBlockState(this.blockPos))) {
                 Vec3 vec3 = Vec3.atBottomCenterOf(this.blockPos);
                 Ant.this.getNavigation().moveTo(vec3.x(), vec3.y(), vec3.z(), 1.0D);
                 Ant.this.getLookControl().setLookAt(vec3.x(), vec3.y(), vec3.z());
-                if (this.blockPos.distManhattan(Ant.this.blockPosition()) <= 2.0D && this.ticks < 20) {
+                if (this.blockPos.distManhattan(Ant.this.blockPosition()) <= 2.0D && this.ticks < this.max) {
                     this.ticks++;
                 }
             }
