@@ -111,10 +111,10 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.goalSelector.addGoal(5, new FindAnthillGoal());
         this.goalSelector.addGoal(6, new EnterAnthillGoal());
         this.moveToAnthillGoal = new MoveToAnthillGoal();
-        this.goalSelector.addGoal(7, new FindTarget());
-        this.goalSelector.addGoal(8, this.moveToAnthillGoal);
-        this.goalSelector.addGoal(9, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
-        this.goalSelector.addGoal(10, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(7, this.moveToAnthillGoal);
+        this.goalSelector.addGoal(8, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
+        this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(10, new FindTarget());
         this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
         this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
 
@@ -271,6 +271,9 @@ public class Ant extends TamableAnimal implements NeutralMob {
         public boolean canAntStart() {
             BlockPos target = this.locateTarget();
             if (Ant.this.hasResource || Ant.this.level().isRaining() || Ant.this.level().isNight() || Ant.this.anthillPos == null) {
+                return false;
+            }
+            if (Ant.this.getRandom().nextFloat() < 0.5F) {
                 return false;
             }
             if (target != null && this.blockPos == null) {
