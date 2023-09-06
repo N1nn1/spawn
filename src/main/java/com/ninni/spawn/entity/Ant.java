@@ -88,7 +88,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
     public Ant(EntityType<? extends Ant> entityType, Level level) {
         super(entityType, level);
         this.lookControl = new AntLookControl(this);
-        this.remainingCooldownBeforeLocatingNewResource = Mth.nextInt(this.random, 20, 60);
+        this.remainingCooldownBeforeLocatingNewResource = Mth.nextInt(this.random, 200, 600);
         this.setPathfindingMalus(BlockPathTypes.WATER, -1);
     }
 
@@ -500,7 +500,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
                 Ant.this.navigation.moveTo((double) Ant.this.savedResourcePos.getX() + 0.5, Ant.this.savedResourcePos.getY(), (double) Ant.this.savedResourcePos.getZ() + 0.5, 1.2f);
                 return true;
             }
-            Ant.this.remainingCooldownBeforeLocatingNewResource = Mth.nextInt(Ant.this.random, 20, 60);
+            Ant.this.remainingCooldownBeforeLocatingNewResource = Mth.nextInt(Ant.this.random, 200, 600);
             return false;
         }
 
@@ -593,7 +593,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
                 } else {
                     bl2 = false;
                 }
-                Ant.this.getLookControl().setLookAt(vec3.x(), vec3.y() + 0.2, vec3.z());
+                Ant.this.getLookControl().setLookAt(vec3.x(), vec3.y() + 0.5, vec3.z());
             }
             if (bl2) {
                 this.setWantedPos();

@@ -150,6 +150,7 @@ public class AnthillBlockEntity extends BlockEntity {
             if (newAnt instanceof com.ninni.spawn.entity.Ant releasedAnt) {
                 if (antState == AntState.RESOURCE_DELIVERED) {
                     ((com.ninni.spawn.entity.Ant) newAnt).setHasResource(false);
+                    ((com.ninni.spawn.entity.Ant) newAnt).setHasResource(false);
                     int i = state.getValue(AnthillBlock.RESOURCE_LEVEL);
                     if (state.getBlock() instanceof AnthillBlock && i < 3) {
                         world.setBlockAndUpdate(pos, state.setValue(AnthillBlock.RESOURCE_LEVEL, i + 1));
