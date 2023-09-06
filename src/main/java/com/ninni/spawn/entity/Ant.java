@@ -59,6 +59,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+//TODO
+// might be going crazy but I swear I saw ants disappear when gathering resources (might just have gone to their home)
+// sometimes ants just continuosly pop in and out of their home very fast and dont stop
+// ants sometimes just cannot pathfind to their home for some reason
+
 public class Ant extends TamableAnimal implements NeutralMob{
     private static final EntityDataAccessor<Boolean> DATA_HAS_RESOURCE = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_ABDOMEN_COLOR = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
@@ -271,7 +276,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         if (this.stayOutOfAnthillCountdown > 0 || this.antGatherGoal.isGathering() || this.getTarget() != null) {
             return false;
         }
-        return this.isTiredOfLookingForResource() || this.level().isRaining() || this.level().isNight() || this.hasResource();
+        return this.isTiredOfLookingForResource() || this.level().isNight();
     }
 
     public void setStayOutOfAnthillCountdown(int i) {
@@ -761,7 +766,11 @@ public class Ant extends TamableAnimal implements NeutralMob{
 
         @Override
         public boolean canAntUse() {
-            return Ant.this.anthillPos != null && !Ant.this.hasRestriction() && Ant.this.wantsToEnterAnthill() && !this.hasReachedTarget(Ant.this.anthillPos) && Ant.this.level().getBlockState(Ant.this.anthillPos).is(SpawnTags.ANTHILLS);
+            return Ant.this.anthillPos != null
+                    && !Ant.this.hasRestriction()
+                    && Ant.this.wantsToEnterAnthill()
+                    && !this.hasReachedTarget(Ant.this.anthillPos)
+                    && Ant.this.level().getBlockState(Ant.this.anthillPos).is(SpawnTags.ANTHILLS);
         }
 
         @Override

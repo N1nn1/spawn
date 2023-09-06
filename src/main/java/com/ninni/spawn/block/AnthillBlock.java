@@ -1,6 +1,7 @@
 package com.ninni.spawn.block;
 
 import com.google.common.collect.Lists;
+import com.ninni.spawn.Spawn;
 import com.ninni.spawn.SpawnProperties;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.entity.Ant;
@@ -9,6 +10,7 @@ import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -29,12 +31,14 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
@@ -138,6 +142,9 @@ public class AnthillBlock extends BaseEntityBlock {
                 placeState = SpawnBlocks.ANT_MOUND.defaultBlockState();
             }
             world.setBlock(blockPos, placeState, 2);
+            if (world.getBlockEntity(blockPos) instanceof BrushableBlockEntity brushableBlockEntity) {
+                brushableBlockEntity.setLootTable(new ResourceLocation(Spawn.MOD_ID, "archaeology/anthill"), blockPos.asLong());
+            }
             world.setBlock(pos, state.setValue(RESOURCE_LEVEL, 0), 2);
         }
     }
