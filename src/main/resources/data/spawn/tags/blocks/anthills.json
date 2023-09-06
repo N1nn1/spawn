@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "spawn:anthill",
+    "spawn:rotten_log_anthill",
+    "spawn:ant_farm"
+  ]
+}

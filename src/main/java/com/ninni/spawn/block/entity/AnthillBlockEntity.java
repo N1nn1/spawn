@@ -2,22 +2,18 @@ package com.ninni.spawn.block.entity;
 
 import com.google.common.collect.Lists;
 import com.ninni.spawn.block.AnthillBlock;
-import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
-import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -33,7 +29,41 @@ public class AnthillBlockEntity extends BlockEntity {
     public static final String ENTITY_DATA_KEY = "EntityData";
     public static final String TICKS_IN_ANTHILL_KEY = "TicksInAnthill";
     public static final String ANTS_KEY = "Ants";
-    private static final List<String> IRRELEVANT_ANT_NBT_KEYS = Arrays.asList("Air", "Bees", "ArmorDropChances", "ArmorItems", "Brain", "CanPickUpLoot", "DeathTime", "FallDistance", "FallFlying", "Fire", "HandDropChances", "HandItems", "HurtByTimestamp", "HurtTime", "LeftHanded", "Motion", "NoGravity", "OnGround", "PortalCooldown", "Pos", "Rotation", "CannotEnterDwellingTicks", "CannotEnterHiveTicks", "TicksSincePollination", "CropsGrownSincePollination", "DwellingPos", "HivePos", "Passengers", "Leash", "UUID");
+    private static final List<String> IGNORED_ANT_TAGS =
+            Arrays.asList(
+                    "Bees",
+                    "Air",
+                    "ArmorDropChances",
+                    "ArmorItems",
+                    "Brain",
+                    "CanPickUpLoot",
+                    "DeathTime",
+                    "FallDistance",
+                    "FallFlying",
+                    "Fire",
+                    "HandDropChances",
+                    "HandItems",
+                    "HurtByTimestamp",
+                    "HurtTime",
+                    "LeftHanded",
+                    "Motion",
+                    "NoGravity",
+                    "OnGround",
+                    "PortalCooldown",
+                    "Pos",
+                    "Rotation",
+                    "CannotEnterHiveTicks",
+                    "TicksSincePollination",
+                    "CropsGrownSincePollination",
+                    "HivePos",
+                    "CannotEnterDwellingTicks",
+                    "CannotEnterHiveTicks",
+                    "TicksSincePollination",
+                    "CropsGrownSincePollination",
+                    "AnthillPos",
+                    "Passengers",
+                    "Leash",
+                    "UUID");
     private final List<Ant> ants = Lists.newArrayList();
     private int day = -1;
 
@@ -57,7 +87,7 @@ public class AnthillBlockEntity extends BlockEntity {
                 if (!(entity instanceof com.ninni.spawn.entity.Ant ant)) continue;
                 if (!(player.position().distanceToSqr(entity.position()) <= 16.0)) continue;
                 ant.setTarget(player);
-                ant.setCannotEnterAnthillTicks(400);
+                ant.setStayOutOfAnthillCountdown(400);
             }
         }
     }
@@ -76,11 +106,11 @@ public class AnthillBlockEntity extends BlockEntity {
         return list;
     }
 
-    public void tryEnterAnthill(Entity entity) {
-        this.tryEnterAnthill(entity, 0);
+    public void tryEnterAnthill(Entity entity, boolean bl) {
+        this.tryEnterAnthill(entity, bl, 0);
     }
 
-    public void tryEnterAnthill(Entity entity, int ticksInAnthill) {
+    public void tryEnterAnthill(Entity entity, boolean bl, int ticksInAnthill) {
         if (this.ants.size() >= 3) {
             return;
         }
@@ -89,7 +119,7 @@ public class AnthillBlockEntity extends BlockEntity {
         CompoundTag nbtCompound = new CompoundTag();
         entity.save(nbtCompound);
         BlockPos blockPos = this.getBlockPos();
-        this.addAnt(nbtCompound, ticksInAnthill);
+        this.addAnt(nbtCompound, ticksInAnthill, bl);
         if (this.level != null) {
             //this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SpeciesSoundEvents.BLOCK_BIRT_DWELLING_ENTER, SoundSource.BLOCKS, 1.0f, 1.0f);
             this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity, this.getBlockState()));
@@ -98,13 +128,13 @@ public class AnthillBlockEntity extends BlockEntity {
         super.setChanged();
     }
 
-    public void addAnt(CompoundTag nbtCompound, int ticksInDwelling) {
+    public void addAnt(CompoundTag nbtCompound, int ticksInDwelling, boolean bl) {
         assert this.level != null;
-        this.ants.add(new Ant(nbtCompound, ticksInDwelling, 1200));
+        this.ants.add(new Ant(nbtCompound, ticksInDwelling, bl ? 2400 : 600));
     }
 
     private static boolean releaseAnt(Level world, BlockPos pos, BlockState state, Ant ant, @Nullable List<Entity> entities, AntState antState) {
-        if ((world.isNight() || world.isRaining()) && antState != AntState.EMERGENCY) {
+        if (world.isNight() && antState != AntState.EMERGENCY) {
             return false;
         }
         CompoundTag nbtCompound = ant.entityData.copy();
@@ -141,7 +171,7 @@ public class AnthillBlockEntity extends BlockEntity {
     }
 
     static void removeIrrelevantNbtKeys(CompoundTag compound) {
-        for (String string : IRRELEVANT_ANT_NBT_KEYS) compound.remove(string);
+        for (String string : IGNORED_ANT_TAGS) compound.remove(string);
     }
 
     private static void ageAnt(int ticks, com.ninni.spawn.entity.Ant ant) {
@@ -195,7 +225,8 @@ public class AnthillBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         nbt.put(ANTS_KEY, this.getAnts());
-        nbt.putInt("Day", this.day);
+        nbt.putInt("Day",
+                    this.day);
     }
 
     public ListTag getAnts() {
@@ -205,7 +236,7 @@ public class AnthillBlockEntity extends BlockEntity {
             nbtCompound.remove("UUID");
             CompoundTag nbtCompound2 = new CompoundTag();
             nbtCompound2.put(ENTITY_DATA_KEY, nbtCompound);
-            nbtCompound2.putInt(IRRELEVANT_ANT_NBT_KEYS.toString(), Ant.ticksInAnthill);
+            nbtCompound2.putInt(IGNORED_ANT_TAGS.toString(), Ant.ticksInAnthill);
             nbtCompound2.putInt(MIN_OCCUPATION_TICKS_KEY, ant.minOccupationTicks);
             nbtList.add(nbtCompound2);
         }

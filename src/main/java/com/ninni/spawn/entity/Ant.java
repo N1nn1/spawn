@@ -4,8 +4,9 @@ import com.google.common.collect.Lists;
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
-import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -13,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
@@ -21,32 +23,16 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.NeutralMob;
-import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.BreedGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
-import net.minecraft.world.entity.ai.util.LandRandomPos;
+import net.minecraft.world.entity.ai.control.LookControl;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.*;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.util.*;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.animal.Animal;
@@ -57,39 +43,56 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Ant extends TamableAnimal implements NeutralMob {
+public class Ant extends TamableAnimal implements NeutralMob{
+    private static final EntityDataAccessor<Boolean> DATA_HAS_RESOURCE = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_ABDOMEN_COLOR = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
-    private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
-    private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
+    public static final String TAG_CANNOT_ENTER_ANTHILL_TICKS = "CannotEnterAnthillTicks";
+    public static final String TAG_TICKS_SINCE_GATHERING = "TicksSinceGathering";
+    public static final String TAG_HAS_RESOURCE = "HasResource";
+    public static final String TAG_ABDOMEN_COLOR = "AbdomenColor";
+    public static final String TAG_RESOURCE_POS = "ResourcePos";
+    public static final String TAG_ANTHILL_POS = "AnthillPos";
+    private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
     @Nullable
-    private UUID angryAt;
-    private int cannotEnterAnthillTicks;
-    private boolean hasResource;
-    int ticksLeftToFindDwelling;
+    private UUID persistentAngerTarget;
+    int ticksWithoutResourceSinceExitingAnthill;
+    private int stayOutOfAnthillCountdown;
+    int remainingCooldownBeforeLocatingNewAnthill;
+    int remainingCooldownBeforeLocatingNewResource;
+    @Nullable
+    BlockPos savedResourcePos;
     @Nullable
     BlockPos anthillPos;
-    MoveToAnthillGoal moveToAnthillGoal;
+    Ant.AntGatherGoal antGatherGoal;
+    Ant.AntGoToAnthillGoal goToAnthillGoal;
+    private Ant.AntGoToKnownResourceGoal goToKnownResourceGoal;
+    private int underWaterTicks;
 
-    public Ant(EntityType<? extends TamableAnimal> entityType, Level level) {
+    public Ant(EntityType<? extends Ant> entityType, Level level) {
         super(entityType, level);
+        this.lookControl = new AntLookControl(this);
+        this.remainingCooldownBeforeLocatingNewResource = Mth.nextInt(this.random, 20, 60);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -100,49 +103,15 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Mth.nextDouble(random, 0.225, 0.3));
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
     }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, new PanicGoal(this, 1.2));
-        this.goalSelector.addGoal(3, new BreedGoal(this, 1.0F));
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0, true));
-        this.goalSelector.addGoal(5, new FindAnthillGoal());
-        this.goalSelector.addGoal(6, new EnterAnthillGoal());
-        this.moveToAnthillGoal = new MoveToAnthillGoal();
-        this.goalSelector.addGoal(7, this.moveToAnthillGoal);
-        this.goalSelector.addGoal(8, new TemptGoal(this, 1.2, Ingredient.of(SpawnTags.HAMSTER_TEMPTS), false));
-        this.goalSelector.addGoal(9, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(10, new FindTarget());
-        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
-        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Ant.class, false, this::getTerritorialTarget));
-        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
-    }
-
-    private boolean getTerritorialTarget(LivingEntity livingEntity) {
-        return livingEntity instanceof Ant ant && ant.isTame() && !ant.isInSittingPose() && !this.isInSittingPose() && this.isTame() && ant.getAbdomenColor() != this.getAbdomenColor() && !this.isBaby() && !ant.isBaby();
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes()
-                .add(Attributes.MOVEMENT_SPEED, 1.0)
-                .add(Attributes.ATTACK_DAMAGE, 3.0)
-                .add(Attributes.MAX_HEALTH, 10.0);
-    }
-
+    
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ANGER, 0);
+        this.entityData.define(DATA_HAS_RESOURCE, false);
         this.entityData.define(DATA_ABDOMEN_COLOR, DyeColor.RED.getId());
-        this.entityData.define(DATA_FLAGS_ID, (byte)0);
+        this.entityData.define(DATA_REMAINING_ANGER_TIME, 0);
     }
-
+    
     public static float[] getColorArray(DyeColor dyeColor) {
         if (dyeColor == DyeColor.WHITE) {
             return new float[]{0.9019608F, 0.9019608F, 0.9019608F};
@@ -157,6 +126,51 @@ public class Ant extends TamableAnimal implements NeutralMob {
         this.entityData.set(DATA_ABDOMEN_COLOR, dyeColor.getId());
     }
 
+    @Override
+    public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
+        if (levelReader.getBlockState(blockPos).isAir()) {
+            return 10.0f;
+        }
+        return 0.0f;
+    }
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(0, new AntAttackGoal(this, 1.4f, true));
+        this.goalSelector.addGoal(1, new AntEnterAnthillGoal());
+        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, Ingredient.of(SpawnTags.ANT_TEMPTS), false));
+        this.antGatherGoal = new AntGatherGoal();
+        this.goalSelector.addGoal(4, this.antGatherGoal);
+        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25));
+        this.goalSelector.addGoal(5, new AntLocateAnthillGoal());
+        this.goToAnthillGoal = new AntGoToAnthillGoal();
+        this.goalSelector.addGoal(5, this.goToAnthillGoal);
+        this.goToKnownResourceGoal = new AntGoToKnownResourceGoal();
+        this.goalSelector.addGoal(6, this.goToKnownResourceGoal);
+        this.goalSelector.addGoal(8, new AntWanderGoal());
+        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
+        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
+
+        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Ant.class, false, this::getTerritorialTarget));
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(3, new AntHurtByOtherGoal(this).setAlertOthers());
+        this.targetSelector.addGoal(4, new AntBecomeAngryTargetGoal(this));
+        this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal<>(this, true));
+    }
+
+    private boolean getTerritorialTarget(LivingEntity livingEntity) {
+        return livingEntity instanceof Ant ant && ant.isTame() && !ant.isInSittingPose() && !this.isInSittingPose() && this.isTame() && ant.getAbdomenColor() != this.getAbdomenColor() && !this.isBaby() && !ant.isBaby();
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 1.0)
+                .add(Attributes.ATTACK_DAMAGE, 3.0)
+                .add(Attributes.MAX_HEALTH, 10.0);
+    }
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
@@ -188,36 +202,131 @@ public class Ant extends TamableAnimal implements NeutralMob {
         }
         return super.mobInteract(player, interactionHand);
     }
-
-    boolean canEnterDwelling() {
-        if (this.cannotEnterAnthillTicks <= 0 && this.getTarget() == null) return this.level().isRaining() || this.level().isNight() || this.hasResource;
-        else return false;
+    
+    @Override
+    public void addAdditionalSaveData(CompoundTag compoundTag) {
+        super.addAdditionalSaveData(compoundTag);
+        if (this.hasAnthill()) {
+            compoundTag.put(TAG_ANTHILL_POS, NbtUtils.writeBlockPos(this.getAnthillPos()));
+        }
+        if (this.hasSavedResourcePos()) {
+            compoundTag.put(TAG_RESOURCE_POS, NbtUtils.writeBlockPos(this.getSavedResourcePos()));
+        }
+        compoundTag.putByte(TAG_ABDOMEN_COLOR, (byte)this.getAbdomenColor().getId());
+        compoundTag.putBoolean(TAG_HAS_RESOURCE, this.hasResource());
+        compoundTag.putInt(TAG_TICKS_SINCE_GATHERING, this.ticksWithoutResourceSinceExitingAnthill);
+        compoundTag.putInt(TAG_CANNOT_ENTER_ANTHILL_TICKS, this.stayOutOfAnthillCountdown);
+        this.addPersistentAngerSaveData(compoundTag);
     }
 
-    public void setCannotEnterAnthillTicks(int cannotEnterAnthillTicks) {
-        this.cannotEnterAnthillTicks = cannotEnterAnthillTicks;
+    @Override
+    public void readAdditionalSaveData(CompoundTag compoundTag) {
+        if (compoundTag.contains(TAG_ABDOMEN_COLOR, 99)) {
+            this.setAbdomenColor(DyeColor.byId(compoundTag.getInt(TAG_ABDOMEN_COLOR)));
+        }
+        this.anthillPos = null;
+        if (compoundTag.contains(TAG_ANTHILL_POS)) {
+            this.anthillPos = NbtUtils.readBlockPos(compoundTag.getCompound(TAG_ANTHILL_POS));
+        }
+        this.savedResourcePos = null;
+        if (compoundTag.contains(TAG_RESOURCE_POS)) {
+            this.savedResourcePos = NbtUtils.readBlockPos(compoundTag.getCompound(TAG_RESOURCE_POS));
+        }
+        super.readAdditionalSaveData(compoundTag);
+        this.setHasResource(compoundTag.getBoolean(TAG_HAS_RESOURCE));
+        this.ticksWithoutResourceSinceExitingAnthill = compoundTag.getInt(TAG_TICKS_SINCE_GATHERING);
+        this.stayOutOfAnthillCountdown = compoundTag.getInt(TAG_CANNOT_ENTER_ANTHILL_TICKS);
+        this.readPersistentAngerSaveData(this.level(), compoundTag);
     }
 
-    private boolean doesAnthillHaveSpace(BlockPos pos) {
-        BlockEntity blockEntity = this.level().getBlockEntity(pos);
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.hasResource() && this.random.nextFloat() < 0.05f) {
+            for (int i = 0; i < this.random.nextInt(2) + 1; ++i) {
+                this.spawnFluidParticle(this.level(), this.getX() - (double)0.3f, this.getX() + (double)0.3f, this.getZ() - (double)0.3f, this.getZ() + (double)0.3f, this.getY(0.5), ParticleTypes.FALLING_NECTAR);
+            }
+        }
+    }
+
+    private void spawnFluidParticle(Level level, double d, double e, double f, double g, double h, ParticleOptions particleOptions) {
+        level.addParticle(particleOptions, Mth.lerp(level.random.nextDouble(), d, e), h, Mth.lerp(level.random.nextDouble(), f, g), 0.0, 0.0, 0.0);
+    }
+
+    @Nullable
+    public BlockPos getSavedResourcePos() {
+        return this.savedResourcePos;
+    }
+
+    public boolean hasSavedResourcePos() {
+        return this.savedResourcePos != null;
+    }
+
+    private boolean isTiredOfLookingForResource() {
+        return this.ticksWithoutResourceSinceExitingAnthill > 3600;
+    }
+
+    boolean wantsToEnterAnthill() {
+        if (this.stayOutOfAnthillCountdown > 0 || this.antGatherGoal.isGathering() || this.getTarget() != null) {
+            return false;
+        }
+        return this.isTiredOfLookingForResource() || this.level().isRaining() || this.level().isNight() || this.hasResource();
+    }
+
+    public void setStayOutOfAnthillCountdown(int i) {
+        this.stayOutOfAnthillCountdown = i;
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        this.underWaterTicks = this.isInWaterOrBubble() ? ++this.underWaterTicks : 0;
+        if (this.underWaterTicks > 20) {
+            this.hurt(this.damageSources().drown(), 1.0f);
+        }
+        if (!this.hasResource()) {
+            ++this.ticksWithoutResourceSinceExitingAnthill;
+        }
+        if (!this.level().isClientSide) {
+            this.updatePersistentAnger((ServerLevel)this.level(), false);
+        }
+    }
+
+    public void resetTicksWithoutResourceSinceExitingAnthill() {
+        this.ticksWithoutResourceSinceExitingAnthill = 0;
+    }
+
+    @Override
+    public int getRemainingPersistentAngerTime() {
+        return this.entityData.get(DATA_REMAINING_ANGER_TIME);
+    }
+
+    @Override
+    public void setRemainingPersistentAngerTime(int i) {
+        this.entityData.set(DATA_REMAINING_ANGER_TIME, i);
+    }
+
+    @Override
+    @Nullable
+    public UUID getPersistentAngerTarget() {
+        return this.persistentAngerTarget;
+    }
+
+    @Override
+    public void setPersistentAngerTarget(@Nullable UUID uUID) {
+        this.persistentAngerTarget = uUID;
+    }
+
+    @Override
+    public void startPersistentAngerTimer() {
+        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
+    }
+
+    private boolean doesAnthillHaveSpace(BlockPos blockPos) {
+        BlockEntity blockEntity = this.level().getBlockEntity(blockPos);
         if (blockEntity instanceof AnthillBlockEntity) {
             return !((AnthillBlockEntity)blockEntity).isFullOfAnts();
-        } else {
-            return false;
         }
-    }
-
-    boolean isWithinDistance(BlockPos pos, int distance) {
-        return pos.closerThan(this.blockPosition(), distance);
-    }
-
-    boolean isAnthillValid() {
-        if (!this.hasAnthill()) {
-            return false;
-        } else {
-            BlockEntity blockEntity = this.level().getBlockEntity(this.anthillPos);
-            return blockEntity != null && blockEntity.getType() == SpawnBlockEntityTypes.ANTHILL;
-        }
+        return false;
     }
 
     @VisibleForDebug
@@ -231,361 +340,91 @@ public class Ant extends TamableAnimal implements NeutralMob {
         return this.anthillPos;
     }
 
-
     @Override
-    public void addAdditionalSaveData(CompoundTag compoundTag) {
-        super.addAdditionalSaveData(compoundTag);
-        compoundTag.putByte("AbdomenColor", (byte)this.getAbdomenColor().getId());
-        compoundTag.putInt("CannotEnterAnthillTicks", this.cannotEnterAnthillTicks);
-        compoundTag.putBoolean("HasResource", this.hasResource);
-        if (this.hasAnthill()) {
-            assert this.getAnthillPos() != null;
-            compoundTag.put("AnthillPos", NbtUtils.writeBlockPos(this.getAnthillPos()));
+    public void aiStep() {
+        super.aiStep();
+        if (!this.level().isClientSide) {
+            if (this.stayOutOfAnthillCountdown > 0) {
+                --this.stayOutOfAnthillCountdown;
+            }
+            if (this.remainingCooldownBeforeLocatingNewAnthill > 0) {
+                --this.remainingCooldownBeforeLocatingNewAnthill;
+            }
+            if (this.remainingCooldownBeforeLocatingNewResource > 0) {
+                --this.remainingCooldownBeforeLocatingNewResource;
+            }
+            if (this.tickCount % 20 == 0 && !this.isAnthillValid()) {
+                this.anthillPos = null;
+            }
         }
     }
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compoundTag) {
-        super.readAdditionalSaveData(compoundTag);
-        if (compoundTag.contains("AbdomenColor", 99)) {
-            this.setAbdomenColor(DyeColor.byId(compoundTag.getInt("AbdomenColor")));
-        }
-        this.cannotEnterAnthillTicks = compoundTag.getInt("CannotEnterAnthillTicks");
-        this.hasResource = compoundTag.getBoolean("HasResource");
-        if (compoundTag.contains("AnthillPos")) {
-            this.anthillPos = NbtUtils.readBlockPos(compoundTag.getCompound("AnthillPos"));
-        }
-    }
-
-    public void setHasResource(boolean hasResource) {
-        this.hasResource = hasResource;
-    }
-
-    class FindTarget extends Ant.NotAngryGoal {
-        @Nullable
-        private BlockPos blockPos;
-        private int ticks = 0;
-        private final int max = UniformInt.of(200, 300).sample(Ant.this.getRandom());
-
-        @Override
-        public boolean canAntStart() {
-            BlockPos target = this.locateTarget();
-            if (Ant.this.hasResource || Ant.this.level().isRaining() || Ant.this.level().isNight() || Ant.this.anthillPos == null) {
-                return false;
-            }
-            if (Ant.this.getRandom().nextFloat() < 0.5F) {
-                return false;
-            }
-            if (target != null && this.blockPos == null) {
-                this.blockPos = target;
-            }
-            return this.blockPos != null;
-        }
-
-        @Override
-        public boolean canAntContinue() {
-            boolean flag = this.blockPos != null && this.isTarget(Ant.this.level().getBlockState(this.blockPos));
-            if (this.ticks == this.max) {
-                this.blockPos = null;
-                Ant.this.hasResource = true;
-                return false;
-            }
-            return flag;
-        }
-
-        @Override
-        public void tick() {
-            if (this.blockPos != null && this.isTarget(Ant.this.level().getBlockState(this.blockPos))) {
-                Vec3 vec3 = Vec3.atBottomCenterOf(this.blockPos);
-                Ant.this.getNavigation().moveTo(vec3.x(), vec3.y(), vec3.z(), 1.0D);
-                Ant.this.getLookControl().setLookAt(vec3.x(), vec3.y(), vec3.z());
-                if (this.blockPos.distManhattan(Ant.this.blockPosition()) <= 2.0D && this.ticks < this.max) {
-                    this.ticks++;
-                }
-            }
-        }
-
-        @Override
-        public void stop() {
-            Ant.this.hasResource = true;
-            this.blockPos = null;
-        }
-
-        private BlockPos locateTarget() {
-            List<BlockPos> list = Lists.newArrayList();
-            int range = 5;
-            BlockPos blockPos = Ant.this.blockPosition();
-            Level world = Ant.this.level();
-            for (int x = -range; x <= range; x++) {
-                for (int z = -range; z <= range; z++) {
-                    for (int y = -range; y <= range; y++) {
-                        BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
-                        boolean flag = this.isTarget(world.getBlockState(pos));
-                        if (flag) {
-                            list.add(pos);
-                        }
-                    }
-                }
-            }
-            if (list.isEmpty()) {
-                return null;
-            }
-            return list.get(Ant.this.random.nextInt(list.size()));
-        }
-
-        public boolean isTarget(BlockState blockState) {
-            return blockState.is(SpawnTags.ANT_RESOURCE);
-        }
-    }
-
-    class EnterAnthillGoal extends Ant.NotAngryGoal {
-        EnterAnthillGoal() {
-            super();
-        }
-
-        @Override
-        public boolean canAntStart() {
-            if (Ant.this.hasAnthill() && Ant.this.canEnterDwelling()) {
-                assert Ant.this.anthillPos != null;
-                if (Ant.this.anthillPos.closerToCenterThan(Ant.this.position(), 2.0)) {
-                    BlockEntity blockEntity = Ant.this.level().getBlockEntity(Ant.this.anthillPos);
-                    if (blockEntity instanceof AnthillBlockEntity blockEntity1) {
-                        if (!blockEntity1.isFullOfAnts()) {
-                            return true;
-                        }
-
-                        Ant.this.anthillPos = null;
-                    }
-                }
-            }
-
+    boolean isAnthillValid() {
+        if (!this.hasAnthill()) {
             return false;
         }
-
-        @Override
-        public boolean canAntContinue() {
+        if (this.isTooFarAway(this.anthillPos)) {
             return false;
         }
-
-        @Override
-        public void start() {
-            BlockEntity blockEntity = Ant.this.level().getBlockEntity(Ant.this.anthillPos);
-            if (blockEntity instanceof AnthillBlockEntity anthillBlockEntity) {
-                anthillBlockEntity.tryEnterAnthill(Ant.this);
-            }
-
-        }
+        BlockEntity blockEntity = this.level().getBlockEntity(this.anthillPos);
+        return blockEntity != null && blockEntity.getType() == SpawnBlockEntityTypes.ANTHILL;
     }
 
-    private class FindAnthillGoal extends Ant.NotAngryGoal {
-        FindAnthillGoal() {
-            super();
-        }
-
-        @Override
-        public boolean canAntStart() {
-            return Ant.this.ticksLeftToFindDwelling == 0 && !Ant.this.hasAnthill();
-        }
-
-        @Override
-        public boolean canAntContinue() {
-            return false;
-        }
-
-        @Override
-        public void start() {
-            Ant.this.ticksLeftToFindDwelling = 200;
-            List<BlockPos> list = this.getNearbyFreeDwellings();
-            if (!list.isEmpty()) {
-                Iterator<BlockPos> var2 = list.iterator();
-
-                BlockPos blockPos;
-                do {
-                    if (!var2.hasNext()) {
-                        Ant.this.moveToAnthillGoal.clearPossibleDwellings();
-                        Ant.this.anthillPos = list.get(0);
-                        return;
-                    }
-
-                    blockPos = var2.next();
-                } while(Ant.this.moveToAnthillGoal.isPossibleDwelling(blockPos));
-
-                Ant.this.anthillPos = blockPos;
-            }
-        }
-
-        private List<BlockPos> getNearbyFreeDwellings() {
-            BlockPos blockPos = Ant.this.blockPosition();
-            PoiManager pointOfInterestStorage = ((ServerLevel)Ant.this.level()).getPoiManager();
-            Stream<PoiRecord> stream = pointOfInterestStorage.getInRange((poiType) -> poiType.is(SpawnTags.ANT_HOME), blockPos, 20, PoiManager.Occupancy.ANY);
-            return stream.map(PoiRecord::getPos).filter(Ant.this::doesAnthillHaveSpace).sorted(Comparator.comparingDouble((blockPos2) -> blockPos2.distSqr(blockPos))).collect(Collectors.toList());
-        }
+    public boolean hasResource() {
+        return entityData.get(DATA_HAS_RESOURCE);
     }
 
-    @VisibleForDebug
-    public class MoveToAnthillGoal extends Ant.NotAngryGoal {
-        int ticks;
-        final List<BlockPos> possibleDwellings;
-        @Nullable
-        private Path path;
-        private int ticksUntilLost;
-
-        MoveToAnthillGoal() {
-            super();
-            this.ticks = Ant.this.level().random.nextInt(10);
-            this.possibleDwellings = Lists.newArrayList();
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+    public void setHasResource(boolean bl) {
+        if (bl) {
+            this.resetTicksWithoutResourceSinceExitingAnthill();
         }
-
-        @Override
-        public boolean canAntStart() {
-            return Ant.this.anthillPos != null && !Ant.this.hasRestriction() && Ant.this.canEnterDwelling() && !this.isCloseEnough(Ant.this.anthillPos) && Ant.this.level().getBlockState(Ant.this.anthillPos).is(SpawnBlocks.ANTHILL);
-        }
-
-        @Override
-        public boolean canAntContinue() {
-            return this.canAntStart();
-        }
-
-        @Override
-        public void start() {
-            this.ticks = 0;
-            this.ticksUntilLost = 0;
-            super.start();
-        }
-
-        @Override
-        public void stop() {
-            this.ticks = 0;
-            this.ticksUntilLost = 0;
-            Ant.this.navigation.stop();
-            Ant.this.navigation.resetMaxVisitedNodesMultiplier();
-        }
-
-        @Override
-        public void tick() {
-            if (Ant.this.anthillPos != null) {
-                ++this.ticks;
-                if (this.ticks > this.adjustedTickDelay(600)) {
-                    this.makeChosenDwellingPossibleDwelling();
-                } else if (!Ant.this.navigation.isInProgress()) {
-                    if (!Ant.this.isWithinDistance(Ant.this.anthillPos, 16)) {
-                        if (Ant.this.isTooFar(Ant.this.anthillPos)) {
-                            this.setLost();
-                        } else {
-                            Ant.this.startMovingTo(Ant.this.anthillPos);
-                        }
-                    } else {
-                        boolean bl = this.startMovingToFar(Ant.this.anthillPos);
-                        if (!bl) {
-                            this.makeChosenDwellingPossibleDwelling();
-                        } else if (this.path != null && Objects.requireNonNull(Ant.this.navigation.getPath()).sameAs(this.path)) {
-                            ++this.ticksUntilLost;
-                            if (this.ticksUntilLost > 60) {
-                                this.setLost();
-                                this.ticksUntilLost = 0;
-                            }
-                        } else {
-                            this.path = Ant.this.navigation.getPath();
-                        }
-
-                    }
-                }
-            }
-        }
-
-        private boolean startMovingToFar(BlockPos pos) {
-            Ant.this.navigation.setMaxVisitedNodesMultiplier(10.0F);
-            Ant.this.navigation.moveTo(pos.getX(), pos.getY(), pos.getZ(), 1.0);
-            return Ant.this.navigation.getPath() != null && Ant.this.navigation.getPath().canReach();
-        }
-
-        boolean isPossibleDwelling(BlockPos pos) {
-            return this.possibleDwellings.contains(pos);
-        }
-
-        private void addPossibleDwelling(BlockPos pos) {
-            this.possibleDwellings.add(pos);
-
-            while(this.possibleDwellings.size() > 3) {
-                this.possibleDwellings.remove(0);
-            }
-
-        }
-
-        void clearPossibleDwellings() {
-            this.possibleDwellings.clear();
-        }
-
-        private void makeChosenDwellingPossibleDwelling() {
-            if (Ant.this.anthillPos != null) {
-                this.addPossibleDwelling(Ant.this.anthillPos);
-            }
-
-            this.setLost();
-        }
-
-        private void setLost() {
-            Ant.this.anthillPos = null;
-            Ant.this.ticksLeftToFindDwelling = 200;
-        }
-
-        private boolean isCloseEnough(BlockPos pos) {
-            if (Ant.this.isWithinDistance(pos, 2)) {
-                return true;
-            } else {
-                Path path = Ant.this.navigation.getPath();
-                return path != null && path.getTarget().equals(pos) && path.canReach() && path.isDone();
-            }
-        }
+        this.entityData.set(DATA_HAS_RESOURCE, bl);
     }
 
-    boolean isTooFar(BlockPos pos) {
-        return !this.isWithinDistance(pos, 32);
+
+    boolean isTooFarAway(BlockPos blockPos) {
+        return !this.closerThan(blockPos, 32);
     }
-
-    void startMovingTo(BlockPos pos) {
-        Vec3 vec3d = Vec3.atBottomCenterOf(pos);
-        BlockPos blockPos = this.blockPosition();
-
-        int k = 6;
-        int l = 8;
-        int m = blockPos.distManhattan(pos);
-        if (m < 15) {
-            k = m / 2;
-            l = m / 2;
-        }
-
-        Vec3 vec3d2 = LandRandomPos.getPosTowards(this, k, l, vec3d);
-        if (vec3d2 != null) {
-            this.navigation.setMaxVisitedNodesMultiplier(0.5F);
-            this.navigation.moveTo(vec3d2.x, vec3d2.y, vec3d2.z, 1.0);
-        }
-    }
-
-    private abstract class NotAngryGoal extends Goal {
-        NotAngryGoal() {
-        }
-
-        public abstract boolean canAntStart();
-
-        public abstract boolean canAntContinue();
-
-        @Override
-        public boolean canUse() {
-            return this.canAntStart() && !Ant.this.isAngry();
-        }
-
-        @Override
-        public boolean canContinueToUse() {
-            return this.canAntContinue() && !Ant.this.isAngry();
-        }
-    }
-
 
     @Override
-    public MobType getMobType() {
-        return MobType.ARTHROPOD;
+    protected PathNavigation createNavigation(Level level) {
+        GroundPathNavigation groundPathNavigation = new GroundPathNavigation(this, level){
+
+            @Override
+            public boolean isStableDestination(BlockPos blockPos) {
+                return !this.level.getBlockState(blockPos.below()).isAir();
+            }
+
+            @Override
+            public void tick() {
+                if (Ant.this.antGatherGoal.isGathering()) {
+                    return;
+                }
+                super.tick();
+            }
+        };
+        groundPathNavigation.setCanOpenDoors(false);
+        groundPathNavigation.setCanFloat(false);
+        groundPathNavigation.setCanPassDoors(true);
+        return groundPathNavigation;
+    }
+
+    @Override
+    public boolean isFood(ItemStack itemStack) {
+        return itemStack.is(SpawnTags.ANT_TEMPTS);
+    }
+
+    boolean isResourceValid(BlockPos blockPos) {
+        return this.level().isLoaded(blockPos) && this.level().getBlockState(blockPos).is(SpawnTags.ANT_RESOURCE);
+    }
+
+    @Override
+    protected void playStepSound(BlockPos blockPos, BlockState blockState) {
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.4f;
     }
 
     @Nullable
@@ -594,34 +433,604 @@ public class Ant extends TamableAnimal implements NeutralMob {
         return null;
     }
 
+    @Override
+    protected void checkFallDamage(double d, boolean bl, BlockState blockState, BlockPos blockPos) {
+    }
+
+    @Override
+    public boolean hurt(DamageSource damageSource, float f) {
+        if (this.isInvulnerableTo(damageSource)) {
+            return false;
+        }
+        if (!this.level().isClientSide) {
+            this.antGatherGoal.stopGathering();
+        }
+        return super.hurt(damageSource, f);
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.ARTHROPOD;
+    }
+
+    @Override
+    protected void jumpInLiquid(TagKey<Fluid> tagKey) {
+        this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.01, 0.0));
+    }
+
+    boolean closerThan(BlockPos blockPos, int i) {
+        return blockPos.closerThan(this.blockPosition(), i);
+    }
+
+    class AntGatherGoal extends Ant.BaseAntGoal {
+        private final Predicate<BlockState> VALID_GATHERING_BLOCKS;
+        private int successfulGatheringTicks;
+        private int lastSoundPlayedTick;
+        private boolean gathering;
+        @Nullable
+        private Vec3 hoverPos;
+        private int gatheringTicks;
+
+        AntGatherGoal() {
+            this.VALID_GATHERING_BLOCKS = blockState -> {
+                if (blockState.hasProperty(BlockStateProperties.WATERLOGGED) && blockState.getValue(BlockStateProperties.WATERLOGGED)) {
+                    return false;
+                }
+                if (blockState.is(SpawnTags.ANT_RESOURCE)) {
+                    if (blockState.is(Blocks.TALL_GRASS)) {
+                        return blockState.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.LOWER;
+                    }
+                    return true;
+                }
+                return false;
+            };
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        @Override
+        public boolean canAntUse() {
+            if (Ant.this.remainingCooldownBeforeLocatingNewResource > 0) return false;
+            if (Ant.this.hasResource()) return false;
+
+            Optional<BlockPos> optional = this.findNearbyResource();
+            if (optional.isPresent()) {
+                Ant.this.savedResourcePos = optional.get();
+                Ant.this.navigation.moveTo((double) Ant.this.savedResourcePos.getX() + 0.5, Ant.this.savedResourcePos.getY(), (double) Ant.this.savedResourcePos.getZ() + 0.5, 1.2f);
+                return true;
+            }
+            Ant.this.remainingCooldownBeforeLocatingNewResource = Mth.nextInt(Ant.this.random, 20, 60);
+            return false;
+        }
+
+        @Override
+        public boolean canAntContinueToUse() {
+            if (!this.gathering) {
+                return false;
+            }
+            if (!Ant.this.hasSavedResourcePos()) {
+                return false;
+            }
+            if (Ant.this.level().isRaining()) {
+                return false;
+            }
+            if (this.hasGatherdLongEnough()) {
+                return Ant.this.random.nextFloat() < 0.2f;
+            }
+            if (Ant.this.tickCount % 20 == 0 && !Ant.this.isResourceValid(Ant.this.savedResourcePos)) {
+                Ant.this.savedResourcePos = null;
+                return false;
+            }
+            return true;
+        }
+
+        private boolean hasGatherdLongEnough() {
+            return this.successfulGatheringTicks > 200;
+        }
+
+        boolean isGathering() {
+            return this.gathering;
+        }
+
+        void stopGathering() {
+            this.gathering = false;
+        }
+
+        @Override
+        public void start() {
+            this.successfulGatheringTicks = 0;
+            this.gatheringTicks = 0;
+            this.lastSoundPlayedTick = 0;
+            this.gathering = true;
+            Ant.this.resetTicksWithoutResourceSinceExitingAnthill();
+        }
+
+        @Override
+        public void stop() {
+            if (this.hasGatherdLongEnough()) {
+                Ant.this.setHasResource(true);
+            }
+            this.gathering = false;
+            Ant.this.navigation.stop();
+            Ant.this.remainingCooldownBeforeLocatingNewResource = 200;
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+
+            ++this.gatheringTicks;
+            if (this.gatheringTicks > 400) {
+                Ant.this.savedResourcePos = null;
+                return;
+            }
+            Vec3 vec3 = Vec3.atBottomCenterOf(Ant.this.savedResourcePos);
+            if (vec3.distanceTo(Ant.this.position()) > 1.0) {
+                this.hoverPos = vec3;
+                this.setWantedPos();
+                return;
+            }
+            if (this.hoverPos == null) {
+                this.hoverPos = vec3;
+            }
+            boolean bl = Ant.this.position().distanceTo(this.hoverPos) <= 0.1;
+            boolean bl2 = true;
+            if (!bl && this.gatheringTicks > 400) {
+                Ant.this.savedResourcePos = null;
+                return;
+            }
+            if (bl) {
+                boolean bl3 = Ant.this.random.nextInt(25) == 0;
+                if (bl3) {
+                    this.hoverPos = new Vec3(vec3.x() + (double)this.getOffset(), vec3.y(), vec3.z() + (double)this.getOffset());
+                    Ant.this.navigation.stop();
+                } else {
+                    bl2 = false;
+                }
+                Ant.this.getLookControl().setLookAt(vec3.x(), vec3.y(), vec3.z());
+            }
+            if (bl2) {
+                this.setWantedPos();
+            }
+            ++this.successfulGatheringTicks;
+            if (Ant.this.random.nextFloat() < 0.05f && this.successfulGatheringTicks > this.lastSoundPlayedTick + 60) {
+                this.lastSoundPlayedTick = this.successfulGatheringTicks;
+            }
+        }
+
+        private void setWantedPos() {
+            Ant.this.getMoveControl().setWantedPosition(this.hoverPos.x(), this.hoverPos.y(), this.hoverPos.z(), 0.7f);
+        }
+
+        private float getOffset() {
+            return (Ant.this.random.nextFloat() * 2.0f - 1.0f) * 0.33333334f;
+        }
+
+        private Optional<BlockPos> findNearbyResource() {
+            return this.findNearestBlock(this.VALID_GATHERING_BLOCKS, 5.0);
+        }
+
+        private Optional<BlockPos> findNearestBlock(Predicate<BlockState> predicate, double d) {
+            BlockPos blockPos = Ant.this.blockPosition();
+            BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+            int i = 0;
+            while ((double)i <= d) {
+                int j = 0;
+                while ((double)j < d) {
+                    int k = 0;
+                    while (k <= j) {
+                        int l = k < j && k > -j ? j : 0;
+                        while (l <= j) {
+                            mutableBlockPos.setWithOffset(blockPos, k, i - 1, l);
+                            if (blockPos.closerThan(mutableBlockPos, d) && predicate.test(Ant.this.level().getBlockState(mutableBlockPos))) {
+                                return Optional.of(mutableBlockPos);
+                            }
+                            l = l > 0 ? -l : 1 - l;
+                        }
+                        k = k > 0 ? -k : 1 - k;
+                    }
+                    ++j;
+                }
+                i = i > 0 ? -i : 1 - i;
+            }
+            return Optional.empty();
+        }
+    }
+
+    class AntLookControl
+            extends LookControl {
+        AntLookControl(Mob mob) {
+            super(mob);
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+        }
+
+        @Override
+        protected boolean resetXRotOnTick() {
+            return !Ant.this.antGatherGoal.isGathering();
+        }
+    }
+
+    class AntAttackGoal
+            extends MeleeAttackGoal {
+        AntAttackGoal(PathfinderMob pathfinderMob, double d, boolean bl) {
+            super(pathfinderMob, d, bl);
+        }
+
+        @Override
+        public boolean canUse() {
+            return super.canUse() && Ant.this.isAngry();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return super.canContinueToUse() && Ant.this.isAngry();
+        }
+    }
+
+    class AntEnterAnthillGoal
+            extends Ant.BaseAntGoal {
+        AntEnterAnthillGoal() {
+        }
+
+        @Override
+        public boolean canAntUse() {
+            BlockEntity blockEntity;
+            if (Ant.this.hasAnthill() && Ant.this.wantsToEnterAnthill() && Ant.this.anthillPos.closerToCenterThan(Ant.this.position(), 2.0) && (blockEntity = Ant.this.level().getBlockEntity(Ant.this.anthillPos)) instanceof AnthillBlockEntity) {
+                AnthillBlockEntity antanthillBlockEntity = (AnthillBlockEntity)blockEntity;
+                if (antanthillBlockEntity.isFullOfAnts()) {
+                    Ant.this.anthillPos = null;
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean canAntContinueToUse() {
+            return false;
+        }
+
+        @Override
+        public void start() {
+            BlockEntity blockEntity = Ant.this.level().getBlockEntity(Ant.this.anthillPos);
+            if (blockEntity instanceof AnthillBlockEntity antanthillBlockEntity) {
+                antanthillBlockEntity.tryEnterAnthill(Ant.this, Ant.this.hasResource());
+            }
+        }
+    }
+
+    class AntLocateAnthillGoal
+            extends Ant.BaseAntGoal {
+        AntLocateAnthillGoal() {
+        }
+
+        @Override
+        public boolean canAntUse() {
+            return Ant.this.remainingCooldownBeforeLocatingNewAnthill == 0 && !Ant.this.hasAnthill() && Ant.this.wantsToEnterAnthill();
+        }
+
+        @Override
+        public boolean canAntContinueToUse() {
+            return false;
+        }
+
+        @Override
+        public void start() {
+            Ant.this.remainingCooldownBeforeLocatingNewAnthill = 200;
+            List<BlockPos> list = this.findNearbyAnthillsWithSpace();
+            if (list.isEmpty()) {
+                return;
+            }
+            for (BlockPos blockPos : list) {
+                if (Ant.this.goToAnthillGoal.isTargetBlacklisted(blockPos)) continue;
+                Ant.this.anthillPos = blockPos;
+                return;
+            }
+            Ant.this.goToAnthillGoal.clearBlacklist();
+            Ant.this.anthillPos = list.get(0);
+        }
+
+        private List<BlockPos> findNearbyAnthillsWithSpace() {
+            BlockPos blockPos = Ant.this.blockPosition();
+            PoiManager poiManager = ((ServerLevel) Ant.this.level()).getPoiManager();
+            Stream<PoiRecord> stream = poiManager.getInRange(holder -> holder.is(SpawnTags.ANT_HOME), blockPos, 20, PoiManager.Occupancy.ANY);
+            return stream.map(PoiRecord::getPos).filter(Ant.this::doesAnthillHaveSpace).sorted(Comparator.comparingDouble(blockPos2 -> blockPos2.distSqr(blockPos))).collect(Collectors.toList());
+        }
+    }
+
+    @VisibleForDebug
+    public class AntGoToAnthillGoal
+            extends Ant.BaseAntGoal {
+        int travellingTicks;
+        final List<BlockPos> blacklistedTargets;
+        @Nullable
+        private Path lastPath;
+        private int ticksStuck;
+
+        AntGoToAnthillGoal() {
+            this.travellingTicks = Ant.this.level().random.nextInt(10);
+            this.blacklistedTargets = Lists.newArrayList();
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        @Override
+        public boolean canAntUse() {
+            return Ant.this.anthillPos != null && !Ant.this.hasRestriction() && Ant.this.wantsToEnterAnthill() && !this.hasReachedTarget(Ant.this.anthillPos) && Ant.this.level().getBlockState(Ant.this.anthillPos).is(SpawnTags.ANTHILLS);
+        }
+
+        @Override
+        public boolean canAntContinueToUse() {
+            return this.canAntUse();
+        }
+
+        @Override
+        public void start() {
+            this.travellingTicks = 0;
+            this.ticksStuck = 0;
+            super.start();
+        }
+
+        @Override
+        public void stop() {
+            this.travellingTicks = 0;
+            this.ticksStuck = 0;
+            Ant.this.navigation.stop();
+            Ant.this.navigation.resetMaxVisitedNodesMultiplier();
+        }
+
+        @Override
+        public void tick() {
+            if (Ant.this.anthillPos == null) {
+                return;
+            }
+            ++this.travellingTicks;
+            if (this.travellingTicks > this.adjustedTickDelay(600)) {
+                this.dropAndBlacklistAnthill();
+                return;
+            }
+            if (Ant.this.navigation.isInProgress()) {
+                return;
+            }
+            if (Ant.this.closerThan(Ant.this.anthillPos, 16)) {
+                boolean bl = this.pathfindDirectlyTowards(Ant.this.anthillPos);
+                if (!bl) {
+                    this.dropAndBlacklistAnthill();
+                } else if (this.lastPath != null && Ant.this.navigation.getPath().sameAs(this.lastPath)) {
+                    ++this.ticksStuck;
+                    if (this.ticksStuck > 60) {
+                        this.dropAnthill();
+                        this.ticksStuck = 0;
+                    }
+                } else {
+                    this.lastPath = Ant.this.navigation.getPath();
+                }
+                return;
+            }
+            if (Ant.this.isTooFarAway(Ant.this.anthillPos)) {
+                this.dropAnthill();
+                return;
+            }
+            Ant.this.moveTo(Ant.this.anthillPos, 0, 0);
+        }
+
+        private boolean pathfindDirectlyTowards(BlockPos blockPos) {
+            Ant.this.navigation.setMaxVisitedNodesMultiplier(10.0f);
+            Ant.this.navigation.moveTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1.0);
+            return Ant.this.navigation.getPath() != null && Ant.this.navigation.getPath().canReach();
+        }
+
+        boolean isTargetBlacklisted(BlockPos blockPos) {
+            return this.blacklistedTargets.contains(blockPos);
+        }
+
+        private void blacklistTarget(BlockPos blockPos) {
+            this.blacklistedTargets.add(blockPos);
+            while (this.blacklistedTargets.size() > 3) {
+                this.blacklistedTargets.remove(0);
+            }
+        }
+
+        void clearBlacklist() {
+            this.blacklistedTargets.clear();
+        }
+
+        private void dropAndBlacklistAnthill() {
+            if (Ant.this.anthillPos != null) {
+                this.blacklistTarget(Ant.this.anthillPos);
+            }
+            this.dropAnthill();
+        }
+
+        private void dropAnthill() {
+            Ant.this.anthillPos = null;
+            Ant.this.remainingCooldownBeforeLocatingNewAnthill = 200;
+        }
+
+        private boolean hasReachedTarget(BlockPos blockPos) {
+            if (Ant.this.closerThan(blockPos, 2)) {
+                return true;
+            }
+            Path path = Ant.this.navigation.getPath();
+            return path != null && path.getTarget().equals(blockPos) && path.canReach() && path.isDone();
+        }
+    }
+
+    public class AntGoToKnownResourceGoal extends Ant.BaseAntGoal {
+        int travellingTicks;
+
+        AntGoToKnownResourceGoal() {
+            this.travellingTicks = Ant.this.level().random.nextInt(10);
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        @Override
+        public boolean canAntUse() {
+            return Ant.this.savedResourcePos != null && !Ant.this.hasRestriction() && this.wantsToGoToKnownResource() && Ant.this.isResourceValid(Ant.this.savedResourcePos) && !Ant.this.closerThan(Ant.this.savedResourcePos, 2);
+        }
+
+        @Override
+        public boolean canAntContinueToUse() {
+            return this.canAntUse();
+        }
+
+        @Override
+        public void start() {
+            this.travellingTicks = 0;
+            super.start();
+        }
+
+        @Override
+        public void stop() {
+            this.travellingTicks = 0;
+            Ant.this.navigation.stop();
+            Ant.this.navigation.resetMaxVisitedNodesMultiplier();
+        }
+
+        @Override
+        public void tick() {
+            if (Ant.this.savedResourcePos == null) {
+                return;
+            }
+            ++this.travellingTicks;
+            if (this.travellingTicks > this.adjustedTickDelay(600)) {
+                Ant.this.savedResourcePos = null;
+                return;
+            }
+            if (Ant.this.navigation.isInProgress()) {
+                return;
+            }
+            if (Ant.this.isTooFarAway(Ant.this.savedResourcePos)) {
+                Ant.this.savedResourcePos = null;
+                return;
+            }
+            Ant.this.moveTo(Ant.this.savedResourcePos, 0,0);
+        }
+
+        private boolean wantsToGoToKnownResource() {
+            return Ant.this.ticksWithoutResourceSinceExitingAnthill > 2400;
+        }
+    }
+
+    class AntWanderGoal extends Goal {
+
+        AntWanderGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            return Ant.this.navigation.isDone() && Ant.this.random.nextInt(10) == 0;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return Ant.this.navigation.isInProgress();
+        }
+
+        @Override
+        public void start() {
+            Vec3 vec3 = this.findPos();
+            if (vec3 != null) {
+                Ant.this.navigation.moveTo(Ant.this.navigation.createPath(BlockPos.containing(vec3), 1), 1.0);
+            }
+        }
+
+        @Nullable
+        private Vec3 findPos() {
+            Vec3 vec32;
+            if (Ant.this.isAnthillValid() && !Ant.this.closerThan(Ant.this.anthillPos, 22)) {
+                Vec3 vec3 = Vec3.atCenterOf(Ant.this.anthillPos);
+                vec32 = vec3.subtract(Ant.this.position()).normalize();
+            } else {
+                vec32 = Ant.this.getViewVector(0.0f);
+            }
+            Vec3 vec33 = LandRandomPos.getPosTowards(Ant.this, 8, 7, vec32);
+            if (vec33 != null) {
+                return vec33;
+            }
+            return LandRandomPos.getPosTowards(Ant.this, 8, 4, vec32);
+        }
+    }
+
+    class AntHurtByOtherGoal
+            extends HurtByTargetGoal {
+        AntHurtByOtherGoal(Ant ant) {
+            super(ant);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return Ant.this.isAngry() && super.canContinueToUse();
+        }
+
+        @Override
+        protected void alertOther(Mob mob, LivingEntity livingEntity) {
+            if (mob instanceof Ant && this.mob.hasLineOfSight(livingEntity)) {
+                mob.setTarget(livingEntity);
+            }
+        }
+    }
+
+    static class AntBecomeAngryTargetGoal
+            extends NearestAttackableTargetGoal<Player> {
+        AntBecomeAngryTargetGoal(Ant ant) {
+            super(ant, Player.class, 10, true, false, ant::isAngryAt);
+        }
+
+        @Override
+        public boolean canUse() {
+            return this.antCanTarget() && super.canUse();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            boolean bl = this.antCanTarget();
+            if (!bl || this.mob.getTarget() == null) {
+                this.targetMob = null;
+                return false;
+            }
+            return super.canContinueToUse();
+        }
+
+        private boolean antCanTarget() {
+            Ant ant = (Ant)this.mob;
+            return ant.isAngry();
+        }
+    }
+
+    abstract class BaseAntGoal
+            extends Goal {
+        BaseAntGoal() {
+        }
+
+        public abstract boolean canAntUse();
+
+        public abstract boolean canAntContinueToUse();
+
+        @Override
+        public boolean canUse() {
+            return this.canAntUse() && !Ant.this.isAngry();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.canAntContinueToUse() && !Ant.this.isAngry();
+        }
+    }
+
+
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<Ant> ant, ServerLevelAccessor world, MobSpawnType mobSpawnType, BlockPos pos, RandomSource randomSource) {
         return world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && Animal.isBrightEnoughToSpawn(world, pos);
     }
 
-    @Override
-    public int getRemainingPersistentAngerTime() {
-        return this.entityData.get(ANGER);
-    }
-
-    @Override
-    public void setRemainingPersistentAngerTime(int angerTime) {
-        this.entityData.set(ANGER, angerTime);
-    }
-
-    @Nullable
-    @Override
-    public UUID getPersistentAngerTarget() {
-        return this.angryAt;
-    }
-
-    @Override
-    public void setPersistentAngerTarget(@Nullable UUID angryAt) {
-        this.angryAt = angryAt;
-    }
-
-    @Override
-    public void startPersistentAngerTimer() {
-        this.setRemainingPersistentAngerTime(ANGER_TIME_RANGE.sample(this.random));
-    }
 }
+

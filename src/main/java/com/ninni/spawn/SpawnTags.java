@@ -21,12 +21,14 @@ public interface SpawnTags {
     TagKey<Item> HAMSTER_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "hamster_tempts"));
     TagKey<Item> HAMSTER_FEEDS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "hamster_feeds"));
     TagKey<Item> ROTTEN_LOGS_ITEM = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "rotten_logs"));
+    TagKey<Item> ANT_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "ant_tempts"));
 
     //Block tags
     TagKey<Block> MUCUS_SOLIDIFIER = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mucus_solidifier"));
     TagKey<Block> MUCUS_SOLIDIFICATION_SPREADER = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mucus_solidification_spreader"));
     TagKey<Block> ROTTEN_LOGS_BLOCK = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "rotten_logs"));
     TagKey<Block> ANT_RESOURCE = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "ant_resource"));
+    TagKey<Block> ANTHILLS = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "anthills"));
 
     //Biome tags
     TagKey<Biome> SNAIL_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "snail_spawns"));
