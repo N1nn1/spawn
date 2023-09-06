@@ -62,7 +62,7 @@ public class Snail extends Animal {
 
     @Override
     public boolean isFood(ItemStack itemStack) {
-        return itemStack.is(SpawnTags.SNAIL_TEMPTS);
+        return itemStack.is(SpawnTags.SNAIL_FEEDS);
     }
 
     @Override
@@ -171,6 +171,7 @@ public class Snail extends Animal {
         ItemStack itemStack = player.getItemInHand(hand);
 
         if (this.isFood(itemStack) && this.getAge() == 0) {
+            if(itemStack.is(Items.MUSHROOM_STEW)) this.spawnAtLocation(Items.BOWL);
             this.playSound(SpawnSoundEvents.SNAIL_EAT, 1, 1);
         }
 

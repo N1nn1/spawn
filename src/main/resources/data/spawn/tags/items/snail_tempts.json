@@ -1,6 +1,5 @@
 {
   "values": [
-    "minecraft:red_mushroom",
-    "minecraft:brown_mushroom"
+    "#spawn:snail_feeds"
   ]
 }

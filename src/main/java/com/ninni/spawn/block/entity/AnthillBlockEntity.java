@@ -8,12 +8,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -119,7 +121,7 @@ public class AnthillBlockEntity extends BlockEntity {
         CompoundTag nbtCompound = new CompoundTag();
         entity.save(nbtCompound);
         BlockPos blockPos = this.getBlockPos();
-        this.addAnt(nbtCompound, ticksInAnthill, bl);
+        this.addAnt(nbtCompound, ticksInAnthill, bl, entity.level().getRandom());
         if (this.level != null) {
             //this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SpeciesSoundEvents.BLOCK_BIRT_DWELLING_ENTER, SoundSource.BLOCKS, 1.0f, 1.0f);
             this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity, this.getBlockState()));
@@ -128,9 +130,9 @@ public class AnthillBlockEntity extends BlockEntity {
         super.setChanged();
     }
 
-    public void addAnt(CompoundTag nbtCompound, int ticksInDwelling, boolean bl) {
+    public void addAnt(CompoundTag nbtCompound, int ticksInAnthill, boolean bl, RandomSource random) {
         assert this.level != null;
-        this.ants.add(new Ant(nbtCompound, ticksInDwelling, bl ? 2400 : 600));
+        this.ants.add(new Ant(nbtCompound, ticksInAnthill, (bl ? 2400 : 600) + random.nextInt(600)));
     }
 
     private static boolean releaseAnt(Level world, BlockPos pos, BlockState state, Ant ant, @Nullable List<Entity> entities, AntState antState) {
@@ -149,7 +151,7 @@ public class AnthillBlockEntity extends BlockEntity {
                 if (antState == AntState.RESOURCE_DELIVERED) {
                     ((com.ninni.spawn.entity.Ant) newAnt).setHasResource(false);
                     int i = state.getValue(AnthillBlock.RESOURCE_LEVEL);
-                    if (state.getBlock() instanceof AnthillBlock && i < 5) {
+                    if (state.getBlock() instanceof AnthillBlock && i < 3) {
                         world.setBlockAndUpdate(pos, state.setValue(AnthillBlock.RESOURCE_LEVEL, i + 1));
                     }
                 }
@@ -186,9 +188,8 @@ public class AnthillBlockEntity extends BlockEntity {
         while (iterator.hasNext()) {
             Ant ant = iterator.next();
             if (Ant.ticksInAnthill > ant.minOccupationTicks) {
-                ItemStack compoundStack = ItemStack.of(ant.entityData.getCompound("Inventory"));
-                AntState antState = compoundStack != ItemStack.EMPTY ? AntState.RESOURCE_DELIVERED : AntState.ANT_RELEASED;
-                if (AnthillBlockEntity.releaseAnt(world, pos, state, ant, null, antState)) {
+                AntState antState = ant.entityData.getBoolean("HasResource") ? AntState.RESOURCE_DELIVERED : AntState.ANT_RELEASED;
+                if (releaseAnt(world, pos, state, ant, null, antState)) {
                     bl = true;
                     iterator.remove();
                 }

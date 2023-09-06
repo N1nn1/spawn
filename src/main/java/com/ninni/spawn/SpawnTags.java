@@ -17,11 +17,14 @@ public interface SpawnTags {
     TagKey<Item> ANGLER_FISH_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "angler_fish_tempts"));
     TagKey<Item> ANGLER_FISH_LIKES = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "angler_fish_likes"));
     TagKey<Item> TUNA_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "tuna_tempts"));
+    TagKey<Item> TUNA_FEEDS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "tuna_feeds"));
     TagKey<Item> SNAIL_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "snail_tempts"));
+    TagKey<Item> SNAIL_FEEDS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "snail_feeds"));
     TagKey<Item> HAMSTER_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "hamster_tempts"));
     TagKey<Item> HAMSTER_FEEDS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "hamster_feeds"));
     TagKey<Item> ROTTEN_LOGS_ITEM = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "rotten_logs"));
     TagKey<Item> ANT_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "ant_tempts"));
+    TagKey<Item> ANT_FEEDS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "ant_feeds"));
 
     //Block tags
     TagKey<Block> MUCUS_SOLIDIFIER = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mucus_solidifier"));

@@ -37,10 +37,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -139,17 +136,18 @@ public class Ant extends TamableAnimal implements NeutralMob{
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new AntAttackGoal(this, 1.4f, true));
         this.goalSelector.addGoal(1, new AntEnterAnthillGoal());
+        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, Ingredient.of(SpawnTags.ANT_TEMPTS), false));
         this.antGatherGoal = new AntGatherGoal();
         this.goalSelector.addGoal(4, this.antGatherGoal);
-        this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.25));
-        this.goalSelector.addGoal(5, new AntLocateAnthillGoal());
         this.goToAnthillGoal = new AntGoToAnthillGoal();
         this.goalSelector.addGoal(5, this.goToAnthillGoal);
+        this.goalSelector.addGoal(5, new  FollowOwnerGoal(this, 1.0, 10.0f, 2.0f, false));
+        this.goalSelector.addGoal(5, new AntLocateAnthillGoal());
         this.goToKnownResourceGoal = new AntGoToKnownResourceGoal();
         this.goalSelector.addGoal(6, this.goToKnownResourceGoal);
-        this.goalSelector.addGoal(8, new AntWanderGoal());
+        this.goalSelector.addGoal(8, new AntWanderGoal(this));
         this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
         this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
 
@@ -179,6 +177,9 @@ public class Ant extends TamableAnimal implements NeutralMob{
 
         if (this.isTame()) {
             if (this.isFood(itemStack) && this.getHealth() < this.getMaxHealth()) {
+                if(itemStack.is(Items.HONEY_BOTTLE)) this.spawnAtLocation(Items.GLASS_BOTTLE);
+                if(itemStack.is(Items.MUSHROOM_STEW)) this.spawnAtLocation(Items.BOWL);
+
                 if (!player.getAbilities().instabuild) {
                     itemStack.shrink(1);
                 }
@@ -209,7 +210,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         if (this.hasAnthill()) {
             compoundTag.put(TAG_ANTHILL_POS, NbtUtils.writeBlockPos(this.getAnthillPos()));
         }
-        if (this.hasSavedResourcePos()) {
+        if (this.hasSavedResourcePos() && !this.isTame()) {
             compoundTag.put(TAG_RESOURCE_POS, NbtUtils.writeBlockPos(this.getSavedResourcePos()));
         }
         compoundTag.putByte(TAG_ABDOMEN_COLOR, (byte)this.getAbdomenColor().getId());
@@ -229,7 +230,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
             this.anthillPos = NbtUtils.readBlockPos(compoundTag.getCompound(TAG_ANTHILL_POS));
         }
         this.savedResourcePos = null;
-        if (compoundTag.contains(TAG_RESOURCE_POS)) {
+        if (compoundTag.contains(TAG_RESOURCE_POS) && !this.isTame()) {
             this.savedResourcePos = NbtUtils.readBlockPos(compoundTag.getCompound(TAG_RESOURCE_POS));
         }
         super.readAdditionalSaveData(compoundTag);
@@ -411,7 +412,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
 
     @Override
     public boolean isFood(ItemStack itemStack) {
-        return itemStack.is(SpawnTags.ANT_TEMPTS);
+        return itemStack.is(SpawnTags.ANT_FEEDS);
     }
 
     boolean isResourceValid(BlockPos blockPos) {
@@ -462,7 +463,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         return blockPos.closerThan(this.blockPosition(), i);
     }
 
-    class AntGatherGoal extends Ant.BaseAntGoal {
+    class AntGatherGoal extends BaseAntGoal {
         private final Predicate<BlockState> VALID_GATHERING_BLOCKS;
         private int successfulGatheringTicks;
         private int lastSoundPlayedTick;
@@ -491,6 +492,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         public boolean canAntUse() {
             if (Ant.this.remainingCooldownBeforeLocatingNewResource > 0) return false;
             if (Ant.this.hasResource()) return false;
+            if (Ant.this.isTame()) return false;
 
             Optional<BlockPos> optional = this.findNearbyResource();
             if (optional.isPresent()) {
@@ -507,6 +509,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
             if (!this.gathering) {
                 return false;
             }
+            if (Ant.this.isTame()) return false;
             if (!Ant.this.hasSavedResourcePos()) {
                 return false;
             }
@@ -590,7 +593,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
                 } else {
                     bl2 = false;
                 }
-                Ant.this.getLookControl().setLookAt(vec3.x(), vec3.y(), vec3.z());
+                Ant.this.getLookControl().setLookAt(vec3.x(), vec3.y() + 0.2, vec3.z());
             }
             if (bl2) {
                 this.setWantedPos();
@@ -640,8 +643,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
     }
 
-    class AntLookControl
-            extends LookControl {
+    class AntLookControl extends LookControl {
         AntLookControl(Mob mob) {
             super(mob);
         }
@@ -657,8 +659,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
     }
 
-    class AntAttackGoal
-            extends MeleeAttackGoal {
+    class AntAttackGoal extends MeleeAttackGoal {
         AntAttackGoal(PathfinderMob pathfinderMob, double d, boolean bl) {
             super(pathfinderMob, d, bl);
         }
@@ -674,8 +675,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
     }
 
-    class AntEnterAnthillGoal
-            extends Ant.BaseAntGoal {
+    class AntEnterAnthillGoal extends BaseAntGoal {
         AntEnterAnthillGoal() {
         }
 
@@ -707,8 +707,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
     }
 
-    class AntLocateAnthillGoal
-            extends Ant.BaseAntGoal {
+    class AntLocateAnthillGoal extends BaseAntGoal {
         AntLocateAnthillGoal() {
         }
 
@@ -747,8 +746,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
     }
 
     @VisibleForDebug
-    public class AntGoToAnthillGoal
-            extends Ant.BaseAntGoal {
+    public class AntGoToAnthillGoal extends BaseAntGoal {
         int travellingTicks;
         final List<BlockPos> blacklistedTargets;
         @Nullable
@@ -863,7 +861,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
     }
 
-    public class AntGoToKnownResourceGoal extends Ant.BaseAntGoal {
+    public class AntGoToKnownResourceGoal extends BaseAntGoal {
         int travellingTicks;
 
         AntGoToKnownResourceGoal() {
@@ -873,11 +871,13 @@ public class Ant extends TamableAnimal implements NeutralMob{
 
         @Override
         public boolean canAntUse() {
-            return Ant.this.savedResourcePos != null && !Ant.this.hasRestriction() && this.wantsToGoToKnownResource() && Ant.this.isResourceValid(Ant.this.savedResourcePos) && !Ant.this.closerThan(Ant.this.savedResourcePos, 2);
+            return !Ant.this.isTame() && Ant.this.savedResourcePos != null && !Ant.this.hasRestriction() && this.wantsToGoToKnownResource() && Ant.this.isResourceValid(Ant.this.savedResourcePos) && !Ant.this.closerThan(Ant.this.savedResourcePos, 2);
         }
 
         @Override
         public boolean canAntContinueToUse() {
+
+            if (Ant.this.isTame()) return false;
             return this.canAntUse();
         }
 
@@ -919,49 +919,35 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
     }
 
-    class AntWanderGoal extends Goal {
+    class AntWanderGoal extends WaterAvoidingRandomStrollGoal {
 
-        AntWanderGoal() {
+        AntWanderGoal(Ant ant) {
+            super(ant, 0.8, 1.0000001E-5f);
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
-        @Override
-        public boolean canUse() {
-            return Ant.this.navigation.isDone() && Ant.this.random.nextInt(10) == 0;
-        }
 
         @Override
-        public boolean canContinueToUse() {
-            return Ant.this.navigation.isInProgress();
-        }
-
-        @Override
-        public void start() {
-            Vec3 vec3 = this.findPos();
-            if (vec3 != null) {
-                Ant.this.navigation.moveTo(Ant.this.navigation.createPath(BlockPos.containing(vec3), 1), 1.0);
-            }
-        }
-
         @Nullable
-        private Vec3 findPos() {
+        protected Vec3 getPosition() {
             Vec3 vec32;
-            if (Ant.this.isAnthillValid() && !Ant.this.closerThan(Ant.this.anthillPos, 22)) {
-                Vec3 vec3 = Vec3.atCenterOf(Ant.this.anthillPos);
-                vec32 = vec3.subtract(Ant.this.position()).normalize();
-            } else {
-                vec32 = Ant.this.getViewVector(0.0f);
+            if (Ant.this.hasAnthill() && !Ant.this.isTame()) {
+                if (Ant.this.isAnthillValid() && !Ant.this.closerThan(Ant.this.anthillPos, 22)) {
+                    Vec3 vec3 = Vec3.atCenterOf(Ant.this.anthillPos);
+                    vec32 = vec3.subtract(Ant.this.position()).normalize();
+                } else {
+                    vec32 = Ant.this.getViewVector(0.0f);
+                }
+                Vec3 vec33 = LandRandomPos.getPosTowards(Ant.this, 8, 7, vec32);
+                if (vec33 != null) {
+                    return vec33;
+                }
             }
-            Vec3 vec33 = LandRandomPos.getPosTowards(Ant.this, 8, 7, vec32);
-            if (vec33 != null) {
-                return vec33;
-            }
-            return LandRandomPos.getPosTowards(Ant.this, 8, 4, vec32);
+            return super.getPosition();
         }
     }
 
-    class AntHurtByOtherGoal
-            extends HurtByTargetGoal {
+    class AntHurtByOtherGoal extends HurtByTargetGoal {
         AntHurtByOtherGoal(Ant ant) {
             super(ant);
         }
@@ -979,8 +965,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
     }
 
-    static class AntBecomeAngryTargetGoal
-            extends NearestAttackableTargetGoal<Player> {
+    static class AntBecomeAngryTargetGoal extends NearestAttackableTargetGoal<Player> {
         AntBecomeAngryTargetGoal(Ant ant) {
             super(ant, Player.class, 10, true, false, ant::isAngryAt);
         }
@@ -1006,8 +991,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
     }
 
-    abstract class BaseAntGoal
-            extends Goal {
+    abstract class BaseAntGoal extends Goal {
         BaseAntGoal() {
         }
 
@@ -1017,12 +1001,12 @@ public class Ant extends TamableAnimal implements NeutralMob{
 
         @Override
         public boolean canUse() {
-            return this.canAntUse() && !Ant.this.isAngry();
+            return this.canAntUse() && !Ant.this.isAngry() && !Ant.this.isTame();
         }
 
         @Override
         public boolean canContinueToUse() {
-            return this.canAntContinueToUse() && !Ant.this.isAngry();
+            return this.canAntContinueToUse() && !Ant.this.isAngry() && !Ant.this.isTame();
         }
     }
 

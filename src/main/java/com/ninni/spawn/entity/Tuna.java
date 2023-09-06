@@ -62,7 +62,7 @@ public class Tuna extends Animal {
 
     @Override
     public boolean isFood(ItemStack itemStack) {
-        return itemStack.is(SpawnTags.TUNA_TEMPTS);
+        return itemStack.is(SpawnTags.TUNA_FEEDS);
     }
 
     @Override

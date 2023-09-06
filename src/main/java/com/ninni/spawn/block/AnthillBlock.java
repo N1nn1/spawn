@@ -113,7 +113,7 @@ public class AnthillBlock extends BaseEntityBlock {
 
     @Override
     public boolean isRandomlyTicking(BlockState blockState) {
-        return blockState.getValue(RESOURCE_LEVEL) == 5;
+        return blockState.getValue(RESOURCE_LEVEL) == 3;
     }
 
     @Override
