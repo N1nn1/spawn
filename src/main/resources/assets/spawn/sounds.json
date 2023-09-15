@@ -223,6 +223,18 @@
 		],
 		"subtitle": "subtitles.block.generic.footsteps"
 	},
+	"entity.big_fish.swim": {
+		"sounds": [
+			"spawn:entity/big_fish/swim1",
+			"spawn:entity/big_fish/swim2",
+			"spawn:entity/big_fish/swim3",
+			"spawn:entity/big_fish/swim4",
+			"spawn:entity/big_fish/swim5",
+			"spawn:entity/big_fish/swim6",
+			"spawn:entity/big_fish/swim7",
+			"spawn:entity/big_fish/swim8"
+		]
+	},
 	"entity.hamster.idle": {
 		"sounds": [
 			"spawn:entity/hamster/idle1",
