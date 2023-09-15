@@ -46,17 +46,11 @@ public interface SpawnSoundEvents {
     SoundEvent SNAIL_LAY_EGGS = register("entity.snail.lay_eggs");
     SoundEvent SNAIL_EGGS_HATCH = register("block.snail_eggs.hatch");
 
-    //TODO
     SoundEvent HAMSTER_AMBIENT = register("entity.hamster.idle");
-    //TODO
-    SoundEvent HAMSTER_AMBIENT_FULL = register("entity.hamster.idle_full");
-    //TODO
+    SoundEvent HAMSTER_AMBIENT_CALL = register("entity.hamster.idle_call");
     SoundEvent HAMSTER_STEP = register("entity.hamster.step");
-    //TODO
     SoundEvent HAMSTER_HURT = register("entity.hamster.hurt");
-    //TODO
     SoundEvent HAMSTER_EAT = register("entity.hamster.eat");
-    //TODO
     SoundEvent HAMSTER_DEATH = register("entity.hamster.death");
     //TODO
     SoundEvent SUNFLOWER_SEED_PICKUP = register("block.sunflower.seed_pickup");

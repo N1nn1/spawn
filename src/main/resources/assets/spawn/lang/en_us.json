@@ -63,6 +63,12 @@
   "block.spawn.sunflower": "Sunflower",
   "item.spawn.sunflower_seeds": "Sunflower Seeds",
   "item.spawn.roasted_sunflower_seeds": "Roasted Sunflower Seeds",
+  "subtitles.entity.hamster.death": "Hamster dies",
+  "subtitles.entity.hamster.eat": "Hamster munches",
+  "subtitles.entity.hamster.hurt": "Hamster hurts",
+  "subtitles.entity.hamster.step": "Hamster scurries",
+  "subtitles.entity.hamster.idle": "Hamster chatters",
+  "subtitles.entity.hamster.idle_call": "Hamster calls",
 
   "entity.spawn.ant": "Ant",
   "item.spawn.ant_spawn_egg": "Ant Spawn Egg",

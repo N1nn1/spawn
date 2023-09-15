@@ -222,5 +222,62 @@
 			"spawn:block/mucus/light2"
 		],
 		"subtitle": "subtitles.block.generic.footsteps"
+	},
+	"entity.hamster.idle": {
+		"sounds": [
+			"spawn:entity/hamster/idle1",
+			"spawn:entity/hamster/idle2",
+			"spawn:entity/hamster/idle3",
+			"spawn:entity/hamster/idle4",
+			"spawn:entity/hamster/idle5",
+			"spawn:entity/hamster/idle6"
+		],
+		"subtitle": "subtitles.entity.hamster.idle"
+	},
+	"entity.hamster.idle_call": {
+		"sounds": [
+			"spawn:entity/hamster/call1",
+			"spawn:entity/hamster/call2",
+			"spawn:entity/hamster/call3",
+			"spawn:entity/hamster/call4",
+			"spawn:entity/hamster/call5"
+		],
+		"subtitle": "subtitles.entity.hamster.idle_call"
+	},
+	"entity.hamster.step": {
+		"sounds": [
+			"spawn:entity/hamster/step1",
+			"spawn:entity/hamster/step2",
+			"spawn:entity/hamster/step3",
+			"spawn:entity/hamster/step4",
+			"spawn:entity/hamster/step5",
+			"spawn:entity/hamster/step6",
+			"spawn:entity/hamster/step7",
+			"spawn:entity/hamster/step8"
+		],
+		"subtitle": "subtitles.entity.hamster.step"
+	},
+	"entity.hamster.hurt": {
+		"sounds": [
+			"spawn:entity/hamster/hurt1",
+			"spawn:entity/hamster/hurt2",
+			"spawn:entity/hamster/hurt3"
+		],
+		"subtitle": "subtitles.entity.hamster.hurt"
+	},
+	"entity.hamster.death": {
+		"sounds": [
+			"spawn:entity/hamster/death"
+		],
+		"subtitle": "subtitles.entity.hamster.death"
+	},
+	"entity.hamster.eat": {
+		"sounds": [
+			"spawn:entity/hamster/eat1",
+			"spawn:entity/hamster/eat2",
+			"spawn:entity/hamster/eat3",
+			"spawn:entity/hamster/eat4"
+		],
+		"subtitle": "subtitles.entity.hamster.eat"
 	}
 }

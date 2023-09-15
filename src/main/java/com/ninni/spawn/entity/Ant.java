@@ -188,7 +188,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
                 if (!player.getAbilities().instabuild) {
                     itemStack.shrink(1);
                 }
-                this.heal(item.getFoodProperties().getNutrition());
+                this.heal(6);
                 return InteractionResult.SUCCESS;
             } else if (item instanceof DyeItem) {
                 DyeColor dyeColor = ((DyeItem)item).getDyeColor();

@@ -31,7 +31,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -294,7 +293,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.getInventory().isEmpty() ? SpawnSoundEvents.HAMSTER_AMBIENT : SpawnSoundEvents.HAMSTER_AMBIENT_FULL;
+        return this.isStanding() ? SpawnSoundEvents.HAMSTER_AMBIENT_CALL : SpawnSoundEvents.HAMSTER_AMBIENT;
     }
 
     @Nullable
