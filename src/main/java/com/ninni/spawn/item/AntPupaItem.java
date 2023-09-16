@@ -2,9 +2,11 @@ package com.ninni.spawn.item;
 
 import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnEntityType;
+import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -50,8 +52,7 @@ public class AntPupaItem extends Item {
             float f = (float) Mth.floor((Mth.wrapDegrees(useOnContext.getRotation() - 180.0f) + 22.5f) / 45.0f) * 45.0f;
             ant.moveTo(ant.getX(), ant.getY(), ant.getZ(), f, 0.0f);
             serverLevel.addFreshEntityWithPassengers(ant);
-            //TODO hatch sound
-            //level.playSound(null, ant.getX(), ant.getY(), ant.getZ(), SoundEvents.ARMOR_STAND_PLACE, SoundSource.BLOCKS, 0.75f, 0.8f);
+            level.playSound(null, ant.getX(), ant.getY(), ant.getZ(), SpawnSoundEvents.ANT_HATCH, SoundSource.NEUTRAL, 0.75f, 0.8f);
 
             ant.gameEvent(GameEvent.ENTITY_PLACE, useOnContext.getPlayer());
         }

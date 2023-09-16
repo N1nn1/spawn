@@ -44,22 +44,22 @@ public class SpawnBlocks {
     // ant blocks
     public static final Block ANT_MOUND = register("ant_mound", new AntMoundBlock(Blocks.COARSE_DIRT, FabricBlockSettings.create().mapColor(MapColor.DIRT).strength(0.25f).pushReaction(PushReaction.DESTROY).sound(SoundType.SUSPICIOUS_GRAVEL), SoundEvents.BRUSH_GRAVEL, SoundEvents.BRUSH_GRAVEL_COMPLETED));
     public static final Block ANTHILL = register("anthill", new AnthillBlock(FabricBlockSettings.create().mapColor(MapColor.DIRT).strength(0.5f).sound(SoundType.GRAVEL)));
-    public static final Block ROTTEN_LOG_ANTHILL = register("rotten_log_anthill", new AnthillBlock(FabricBlockSettings.create().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).ignitedByLava().strength(1.6f)));
+    public static final Block ROTTEN_LOG_ANTHILL = register("rotten_log_anthill", new AnthillBlock(FabricBlockSettings.create().mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).sound(SpawnSoundEvents.ROTTEN_WOOD).ignitedByLava().strength(1.6f)));
     public static final Block ANT_FARM = register("ant_farm", new AnthillBlock(FabricBlockSettings.create().mapColor(MapColor.GRASS).nonOpaque().strength(2.0f).sound(SoundType.GLASS)));
     // rotten wood
-    public static final Block ROTTEN_LOG = register("rotten_log", new RotatedPillarBlock(FabricBlockSettings.copyOf(Blocks.OAK_LOG).strength(1.0f).pushReaction(PushReaction.DESTROY)));
-    public static final Block ROTTEN_WOOD = register("rotten_wood", new RotatedPillarBlock(FabricBlockSettings.copyOf(Blocks.OAK_WOOD).strength(1.0f).pushReaction(PushReaction.DESTROY)));
-    public static final Block STRIPPED_ROTTEN_LOG = register("stripped_rotten_log", new RotatedPillarBlock(FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_LOG).strength(0.8f).pushReaction(PushReaction.DESTROY)));
-    public static final Block STRIPPED_ROTTEN_WOOD = register("stripped_rotten_wood", new RotatedPillarBlock(FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_WOOD).strength(0.8f).pushReaction(PushReaction.DESTROY)));
-    public static final Block ROTTEN_PLANKS = register("rotten_planks", new Block(FabricBlockSettings.create().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(1.0f, 1.0f).sound(SoundType.WOOD).ignitedByLava()));
-    public static final Block CRACKED_ROTTEN_PLANKS = register("cracked_rotten_planks", new Block(FabricBlockSettings.create().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.8f, 0.0f).sound(SoundType.WOOD).ignitedByLava()));
+    public static final Block ROTTEN_LOG = register("rotten_log", new RotatedPillarBlock(FabricBlockSettings.copyOf(Blocks.OAK_LOG).strength(1.0f).pushReaction(PushReaction.DESTROY).sound(SpawnSoundEvents.ROTTEN_WOOD)));
+    public static final Block ROTTEN_WOOD = register("rotten_wood", new RotatedPillarBlock(FabricBlockSettings.copyOf(Blocks.OAK_WOOD).strength(1.0f).pushReaction(PushReaction.DESTROY).sound(SpawnSoundEvents.ROTTEN_WOOD)));
+    public static final Block STRIPPED_ROTTEN_LOG = register("stripped_rotten_log", new RotatedPillarBlock(FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_LOG).strength(0.8f).pushReaction(PushReaction.DESTROY).sound(SpawnSoundEvents.ROTTEN_WOOD)));
+    public static final Block STRIPPED_ROTTEN_WOOD = register("stripped_rotten_wood", new RotatedPillarBlock(FabricBlockSettings.copyOf(Blocks.STRIPPED_OAK_WOOD).strength(0.8f).pushReaction(PushReaction.DESTROY).sound(SpawnSoundEvents.ROTTEN_WOOD)));
+    public static final Block ROTTEN_PLANKS = register("rotten_planks", new Block(FabricBlockSettings.create().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(1.0f, 1.0f).sound(SpawnSoundEvents.ROTTEN_WOOD).ignitedByLava()));
+    public static final Block CRACKED_ROTTEN_PLANKS = register("cracked_rotten_planks", new Block(FabricBlockSettings.create().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.8f, 0.0f).sound(SoundType.WOOD).sound(SpawnSoundEvents.CRACKED_ROTTEN_WOOD).ignitedByLava()));
     public static final Block ROTTEN_STAIRS = register("rotten_stairs", new StairBlock(ROTTEN_PLANKS.defaultBlockState(), FabricBlockSettings.copyOf(ROTTEN_PLANKS)));
     public static final Block ROTTEN_SLAB = register("rotten_slab", new SlabBlock(FabricBlockSettings.copyOf(ROTTEN_PLANKS)));
     public static final Block ROTTEN_FENCE = register("rotten_fence", new FenceBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).forceSolidOn()));
     public static final Block ROTTEN_FENCE_GATE = register("rotten_fence_gate", new FenceGateBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).forceSolidOn(), SpawnWoodType.ROTTEN));
     public static final Block ROTTEN_DOOR = register("rotten_door", new DoorBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).noOcclusion(), SpawnBlockSetType.ROTTEN));
     public static final Block ROTTEN_TRAPDOOR = register("rotten_trapdoor", new TrapDoorBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).noOcclusion().isValidSpawn(SpawnBlocks::never), SpawnBlockSetType.ROTTEN));
-    public static final Block FALLEN_LEAVES = register("fallen_leaves", new FallenLeavesBlock(FabricBlockSettings.create().noOcclusion().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY).mapColor(DyeColor.BROWN).noCollission()));
+    public static final Block FALLEN_LEAVES = register("fallen_leaves", new FallenLeavesBlock(FabricBlockSettings.create().noOcclusion().sound(SpawnSoundEvents.FALLEN_LEAVES).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY).mapColor(DyeColor.BROWN).noCollission()));
 
     private static Block register(String id, Block block) {
         return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Spawn.MOD_ID, id), block);

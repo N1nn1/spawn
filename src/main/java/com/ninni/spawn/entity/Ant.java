@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
+import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -188,6 +190,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
                 if (!player.getAbilities().instabuild) {
                     itemStack.shrink(1);
                 }
+                this.playSound(SpawnSoundEvents.ANT_EAT);
                 this.heal(6);
                 return InteractionResult.SUCCESS;
             } else if (item instanceof DyeItem) {
@@ -426,11 +429,30 @@ public class Ant extends TamableAnimal implements NeutralMob{
 
     @Override
     protected void playStepSound(BlockPos blockPos, BlockState blockState) {
+        this.playSound(SpawnSoundEvents.ANT_STEP, 0.15f, 1.0f);
     }
 
     @Override
     protected float getSoundVolume() {
         return 0.4f;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SpawnSoundEvents.ANT_AMBIENT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return SpawnSoundEvents.ANT_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SpawnSoundEvents.ANT_DEATH;
     }
 
     @Nullable
@@ -555,6 +577,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         @Override
         public void stop() {
             if (this.hasGatherdLongEnough()) {
+                Ant.this.playSound(SpawnSoundEvents.ANT_COLLECT_RESOURCE);
                 Ant.this.setHasResource(true);
             }
             this.gathering = false;
