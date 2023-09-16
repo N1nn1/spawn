@@ -223,6 +223,37 @@
 		],
 		"subtitle": "subtitles.block.generic.footsteps"
 	},
+	"entity.tuna_egg.hit": {
+		"sounds": [
+			"spawn:entity/tuna_egg/hit1",
+			"spawn:entity/tuna_egg/hit2",
+			"spawn:entity/tuna_egg/hit3",
+			"spawn:entity/tuna_egg/hit4"
+		],
+		"subtitle": "subtitles.entity.tuna_egg.hit"
+	},
+	"entity.tuna_egg.broken": {
+		"sounds": [
+			"spawn:entity/tuna_egg/break"
+		],
+		"subtitle": "subtitles.entity.tuna_egg.broken"
+	},
+	"item.bucket.empty_tuna_egg": {
+		"sounds": [
+			"spawn:item/bucket/empty_tuna_egg1",
+			"spawn:item/bucket/empty_tuna_egg2",
+			"spawn:item/bucket/empty_tuna_egg3"
+		],
+		"subtitle": "subtitles.item.bucket.empty"
+	},
+	"item.bucket.fill_tuna_egg": {
+		"sounds": [
+			"spawn:item/bucket/fill_tuna_egg1",
+			"spawn:item/bucket/fill_tuna_egg2",
+			"spawn:item/bucket/fill_tuna_egg3"
+		],
+		"subtitle": "subtitles.item.bucket.fill_tuna_egg"
+	},
 	"entity.big_fish.swim": {
 		"sounds": [
 			"spawn:entity/big_fish/swim1",

@@ -21,13 +21,9 @@ public interface SpawnSoundEvents {
     SoundEvent ANGLER_FISH_EFFECT_GIVE = register("entity.angler_fish.effect.give");
     SoundEvent ANGLER_FISH_EFFECT_DENY = register("entity.angler_fish.effect.deny");
 
-    //TODO
     SoundEvent TUNA_EGG_HIT = register("entity.tuna_egg.hit");
-    //TODO
     SoundEvent TUNA_EGG_BROKEN = register("entity.tuna_egg.broken");
-    //TODO
     SoundEvent BUCKET_EMPTY_TUNA_EGG = register("item.bucket.empty_tuna_egg");
-    //TODO
     SoundEvent BUCKET_FILL_TUNA_EGG = register("item.bucket.fill_tuna_egg");
 
     SoundEvent SEAHORSE_GROWL = register("entity.seahorse.growl");

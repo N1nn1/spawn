@@ -21,6 +21,9 @@
   "item.spawn.cooked_tuna_chunk": "Trancio di tonno cotto",
   "item.spawn.tuna_sandwich": "Panino con tonno",
   "item.spawn.tuna_egg_bucket": "Secchio con uova di tonno",
+  "subtitles.item.bucket.fill_tuna_egg": "Uovo di tonno collezionato",
+  "subtitles.entity.tuna_egg.hit": "Uovo di tonno danneggiato",
+  "subtitles.entity.tuna_egg.broken": "Uovo di tonno rotto",
 
   "entity.spawn.seahorse": "Cavalluccio marino",
   "item.spawn.seahorse_spawn_egg": "Uovo generatore di cavalluccio marino",
@@ -63,6 +66,12 @@
   "block.spawn.sunflower": "Girasole",
   "item.spawn.sunflower_seeds": "Semi di girasole",
   "item.spawn.roasted_sunflower_seeds": "Semi di girasole tostati",
+  "subtitles.entity.hamster.death": "Criceto muore",
+  "subtitles.entity.hamster.eat": "Criceto sgranocchia",
+  "subtitles.entity.hamster.hurt": "Criceto ferito",
+  "subtitles.entity.hamster.step": "Criceto sgambetta",
+  "subtitles.entity.hamster.idle": "Criceto squittisce",
+  "subtitles.entity.hamster.idle_call": "Criceto chiama",
 
   "entity.spawn.ant": "Formica",
   "item.spawn.ant_spawn_egg": "Uovo generatore di formica",

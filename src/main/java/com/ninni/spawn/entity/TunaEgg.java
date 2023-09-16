@@ -67,6 +67,7 @@ public class TunaEgg extends Mob implements Bucketable {
         } else {
             this.level().broadcastEntityEvent(this, (byte)32);
             this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
+            this.playSound(SpawnSoundEvents.TUNA_EGG_HIT);
             this.lastHit = l;
         }
         return true;

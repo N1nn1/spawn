@@ -21,6 +21,9 @@
   "item.spawn.cooked_tuna_chunk": "Cooked Tuna Chunk",
   "item.spawn.tuna_sandwich": "Tuna Sandwich",
   "item.spawn.tuna_egg_bucket": "Bucket of Tuna Egg",
+  "subtitles.item.bucket.fill_tuna_egg": "Tuna Egg collected",
+  "subtitles.entity.tuna_egg.hit": "Tuna Egg damages",
+  "subtitles.entity.tuna_egg.broken": "Tuna Egg breaks",
 
   "entity.spawn.seahorse": "Seahorse",
   "item.spawn.seahorse_spawn_egg": "Seahorse Spawn Egg",
