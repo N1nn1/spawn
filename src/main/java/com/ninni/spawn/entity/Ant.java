@@ -93,7 +93,6 @@ import java.util.stream.Stream;
 
 //TODO
 // might be going crazy but I swear I saw ants disappear when gathering resources (might just have gone to their home)
-// sometimes ants just continuosly pop in and out of their home very fast and dont stop
 // ants sometimes just cannot pathfind to their home for some reason
 
 public class Ant extends TamableAnimal implements NeutralMob{
@@ -119,7 +118,6 @@ public class Ant extends TamableAnimal implements NeutralMob{
     BlockPos anthillPos;
     Ant.AntGatherGoal antGatherGoal;
     Ant.AntGoToAnthillGoal goToAnthillGoal;
-    private Ant.AntGoToKnownResourceGoal goToKnownResourceGoal;
     private int underWaterTicks;
 
     public Ant(EntityType<? extends Ant> entityType, Level level) {
@@ -183,9 +181,9 @@ public class Ant extends TamableAnimal implements NeutralMob{
         this.goToAnthillGoal = new AntGoToAnthillGoal();
         this.goalSelector.addGoal(5, this.goToAnthillGoal);
         this.goalSelector.addGoal(6, new AntGoToKnownResourceGoal());
-        this.goalSelector.addGoal(8, new AntWanderGoal(this));
-        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 6));
-        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(7, new AntWanderGoal(this));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Ant.class, false, this::getTerritorialTarget));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
@@ -300,6 +298,10 @@ public class Ant extends TamableAnimal implements NeutralMob{
         return this.savedResourcePos != null;
     }
 
+    public void setSavedResourcePos(BlockPos blockPos) {
+        this.savedResourcePos = blockPos;
+    }
+
     private boolean isTiredOfLookingForResource() {
         return this.ticksWithoutResourceSinceExitingAnthill > 3600;
     }
@@ -308,7 +310,9 @@ public class Ant extends TamableAnimal implements NeutralMob{
         if (this.stayOutOfAnthillCountdown > 0 || this.antGatherGoal.isGathering() || this.getTarget() != null) {
             return false;
         }
-        return this.isTiredOfLookingForResource() || this.level().isNight();
+        boolean flag = this.isTiredOfLookingForResource() || this.hasResource() || this.level().isNight();
+        System.out.println(this.isTiredOfLookingForResource());
+        return flag;
     }
 
     public void setStayOutOfAnthillCountdown(int i) {
@@ -923,56 +927,41 @@ public class Ant extends TamableAnimal implements NeutralMob{
     }
 
     public class AntGoToKnownResourceGoal extends BaseAntGoal {
-        int travellingTicks;
+        private final Ant ant = Ant.this;
 
         AntGoToKnownResourceGoal() {
-            this.travellingTicks = Ant.this.level().random.nextInt(10);
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
         @Override
         public boolean canAntUse() {
-            return !Ant.this.isTame() && Ant.this.savedResourcePos != null && !Ant.this.hasRestriction() && this.wantsToGoToKnownResource() && Ant.this.isResourceValid(Ant.this.savedResourcePos) && !Ant.this.closerThan(Ant.this.savedResourcePos, 2);
+            if (this.ant.savedResourcePos == null) {
+                return false;
+            }
+            if (!this.ant.isResourceValid(this.ant.savedResourcePos)) {
+                this.ant.savedResourcePos = null;
+                return false;
+            }
+            return !this.ant.isTame() && this.wantsToGoToKnownResource();
         }
 
         @Override
         public boolean canAntContinueToUse() {
-
-            if (Ant.this.isTame()) return false;
-            return this.canAntUse();
-        }
-
-        @Override
-        public void start() {
-            this.travellingTicks = 0;
-            super.start();
+            return !Ant.this.isTame() && this.canAntUse();
         }
 
         @Override
         public void stop() {
-            this.travellingTicks = 0;
             Ant.this.navigation.stop();
             Ant.this.navigation.resetMaxVisitedNodesMultiplier();
         }
 
         @Override
         public void tick() {
-            if (Ant.this.savedResourcePos == null) {
-                return;
+            BlockPos targetPos = this.ant.savedResourcePos;
+            if (targetPos != null && this.ant.isResourceValid(targetPos)) {
+                Ant.this.getNavigation().moveTo(targetPos.getX(), targetPos.getY(), targetPos.getZ(), 1.0D);
             }
-            ++this.travellingTicks;
-            if (this.travellingTicks > this.adjustedTickDelay(600)) {
-                Ant.this.savedResourcePos = null;
-                return;
-            }
-            if (Ant.this.navigation.isInProgress()) {
-                return;
-            }
-            if (Ant.this.isTooFarAway(Ant.this.savedResourcePos)) {
-                Ant.this.savedResourcePos = null;
-                return;
-            }
-            Ant.this.moveTo(Ant.this.savedResourcePos, 0,0);
         }
 
         private boolean wantsToGoToKnownResource() {
