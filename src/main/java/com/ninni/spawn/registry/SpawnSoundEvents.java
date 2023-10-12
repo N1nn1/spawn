@@ -47,9 +47,8 @@ public interface SpawnSoundEvents {
     SoundEvent HAMSTER_HURT = register("entity.hamster.hurt");
     SoundEvent HAMSTER_EAT = register("entity.hamster.eat");
     SoundEvent HAMSTER_DEATH = register("entity.hamster.death");
-    //TODO
+
     SoundEvent SUNFLOWER_SEED_PICKUP = register("block.sunflower.seed_pickup");
-    //
 
     //TODO
     SoundEvent ANT_AMBIENT = register("entity.ant.idle");
@@ -66,6 +65,7 @@ public interface SpawnSoundEvents {
     SoundEvent ANTHILL_EXIT = register("block.anthill.exit");
     SoundEvent ANTHILL_WORK = register("block.anthill.work");
     SoundEvent ANTHILL_RESOURCE = register("block.anthill.resource");
+    //
 
     SoundEvent ROTTEN_WOOD_FENCE_GATE_OPEN = register("block.rotten_wood_fence_gate.open");
     SoundEvent ROTTEN_WOOD_FENCE_GATE_CLOSE = register("block.rotten_wood_fence_gate.close");
@@ -73,13 +73,10 @@ public interface SpawnSoundEvents {
     SoundEvent ROTTEN_WOOD_DOOR_CLOSE = register("block.rotten_wood_door.close");
     SoundEvent ROTTEN_WOOD_TRAPDOOR_OPEN = register("block.rotten_wood_trapdoor.open");
     SoundEvent ROTTEN_WOOD_TRAPDOOR_CLOSE = register("block.rotten_wood_trapdoor.close");
-    //
 
     SoundType MUCUS = register("mucus", 1, 1);
-    //TODO
     SoundType ROTTEN_WOOD = register("rotten_wood", 1, 1);
     SoundType CRACKED_ROTTEN_WOOD = register("cracked_rotten_wood", 1, 1);
-    //
     SoundType FALLEN_LEAVES = register("fallen_leaves", 1, 1);
     SoundType SNAIL_SHELL = register("snail_shell", 1, 1);
 
