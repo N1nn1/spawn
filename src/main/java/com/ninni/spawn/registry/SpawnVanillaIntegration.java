@@ -8,6 +8,8 @@ import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
 import com.ninni.spawn.client.particles.TunaEggParticle;
 import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.entity.Hamster;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -43,23 +45,6 @@ public class SpawnVanillaIntegration {
         registerCompostables();
     }
 
-    public static void clientInit() {
-        registerModelLayers();
-        registerParticles();
-        registerBlockRenderLayers();
-        registerScreens();
-    }
-
-
-    //server
-    private static void registerStrippables() {
-        StrippableBlockRegistry.register(SpawnBlocks.ROTTEN_LOG, SpawnBlocks.STRIPPED_ROTTEN_LOG);
-        StrippableBlockRegistry.register(SpawnBlocks.ROTTEN_WOOD, SpawnBlocks.STRIPPED_ROTTEN_WOOD);
-        //TODO make custom sounds and impl for this (planks have no axis blockstate)
-        //StrippableBlockRegistry.register(SpawnBlocks.ROTTEN_PLANKS, SpawnBlocks.CRACKED_ROTTEN_PLANKS);
-
-    }
-
     private static void registerBiomeModifications() {
         BiomeModifications.create(new ResourceLocation(Spawn.MOD_ID, "replace_sunflower_patch")).add(ModificationPhase.REPLACEMENTS, biomeSelectionContext -> biomeSelectionContext.hasPlacedFeature(VegetationPlacements.PATCH_SUNFLOWER), biomeModificationContext -> {
             BiomeModificationContext.GenerationSettingsContext generationSettings = biomeModificationContext.getGenerationSettings();
@@ -68,6 +53,14 @@ public class SpawnVanillaIntegration {
             }
         });
         BiomeModifications.addFeature(BiomeSelectors.tag(SpawnTags.SMALL_ANTHILL_GENERATES), GenerationStep.Decoration.VEGETAL_DECORATION, SpawnPlacedFeatures.SMALL_ANTHILL);
+    }
+
+    private static void registerStrippables() {
+        StrippableBlockRegistry.register(SpawnBlocks.ROTTEN_LOG, SpawnBlocks.STRIPPED_ROTTEN_LOG);
+        StrippableBlockRegistry.register(SpawnBlocks.ROTTEN_WOOD, SpawnBlocks.STRIPPED_ROTTEN_WOOD);
+        //TODO make custom sounds and impl for this (planks have no axis blockstate)
+        //StrippableBlockRegistry.register(SpawnBlocks.ROTTEN_PLANKS, SpawnBlocks.CRACKED_ROTTEN_PLANKS);
+
     }
 
     private static void registerFlammables() {
@@ -100,57 +93,67 @@ public class SpawnVanillaIntegration {
         defaultInstance.add(SpawnItems.ROTTEN_PLANKS, 1F);
     }
 
+    @Environment(EnvType.CLIENT)
+    public static class Client {
 
-    //client
-    private static void registerScreens() {
-        ClientPlayNetworking.registerGlobalReceiver(OPEN_HAMSTER_SCREEN, (client, handler, buf, responseSender) -> {
-            int id = buf.readInt();
-            Level level = client.level;
-            Optional.ofNullable(level).ifPresent(world -> {
-                Entity entity = world.getEntity(id);
-                if (entity instanceof Hamster hamster) {
-                    int slotCount = buf.readInt();
-                    int syncId = buf.readInt();
-                    LocalPlayer clientPlayerEntity = client.player;
-                    SimpleContainer simpleInventory = new SimpleContainer(slotCount);
-                    assert clientPlayerEntity != null;
-                    HamsterInventoryMenu hamsterInventoryMenu = new HamsterInventoryMenu(syncId, clientPlayerEntity.getInventory(), simpleInventory, hamster);
-                    clientPlayerEntity.containerMenu = hamsterInventoryMenu;
-                    client.execute(() -> client.setScreen(new HamsterInventoryScreen(hamsterInventoryMenu, clientPlayerEntity.getInventory(), hamster)));
-                }
+        public static void clientInit() {
+            registerModelLayers();
+            registerParticles();
+            registerBlockRenderLayers();
+            registerScreens();
+        }
+
+        private static void registerScreens() {
+            ClientPlayNetworking.registerGlobalReceiver(OPEN_HAMSTER_SCREEN, (client, handler, buf, responseSender) -> {
+                int id = buf.readInt();
+                Level level = client.level;
+                Optional.ofNullable(level).ifPresent(world -> {
+                    Entity entity = world.getEntity(id);
+                    if (entity instanceof Hamster hamster) {
+                        int slotCount = buf.readInt();
+                        int syncId = buf.readInt();
+                        LocalPlayer clientPlayerEntity = client.player;
+                        SimpleContainer simpleInventory = new SimpleContainer(slotCount);
+                        assert clientPlayerEntity != null;
+                        HamsterInventoryMenu hamsterInventoryMenu = new HamsterInventoryMenu(syncId, clientPlayerEntity.getInventory(), simpleInventory, hamster);
+                        clientPlayerEntity.containerMenu = hamsterInventoryMenu;
+                        client.execute(() -> client.setScreen(new HamsterInventoryScreen(hamsterInventoryMenu, clientPlayerEntity.getInventory(), hamster)));
+                    }
+                });
             });
-        });
-    }
+        }
 
-    private static void registerBlockRenderLayers() {
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
-                SpawnBlocks.MUCUS,
-                SpawnBlocks.MUCUS_BLOCK,
-                SpawnBlocks.GHOSTLY_MUCUS_BLOCK,
-                SpawnBlocks.SNAIL_EGGS
-        );
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
-                SpawnBlocks.FALLEN_LEAVES,
-                SpawnBlocks.ANT_FARM,
-                SpawnBlocks.POTTED_SWEET_BERRY_BUSH,
-                SpawnBlocks.SUNFLOWER,
-                SpawnBlocks.SUNFLOWER_PLANT
-        );
-    }
+        private static void registerBlockRenderLayers() {
+            BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
+                    SpawnBlocks.MUCUS,
+                    SpawnBlocks.MUCUS_BLOCK,
+                    SpawnBlocks.GHOSTLY_MUCUS_BLOCK,
+                    SpawnBlocks.SNAIL_EGGS
+            );
+            BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
+                    SpawnBlocks.FALLEN_LEAVES,
+                    SpawnBlocks.ANT_FARM,
+                    SpawnBlocks.POTTED_SWEET_BERRY_BUSH,
+                    SpawnBlocks.SUNFLOWER,
+                    SpawnBlocks.SUNFLOWER_PLANT
+            );
+        }
 
-    private static void registerModelLayers() {
-        Reflection.initialize(SpawnEntityModelLayers.class);
-        EntityRendererRegistry.register(SpawnEntityType.ANGLER_FISH, AnglerFishRenderer::new);
-        EntityRendererRegistry.register(SpawnEntityType.TUNA, TunaRenderer::new);
-        EntityRendererRegistry.register(SpawnEntityType.TUNA_EGG, TunaEggRenderer::new);
-        EntityRendererRegistry.register(SpawnEntityType.SEAHORSE, SeahorseRenderer::new);
-        EntityRendererRegistry.register(SpawnEntityType.SNAIL, SnailRenderer::new);
-        EntityRendererRegistry.register(SpawnEntityType.HAMSTER, HamsterRenderer::new);
-        EntityRendererRegistry.register(SpawnEntityType.ANT, AntRenderer::new);
-    }
+        private static void registerModelLayers() {
+            Reflection.initialize(SpawnEntityModelLayers.class);
+            EntityRendererRegistry.register(SpawnEntityType.ANGLER_FISH, AnglerFishRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.TUNA, TunaRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.TUNA_EGG, TunaEggRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.SEAHORSE, SeahorseRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.SNAIL, SnailRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.HAMSTER, HamsterRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.ANT, AntRenderer::new);
+        }
 
-    private static void registerParticles() {
-        ParticleFactoryRegistry.getInstance().register(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, GlowParticle.GlowSquidProvider::new);
-        ParticleFactoryRegistry.getInstance().register(SpawnParticles.TUNA_EGG, TunaEggParticle.Factory::new);
+        private static void registerParticles() {
+            ParticleFactoryRegistry.getInstance().register(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, GlowParticle.GlowSquidProvider::new);
+            ParticleFactoryRegistry.getInstance().register(SpawnParticles.TUNA_EGG, TunaEggParticle.Factory::new);
+        }
+
     }
 }

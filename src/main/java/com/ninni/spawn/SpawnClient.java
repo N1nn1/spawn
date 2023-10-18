@@ -7,6 +7,6 @@ public class SpawnClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		SpawnVanillaIntegration.clientInit();
+		SpawnVanillaIntegration.Client.clientInit();
 	}
 }
