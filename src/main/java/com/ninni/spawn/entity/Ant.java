@@ -91,10 +91,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-//TODO
-// might be going crazy but I swear I saw ants disappear when gathering resources (might just have gone to their home)
-// ants sometimes just cannot pathfind to their home for some reason
-
+//TODO works fine as of right now, but the ants might have to be recoded in brain ai later
 public class Ant extends TamableAnimal implements NeutralMob{
     private static final EntityDataAccessor<Boolean> DATA_HAS_RESOURCE = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_ABDOMEN_COLOR = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
@@ -130,9 +127,9 @@ public class Ant extends TamableAnimal implements NeutralMob{
     @SuppressWarnings("DataFlowIssue")
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Mth.nextInt(random, 12, 20));
-        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Mth.nextInt(random, 1, 3));
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Mth.nextDouble(random, 0.225, 0.3));
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Mth.nextInt(serverLevelAccessor.getRandom(), 12, 20));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Mth.nextInt(serverLevelAccessor.getRandom(), 1, 3));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Mth.nextDouble(serverLevelAccessor.getRandom(), 0.225, 0.3));
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
     }
     
@@ -311,7 +308,6 @@ public class Ant extends TamableAnimal implements NeutralMob{
             return false;
         }
         boolean flag = this.isTiredOfLookingForResource() || this.hasResource() || this.level().isNight();
-        System.out.println(this.isTiredOfLookingForResource());
         return flag;
     }
 
@@ -425,7 +421,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
 
 
     boolean isTooFarAway(BlockPos blockPos) {
-        return !this.closerThan(blockPos, 32);
+        return !this.closerThan(blockPos, 64);
     }
 
     @Override
@@ -881,7 +877,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
                 this.dropAnthill();
                 return;
             }
-            Ant.this.moveTo(Ant.this.anthillPos, 0, 0);
+            Ant.this.getNavigation().moveTo(Ant.this.anthillPos.getX(), Ant.this.anthillPos.getY(), Ant.this.anthillPos.getZ(), Ant.this.getSpeed());
         }
 
         private boolean pathfindDirectlyTowards(BlockPos blockPos) {

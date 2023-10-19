@@ -485,5 +485,13 @@
 			}
 		],
 		"subtitle": "subtitles.block.sunflower.seed_pickup"
+	},
+	"music_disc.rot": {
+		"sounds": [
+			{
+				"name": "spawn:records/music_disc_rot",
+				"stream": true
+			}
+		]
 	}
 }

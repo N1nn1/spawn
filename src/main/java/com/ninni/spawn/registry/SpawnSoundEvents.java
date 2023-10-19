@@ -65,7 +65,9 @@ public interface SpawnSoundEvents {
     SoundEvent ANTHILL_EXIT = register("block.anthill.exit");
     SoundEvent ANTHILL_WORK = register("block.anthill.work");
     SoundEvent ANTHILL_RESOURCE = register("block.anthill.resource");
+
     //
+    SoundEvent MUSIC_DISC_ROT = register("music_disc.rot");
 
     SoundEvent ROTTEN_WOOD_FENCE_GATE_OPEN = register("block.rotten_wood_fence_gate.open");
     SoundEvent ROTTEN_WOOD_FENCE_GATE_CLOSE = register("block.rotten_wood_fence_gate.close");

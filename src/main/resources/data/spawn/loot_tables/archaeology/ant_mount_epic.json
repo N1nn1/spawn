@@ -7,15 +7,21 @@
         {
           "type": "minecraft:item",
           "name": "spawn:ant_pupa",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "spawn:crown_pottery_sherd",
           "weight": 2
         },
         {
           "type": "minecraft:item",
-          "name": "spawn:crown_pottery_sherd"
+          "name": "spawn:spade_pottery_sherd",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "name": "spawn:spade_pottery_sherd"
+          "name": "spawn:music_disc_rot"
         }
       ],
       "rolls": 1.0
