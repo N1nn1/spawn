@@ -493,5 +493,70 @@
 				"stream": true
 			}
 		]
+	},
+	"entity.ant.idle": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.entity.ant.idle"
+	},
+	"entity.ant.step": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.entity.ant.step"
+	},
+	"entity.ant.hurt": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.entity.ant.hurt"
+	},
+	"entity.ant.eat": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.entity.ant.eat"
+	},
+	"entity.ant.attack": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.entity.ant.attack"
+	},
+	"entity.ant.death": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.entity.ant.death"
+	},
+	"entity.ant.collect_resource": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.entity.ant.collect_resource"
+	},
+	"entity.ant.hatch": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.entity.ant.hatch"
+	},
+	"block.anthill.enter": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.block.anthill.enter"
+	},
+	"block.anthill.exit": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.block.anthill.exit"
+	},
+	"block.anthill.work": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.block.anthill.work"
+	},
+	"block.anthill.resource": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.block.anthill.resource"
+	},
+	"block.rotten_wood.crack": {
+		"sounds": [
+		],
+		"subtitle": "subtitles.block.rotten_wood.crack"
 	}
 }
