@@ -127,9 +127,9 @@ public class Ant extends TamableAnimal implements NeutralMob{
     @SuppressWarnings("DataFlowIssue")
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Mth.nextInt(serverLevelAccessor.getRandom(), 12, 20));
-        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Mth.nextInt(serverLevelAccessor.getRandom(), 1, 3));
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Mth.nextDouble(serverLevelAccessor.getRandom(), 0.225, 0.3));
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Mth.nextInt(this.getRandom(), 12, 20));
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(Mth.nextInt(this.getRandom(), 1, 3));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(Mth.nextDouble(this.getRandom(), 0.225, 0.3));
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
     }
     
@@ -877,7 +877,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
                 this.dropAnthill();
                 return;
             }
-            Ant.this.getNavigation().moveTo(Ant.this.anthillPos.getX(), Ant.this.anthillPos.getY(), Ant.this.anthillPos.getZ(), Ant.this.getSpeed());
+            Ant.this.getNavigation().moveTo(Ant.this.anthillPos.getX(), Ant.this.anthillPos.getY(), Ant.this.anthillPos.getZ(), 1);
         }
 
         private boolean pathfindDirectlyTowards(BlockPos blockPos) {
