@@ -6,7 +6,6 @@ import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -91,7 +90,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-//TODO works fine as of right now, but the ants might have to be recoded in brain ai later
+@SuppressWarnings("DataFlowIssue")
 public class Ant extends TamableAnimal implements NeutralMob{
     private static final EntityDataAccessor<Boolean> DATA_HAS_RESOURCE = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_ABDOMEN_COLOR = SynchedEntityData.defineId(Ant.class, EntityDataSerializers.INT);
@@ -124,7 +123,6 @@ public class Ant extends TamableAnimal implements NeutralMob{
         this.setPathfindingMalus(BlockPathTypes.WATER, -1);
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(Mth.nextInt(this.getRandom(), 12, 20));
@@ -235,7 +233,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
         return super.mobInteract(player, interactionHand);
     }
-    
+
     @Override
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
@@ -277,13 +275,13 @@ public class Ant extends TamableAnimal implements NeutralMob{
         super.tick();
         if (this.hasResource() && this.random.nextFloat() < 0.05f) {
             for (int i = 0; i < this.random.nextInt(2) + 1; ++i) {
-                this.spawnFluidParticle(this.level(), this.getX() - (double)0.3f, this.getX() + (double)0.3f, this.getZ() - (double)0.3f, this.getZ() + (double)0.3f, this.getY(0.5), ParticleTypes.FALLING_NECTAR);
+                this.spawnFluidParticle(this.level(), this.getX() - (double)0.3f, this.getX() + (double)0.3f, this.getZ() - (double)0.3f, this.getZ() + (double)0.3f, this.getY(0.5));
             }
         }
     }
 
-    private void spawnFluidParticle(Level level, double d, double e, double f, double g, double h, ParticleOptions particleOptions) {
-        level.addParticle(particleOptions, Mth.lerp(level.random.nextDouble(), d, e), h, Mth.lerp(level.random.nextDouble(), f, g), 0.0, 0.0, 0.0);
+    private void spawnFluidParticle(Level level, double d, double e, double f, double g, double h) {
+        level.addParticle(ParticleTypes.FALLING_NECTAR, Mth.lerp(level.random.nextDouble(), d, e), h, Mth.lerp(level.random.nextDouble(), f, g), 0.0, 0.0, 0.0);
     }
 
     @Nullable
@@ -307,8 +305,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         if (this.stayOutOfAnthillCountdown > 0 || this.antGatherGoal.isGathering() || this.getTarget() != null) {
             return false;
         }
-        boolean flag = this.isTiredOfLookingForResource() || this.hasResource() || this.level().isNight();
-        return flag;
+        return this.isTiredOfLookingForResource() || this.hasResource() || this.level().isNight();
     }
 
     public void setStayOutOfAnthillCountdown(int i) {
@@ -670,22 +667,22 @@ public class Ant extends TamableAnimal implements NeutralMob{
         }
 
         private Optional<BlockPos> findNearbyResource() {
-            return this.findNearestBlock(this.VALID_GATHERING_BLOCKS, 5.0);
+            return this.findNearestBlock(this.VALID_GATHERING_BLOCKS);
         }
 
-        private Optional<BlockPos> findNearestBlock(Predicate<BlockState> predicate, double d) {
+        private Optional<BlockPos> findNearestBlock(Predicate<BlockState> predicate) {
             BlockPos blockPos = Ant.this.blockPosition();
             BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
             int i = 0;
-            while ((double)i <= d) {
+            while ((double)i <= 5.0) {
                 int j = 0;
-                while ((double)j < d) {
+                while ((double)j < 5.0) {
                     int k = 0;
                     while (k <= j) {
                         int l = k < j && k > -j ? j : 0;
                         while (l <= j) {
                             mutableBlockPos.setWithOffset(blockPos, k, i - 1, l);
-                            if (blockPos.closerThan(mutableBlockPos, d) && predicate.test(Ant.this.level().getBlockState(mutableBlockPos))) {
+                            if (blockPos.closerThan(mutableBlockPos, 5.0) && predicate.test(Ant.this.level().getBlockState(mutableBlockPos))) {
                                 return Optional.of(mutableBlockPos);
                             }
                             l = l > 0 ? -l : 1 - l;

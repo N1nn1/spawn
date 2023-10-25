@@ -66,6 +66,8 @@ public interface SpawnSoundEvents {
     SoundEvent ANTHILL_WORK = register("block.anthill.work");
     SoundEvent ANTHILL_RESOURCE = register("block.anthill.resource");
 
+    SoundEvent ROTTEN_WOOD_CRACK = register("block.rotten_wood.crack");
+
     //
     SoundEvent MUSIC_DISC_ROT = register("music_disc.rot");
 

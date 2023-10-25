@@ -58,9 +58,6 @@ public class SpawnVanillaIntegration {
     private static void registerStrippables() {
         StrippableBlockRegistry.register(SpawnBlocks.ROTTEN_LOG, SpawnBlocks.STRIPPED_ROTTEN_LOG);
         StrippableBlockRegistry.register(SpawnBlocks.ROTTEN_WOOD, SpawnBlocks.STRIPPED_ROTTEN_WOOD);
-        //TODO make custom sounds and impl for this (planks have no axis blockstate)
-        //StrippableBlockRegistry.register(SpawnBlocks.ROTTEN_PLANKS, SpawnBlocks.CRACKED_ROTTEN_PLANKS);
-
     }
 
     private static void registerFlammables() {

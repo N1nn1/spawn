@@ -44,6 +44,7 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.COD_BUCKET, ANGLER_FISH_BUCKET);
             entries.addAfter(Items.TROPICAL_FISH_BUCKET, SEAHORSE_BUCKET);
             entries.addAfter(Items.MILK_BUCKET, ANT_PUPA);
+            entries.addAfter(Items.MUSIC_DISC_RELIC, MUSIC_DISC_ROT);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(entries -> {
@@ -150,6 +151,7 @@ public class SpawnCreativeModeTab {
                 output.accept(ROTTEN_TRAPDOOR);
                 output.accept(FALLEN_LEAVES);
                 output.accept(ANT_PUPA);
+                output.accept(MUSIC_DISC_ROT);
                 output.accept(CROWN_POTTERY_SHERD);
                 output.accept(SPADE_POTTERY_SHERD);
             }).build()
