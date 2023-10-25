@@ -50,7 +50,7 @@ public interface SpawnSoundEvents {
 
     SoundEvent SUNFLOWER_SEED_PICKUP = register("block.sunflower.seed_pickup");
 
-    //TODO
+    //TODO ant sounds
     SoundEvent ANT_AMBIENT = register("entity.ant.idle");
     SoundEvent ANT_STEP = register("entity.ant.step");
     SoundEvent ANT_HURT = register("entity.ant.hurt");
