@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "spawn:ghostly_mucus_block_from_mucus_block"
+      "spawn:ghostly_mucus_block"
     ]
   },
   "criteria": {
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "spawn:ghostly_mucus_block"
+        "recipe": "spawn:ghostly_mucus_block_from_mucus_block"
       }
     }
   },

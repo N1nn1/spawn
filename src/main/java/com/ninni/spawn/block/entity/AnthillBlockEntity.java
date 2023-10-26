@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import com.ninni.spawn.block.AnthillBlock;
 import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
+import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -127,7 +129,7 @@ public class AnthillBlockEntity extends BlockEntity {
                 }
                 this.hasResource = ant.hasResource();
             }
-            //this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SpeciesSoundEvents.BLOCK_BIRT_DWELLING_ENTER, SoundSource.BLOCKS, 1.0f, 1.0f);
+            this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SpawnSoundEvents.ANTHILL_ENTER, SoundSource.BLOCKS, 1.0f, 1.0f);
             this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity, this.getBlockState()));
         }
         entity.discard();
@@ -169,7 +171,7 @@ public class AnthillBlockEntity extends BlockEntity {
                 double z = (double)pos.getZ() + 0.5;
                 releasedAnt.moveTo(x, y, z, releasedAnt.getYRot(), releasedAnt.getXRot());
             } else return false;
-            //world.playSound(null, pos, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, pos, SpawnSoundEvents.ANTHILL_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);
             world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(releasedAnt, world.getBlockState(pos)));
             if (world instanceof ServerLevel serverLevel) {
                 releasedAnt.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(releasedAnt.blockPosition()), MobSpawnType.EVENT, null, nbtCompound);
@@ -212,7 +214,7 @@ public class AnthillBlockEntity extends BlockEntity {
             double d = (double)pos.getX() + 0.5;
             double e = pos.getY();
             double f = (double)pos.getZ() + 0.5;
-            //world.playSound(null, d, e, f, SpeciesSoundEvents.BLOCK_BIRT_DWELLING_WORK, SoundSource.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, d, e, f, SpawnSoundEvents.ANTHILL_WORK, SoundSource.BLOCKS, 0.5f, 1.0f);
         }
     }
 

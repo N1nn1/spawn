@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "spawn:tuna_egg_bucket",
+    "spawn:angler_fish_bucket",
+    "spawn:seahorse_bucket"
+  ]
+}

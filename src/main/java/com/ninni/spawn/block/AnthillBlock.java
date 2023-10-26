@@ -7,11 +7,13 @@ import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnBlocks;
+import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -145,6 +147,7 @@ public class AnthillBlock extends BaseEntityBlock {
             if (world.getBlockEntity(blockPos) instanceof BrushableBlockEntity brushableBlockEntity) {
                 brushableBlockEntity.setLootTable(new ResourceLocation(Spawn.MOD_ID, "archaeology/anthill"), blockPos.asLong());
             }
+            world.playSound(null, pos, SpawnSoundEvents.ANTHILL_RESOURCE, SoundSource.BLOCKS);
             world.setBlock(pos, state.setValue(RESOURCE_LEVEL, 0), 2);
         }
     }

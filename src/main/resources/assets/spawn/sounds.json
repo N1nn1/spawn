@@ -496,67 +496,145 @@
 	},
 	"entity.ant.idle": {
 		"sounds": [
+			"spawn:entity/ant/idle1",
+			"spawn:entity/ant/idle2",
+			"spawn:entity/ant/idle3",
+			"spawn:entity/ant/idle4",
+			"spawn:entity/ant/idle5",
+			"spawn:entity/ant/idle6",
+			"spawn:entity/ant/idle7"
 		],
 		"subtitle": "subtitles.entity.ant.idle"
 	},
 	"entity.ant.step": {
 		"sounds": [
+			"spawn:entity/ant/step1",
+			"spawn:entity/ant/step2",
+			"spawn:entity/ant/step3",
+			"spawn:entity/ant/step4",
+			"spawn:entity/ant/step5"
 		],
 		"subtitle": "subtitles.entity.ant.step"
 	},
 	"entity.ant.hurt": {
 		"sounds": [
+			"spawn:entity/ant/hurt1",
+			"spawn:entity/ant/hurt2",
+			"spawn:entity/ant/hurt3"
 		],
 		"subtitle": "subtitles.entity.ant.hurt"
 	},
 	"entity.ant.eat": {
 		"sounds": [
+			"spawn:entity/ant/eat1",
+			"spawn:entity/ant/eat2",
+			"spawn:entity/ant/eat3"
 		],
 		"subtitle": "subtitles.entity.ant.eat"
 	},
-	"entity.ant.attack": {
-		"sounds": [
-		],
-		"subtitle": "subtitles.entity.ant.attack"
-	},
 	"entity.ant.death": {
 		"sounds": [
+			"spawn:entity/ant/death1",
+			"spawn:entity/ant/death2",
+			"spawn:entity/ant/death3"
 		],
 		"subtitle": "subtitles.entity.ant.death"
 	},
 	"entity.ant.collect_resource": {
 		"sounds": [
+			"spawn:entity/ant/collect_resource1",
+			"spawn:entity/ant/collect_resource2",
+			"spawn:entity/ant/collect_resource3"
 		],
 		"subtitle": "subtitles.entity.ant.collect_resource"
 	},
 	"entity.ant.hatch": {
 		"sounds": [
+			"spawn:entity/ant/hatch1",
+			"spawn:entity/ant/hatch2"
 		],
 		"subtitle": "subtitles.entity.ant.hatch"
 	},
 	"block.anthill.enter": {
 		"sounds": [
+			"spawn:block/anthill/enter1",
+			"spawn:block/anthill/enter2"
 		],
 		"subtitle": "subtitles.block.anthill.enter"
 	},
 	"block.anthill.exit": {
 		"sounds": [
+			"spawn:block/anthill/exit1",
+			"spawn:block/anthill/exit2"
 		],
 		"subtitle": "subtitles.block.anthill.exit"
 	},
 	"block.anthill.work": {
 		"sounds": [
+			"spawn:block/anthill/work1",
+			"spawn:block/anthill/work2",
+			"spawn:block/anthill/work3",
+			"spawn:block/anthill/work4"
 		],
 		"subtitle": "subtitles.block.anthill.work"
 	},
 	"block.anthill.resource": {
 		"sounds": [
+			"spawn:block/anthill/resource1",
+			"spawn:block/anthill/resource2",
+			"spawn:block/anthill/resource3"
 		],
 		"subtitle": "subtitles.block.anthill.resource"
 	},
 	"block.rotten_wood.crack": {
 		"sounds": [
+			"spawn:block/rotten_wood/crack1",
+			"spawn:block/rotten_wood/crack2"
 		],
 		"subtitle": "subtitles.block.rotten_wood.crack"
+	},
+	"block.fallen_leaves.break": {
+		"sounds": [
+			"spawn:block/fallen_leaves/heavy1",
+			"spawn:block/fallen_leaves/heavy2",
+			"spawn:block/fallen_leaves/heavy3",
+			"spawn:block/fallen_leaves/heavy4"
+		],
+		"subtitle": "subtitles.block.generic.break"
+	},
+	"block.fallen_leaves.fall": {
+		"sounds": [
+			{
+				"name": "spawn:block.fallen_leaves.break",
+				"type": "event"
+			}
+		]
+	},
+	"block.fallen_leaves.hit": {
+		"sounds": [
+			{
+				"name": "spawn:block.fallen_leaves.step",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.hit"
+	},
+	"block.fallen_leaves.place": {
+		"sounds": [
+			{
+				"name": "spawn:block.fallen_leaves.break",
+				"type": "event"
+			}
+		],
+		"subtitle": "subtitles.block.generic.place"
+	},
+	"block.fallen_leaves.step": {
+		"sounds": [
+			"spawn:block/fallen_leaves/light1",
+			"spawn:block/fallen_leaves/light2",
+			"spawn:block/fallen_leaves/light3",
+			"spawn:block/fallen_leaves/light4"
+		],
+		"subtitle": "subtitles.block.generic.footsteps"
 	}
 }

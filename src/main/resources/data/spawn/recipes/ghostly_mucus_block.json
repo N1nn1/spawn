@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "###",
+    " # ",
     "#G#",
-    "###"
+    " # "
   ],
   "key": {
     "#": {
@@ -15,6 +15,6 @@
   },
   "result": {
     "item": "spawn:ghostly_mucus_block",
-    "count": 8
+    "count": 4
   }
 }

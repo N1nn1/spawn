@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "spawn:potted_sweet_berries_from_sweet_berries"
+      "spawn:potted_sweet_berries"
     ]
   },
   "criteria": {
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "spawn:potted_sweet_berries"
+        "recipe": "spawn:potted_sweet_berries_from_sweet_berries"
       }
     }
   },

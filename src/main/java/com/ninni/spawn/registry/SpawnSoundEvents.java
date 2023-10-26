@@ -50,13 +50,11 @@ public interface SpawnSoundEvents {
 
     SoundEvent SUNFLOWER_SEED_PICKUP = register("block.sunflower.seed_pickup");
 
-    //TODO ant sounds
     SoundEvent ANT_AMBIENT = register("entity.ant.idle");
-    SoundEvent ANT_STEP = register("entity.ant.step");
     SoundEvent ANT_HURT = register("entity.ant.hurt");
     SoundEvent ANT_EAT = register("entity.ant.eat");
-    SoundEvent ANT_ATTACK = register("entity.ant.attack");
     SoundEvent ANT_DEATH = register("entity.ant.death");
+    SoundEvent ANT_STEP = register("entity.ant.step");
     SoundEvent ANT_COLLECT_RESOURCE = register("entity.ant.collect_resource");
 
     SoundEvent ANT_HATCH = register("entity.ant.hatch");
@@ -68,7 +66,6 @@ public interface SpawnSoundEvents {
 
     SoundEvent ROTTEN_WOOD_CRACK = register("block.rotten_wood.crack");
 
-    //
     SoundEvent MUSIC_DISC_ROT = register("music_disc.rot");
 
     SoundEvent ROTTEN_WOOD_FENCE_GATE_OPEN = register("block.rotten_wood_fence_gate.open");

@@ -6,6 +6,7 @@ import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -167,7 +168,6 @@ public class Ant extends TamableAnimal implements NeutralMob{
         this.goalSelector.addGoal(0, new AntAttackGoal(this, 1.4f, true));
         this.goalSelector.addGoal(1, new AntEnterAnthillGoal());
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, Ingredient.of(SpawnTags.ANT_TEMPTS), false));
         this.antGatherGoal = new AntGatherGoal();
         this.goalSelector.addGoal(4, this.antGatherGoal);
@@ -205,12 +205,21 @@ public class Ant extends TamableAnimal implements NeutralMob{
         Item item = itemStack.getItem();
 
         if (this.isTame()) {
-            if (this.isFood(itemStack) && this.getHealth() < this.getMaxHealth()) {
+            if (this.isFood(itemStack) && (this.age < 0 || this.getHealth() < this.getMaxHealth())) {
                 if(itemStack.is(Items.HONEY_BOTTLE)) this.spawnAtLocation(Items.GLASS_BOTTLE);
                 if(itemStack.is(Items.MUSHROOM_STEW)) this.spawnAtLocation(Items.BOWL);
 
                 if (!player.getAbilities().instabuild) {
                     itemStack.shrink(1);
+                }
+                if (this.getHealth() < this.getMaxHealth()) {
+                    this.heal(6);
+                }
+                if (this.age < 0) {
+                    this.ageUp(Animal.getSpeedUpSecondsWhenFeeding(-age), true);
+                }
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, itemStack), this.getX(), this.getY(0.6666666666666666), this.getZ(), 10, this.getBbWidth() / 4.0f, this.getBbHeight() / 4.0f, this.getBbWidth() / 4.0f, 0.05);
                 }
                 this.playSound(SpawnSoundEvents.ANT_EAT);
                 this.heal(6);
@@ -231,7 +240,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
             this.setTarget(null);
             return InteractionResult.SUCCESS;
         }
-        return super.mobInteract(player, interactionHand);
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -456,11 +465,6 @@ public class Ant extends TamableAnimal implements NeutralMob{
     @Override
     protected void playStepSound(BlockPos blockPos, BlockState blockState) {
         this.playSound(SpawnSoundEvents.ANT_STEP, 0.15f, 1.0f);
-    }
-
-    @Override
-    protected float getSoundVolume() {
-        return 0.4f;
     }
 
     @Nullable
