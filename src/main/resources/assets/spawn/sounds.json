@@ -346,8 +346,7 @@
 			"spawn:block/rotten_wood/dig1",
 			"spawn:block/rotten_wood/dig2",
 			"spawn:block/rotten_wood/dig3",
-			"spawn:block/rotten_wood/dig4",
-			"spawn:block/rotten_wood/dig5"
+			"spawn:block/rotten_wood/dig4"
 		],
 		"subtitle": "subtitles.block.generic.break"
 	},
@@ -377,8 +376,7 @@
 			"spawn:block/rotten_wood/dig1",
 			"spawn:block/rotten_wood/dig2",
 			"spawn:block/rotten_wood/dig3",
-			"spawn:block/rotten_wood/dig4",
-			"spawn:block/rotten_wood/dig5"
+			"spawn:block/rotten_wood/dig4"
 		],
 		"subtitle": "subtitles.block.generic.place"
 	},
@@ -430,8 +428,7 @@
 			"spawn:block/rotten_wood/dig1",
 			"spawn:block/rotten_wood/dig2",
 			"spawn:block/rotten_wood/dig3",
-			"spawn:block/rotten_wood/dig4",
-			"spawn:block/rotten_wood/dig5"
+			"spawn:block/rotten_wood/dig4"
 		],
 		"subtitle": "subtitles.block.generic.break"
 	},
@@ -461,8 +458,7 @@
 			"spawn:block/rotten_wood/dig1",
 			"spawn:block/rotten_wood/dig2",
 			"spawn:block/rotten_wood/dig3",
-			"spawn:block/rotten_wood/dig4",
-			"spawn:block/rotten_wood/dig5"
+			"spawn:block/rotten_wood/dig4"
 		],
 		"subtitle": "subtitles.block.generic.place"
 	},
