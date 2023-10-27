@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "criteria": {
+    "obtain_ant_pupa": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "spawn:ant_pupa"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.obtain_ant_pupa.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "spawn:ant_pupa"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.obtain_ant_pupa.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_ant_pupa"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

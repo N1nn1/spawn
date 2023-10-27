@@ -1,0 +1,38 @@
+{
+  "parent": "spawn:husbandry/obtain_ant_pupa",
+  "criteria": {
+    "obtain_ant_farm": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "spawn:ant_farm"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.obtain_ant_farm.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "spawn:ant_farm"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.obtain_ant_farm.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_ant_farm"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

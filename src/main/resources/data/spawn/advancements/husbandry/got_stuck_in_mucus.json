@@ -1,0 +1,29 @@
+{
+  "parent": "spawn:husbandry/obtain_mucus",
+  "criteria": {
+    "got_stuck_in_mucus": {
+      "trigger": "spawn:got_stuck_in_mucus"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.got_stuck_in_mucus.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "spawn:mucus_block"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.got_stuck_in_mucus.title"
+    }
+  },
+  "requirements": [
+    [
+      "got_stuck_in_mucus"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

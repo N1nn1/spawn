@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "criteria": {
+    "obtain_snail_shell": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "spawn:snail_shell"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.obtain_snail_shell.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "spawn:snail_shell"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.obtain_snail_shell.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_snail_shell"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

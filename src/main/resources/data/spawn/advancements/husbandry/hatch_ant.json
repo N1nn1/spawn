@@ -1,0 +1,29 @@
+{
+  "parent": "spawn:husbandry/obtain_ant_pupa",
+  "criteria": {
+    "hatch_ant": {
+      "trigger": "spawn:hatch_ant"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.hatch_ant.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "spawn:ant_pupa"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.hatch_ant.title"
+    }
+  },
+  "requirements": [
+    [
+      "hatch_ant"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

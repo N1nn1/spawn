@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:husbandry/tame_an_animal",
+  "criteria": {
+    "open_hamster_inventory": {
+      "trigger": "spawn:open_hamster_inventory"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.open_hamster_inventory.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "spawn:sunflower_seeds"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.open_hamster_inventory.title"
+    }
+  },
+  "requirements": [
+    [
+      "open_hamster_inventory"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

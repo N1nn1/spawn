@@ -1,0 +1,36 @@
+{
+  "parent": "minecraft:husbandry/tactical_fishing",
+  "criteria": {
+    "tuna_egg_bucket": {
+      "conditions": {
+        "item": {
+          "items": [
+            "spawn:tuna_egg_bucket"
+          ]
+        }
+      },
+      "trigger": "minecraft:filled_bucket"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.tuna_egg_in_a_bucket.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "spawn:tuna_egg_bucket"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.tuna_egg_in_a_bucket.title"
+    }
+  },
+  "requirements": [
+    [
+      "tuna_egg_bucket"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -14,6 +14,8 @@
   "subtitles.entity.spawn.angler_fish.deflate": "Pesce abissale si sgonfia",
   "subtitles.entity.spawn.angler_fish.effect.give": "Pesce abissale grazia",
   "subtitles.entity.spawn.angler_fish.effect.deny": "Pesce abissale stanco",
+  "advancements.spawn.interact_with_angler_fish.title": "Nuota e zitto zitto e nuota",
+  "advancements.spawn.interact_with_angler_fish.description": "Dai degli oggetti scintillanti ad un pesce abissale e ricevi la sua benedizione",
 
   "entity.spawn.tuna": "Tonno",
   "item.spawn.tuna_spawn_egg": "Uovo generatore di tonno",
@@ -24,6 +26,8 @@
   "subtitles.item.bucket.fill_tuna_egg": "Uovo di tonno collezionato",
   "subtitles.entity.tuna_egg.hit": "Uovo di tonno danneggiato",
   "subtitles.entity.tuna_egg.broken": "Uovo di tonno rotto",
+  "advancements.spawn.tuna_egg_in_a_bucket.title": "Bebè a bordo",
+  "advancements.spawn.tuna_egg_in_a_bucket.description": "Raccogli un uovo di tonno con un secchio",
 
   "entity.spawn.seahorse": "Cavalluccio marino",
   "item.spawn.seahorse_spawn_egg": "Uovo generatore di cavalluccio marino",
@@ -60,6 +64,14 @@
   "subtitles.entity.snail.shell_grow": "Guscio di chiocciola cresce",
   "subtitles.entity.snail.lay_eggs": "Chiocciola depone uova",
   "subtitles.entity.snail.slide": "Chiocciola striscia",
+  "advancements.spawn.obtain_snail_shell.title": "Sul guscio della porta",
+  "advancements.spawn.obtain_snail_shell.description": "Colpisci una chiocciola con un proiettile e falle cadere remporaneamente il guscio",
+  "advancements.spawn.obtain_mucus.title": "Fai la bava",
+  "advancements.spawn.obtain_mucus.description": "Ottieni della bava",
+  "advancements.spawn.got_stuck_in_mucus.title": "Leeeeeeeeeeeeeeeeento",
+  "advancements.spawn.got_stuck_in_mucus.description": "Rimani bloccato in un blocco di bava",
+  "advancements.spawn.went_through_ghostly_mucus.title": "Vloce",
+  "advancements.spawn.went_through_ghostly_mucus.description": "Attraversa un blocco di bava spettrale",
 
   "entity.spawn.hamster": "Criceto",
   "item.spawn.hamster_spawn_egg": "Uovo generatore di criceto",
@@ -72,6 +84,8 @@
   "subtitles.entity.hamster.step": "Criceto sgambetta",
   "subtitles.entity.hamster.idle": "Criceto squittisce",
   "subtitles.entity.hamster.idle_call": "Criceto chiama",
+  "advancements.spawn.open_hamster_inventory.title": "Dici Ahhhhh",
+  "advancements.spawn.open_hamster_inventory.description": "Dai un'occhiata nelle sacche guanciali di un criceto",
 
   "entity.spawn.ant": "Formica",
   "item.spawn.ant_spawn_egg": "Uovo generatore di formica",
@@ -109,5 +123,11 @@
   "subtitles.block.anthill.enter": "Formica entra nel formicaio",
   "subtitles.block.anthill.exit": "Formica esce dal formicaio",
   "subtitles.block.anthill.work": "Formiche lavorano",
-  "subtitles.block.anthill.resource": "Formicaio fa marcire qualcosa"
+  "subtitles.block.anthill.resource": "Formicaio fa marcire qualcosa",
+  "advancements.spawn.obtain_ant_pupa.title": "Sua maestà",
+  "advancements.spawn.obtain_ant_pupa.description": "Ottieni una pupa di formica",
+  "advancements.spawn.obtain_ant_farm.title": "Insetti del podere",
+  "advancements.spawn.obtain_ant_farm.description": "Crea un formicaio per portare le tue amiche formiche a casa",
+  "advancements.spawn.hatch_ant.title": "Fabio?",
+  "advancements.spawn.hatch_ant.description": "Fai nascere una formica addomesticata da una pupa"
 }

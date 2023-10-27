@@ -1,9 +1,11 @@
 package com.ninni.spawn.block;
 
 
+import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
@@ -38,6 +40,7 @@ public class GhostlyMucusBlockBlock extends MucusBlockBlock {
     @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
         level.addParticle(ParticleTypes.MYCELIUM, entity.getRandomX(0.6), entity.getY() + 1, entity.getRandomZ(0.6), 0, 0,0);
+        if (entity instanceof ServerPlayer serverPlayer) SpawnCriteriaTriggers.WENT_THROUGH_GHOSTLY_MUCUS.trigger(serverPlayer);
     }
 
     @Override

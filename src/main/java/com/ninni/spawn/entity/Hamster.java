@@ -2,6 +2,7 @@ package com.ninni.spawn.entity;
 
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.entity.variant.HamsterVariant;
+import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.Util;
@@ -102,6 +103,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         if (!this.level().isClientSide && player.isSecondaryUseActive() && player instanceof HamsterOpenContainer && this.isOwnedBy(player) && !this.isBaby()) {
+            if (player instanceof ServerPlayer serverPlayer) SpawnCriteriaTriggers.OPEN_HAMSTER_INVENTORY.trigger(serverPlayer);
             this.openCustomInventoryScreen(player);
             return InteractionResult.SUCCESS;
         }

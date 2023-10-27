@@ -14,6 +14,8 @@
   "subtitles.entity.spawn.angler_fish.deflate": "Angler Fish deflates",
   "subtitles.entity.spawn.angler_fish.effect.give": "Angler Fish graces",
   "subtitles.entity.spawn.angler_fish.effect.deny": "Angler Fish tires",
+  "advancements.spawn.interact_with_angler_fish.title": "Just Keep Swimming",
+  "advancements.spawn.interact_with_angler_fish.description": "Give some glowy items to an Angler Fish to receive its blessing",
 
   "entity.spawn.tuna": "Tuna",
   "item.spawn.tuna_spawn_egg": "Tuna Spawn Egg",
@@ -24,6 +26,8 @@
   "subtitles.item.bucket.fill_tuna_egg": "Tuna Egg collected",
   "subtitles.entity.tuna_egg.hit": "Tuna Egg damages",
   "subtitles.entity.tuna_egg.broken": "Tuna Egg breaks",
+  "advancements.spawn.tuna_egg_in_a_bucket.title": "Baby on Board",
+  "advancements.spawn.tuna_egg_in_a_bucket.description": "Collect a Tuna Egg with a Bucket",
 
   "entity.spawn.seahorse": "Seahorse",
   "item.spawn.seahorse_spawn_egg": "Seahorse Spawn Egg",
@@ -60,6 +64,14 @@
   "subtitles.entity.snail.shell_grow": "Snail Shell grows",
   "subtitles.entity.snail.lay_eggs": "Snail lays Eggs",
   "subtitles.entity.snail.slide": "Snail slides",
+  "advancements.spawn.obtain_snail_shell.title": "Shell Shock!",
+  "advancements.spawn.obtain_snail_shell.description": "Hit a Snail with a Projectile to temporarily remove its Shell",
+  "advancements.spawn.obtain_mucus.title": "Snailed It",
+  "advancements.spawn.obtain_mucus.description": "Obtain Mucus",
+  "advancements.spawn.got_stuck_in_mucus.title": "Sloooooooooooooooooow",
+  "advancements.spawn.got_stuck_in_mucus.description": "Get stuck in a Snail's trail... Yuck",
+  "advancements.spawn.went_through_ghostly_mucus.title": "Fst",
+  "advancements.spawn.went_through_ghostly_mucus.description": "Pass through a Ghostly Mucus Block",
 
   "entity.spawn.hamster": "Hamster",
   "item.spawn.hamster_spawn_egg": "Hamster Spawn Egg",
@@ -73,6 +85,8 @@
   "subtitles.entity.hamster.step": "Hamster scurries",
   "subtitles.entity.hamster.idle": "Hamster chatters",
   "subtitles.entity.hamster.idle_call": "Hamster calls",
+  "advancements.spawn.open_hamster_inventory.title": "Say Ahhhhh",
+  "advancements.spawn.open_hamster_inventory.description": "Open the cheek pouch of a Tamed Hamster",
 
   "entity.spawn.ant": "Ant",
   "item.spawn.ant_spawn_egg": "Ant Spawn Egg",
@@ -109,5 +123,11 @@
   "subtitles.block.anthill.enter": "Ant enters anthill",
   "subtitles.block.anthill.exit": "Ant leaves anthill",
   "subtitles.block.anthill.work": "Ants work",
-  "subtitles.block.anthill.resource": "Anthill rots something"
+  "subtitles.block.anthill.resource": "Anthill rots something",
+  "advancements.spawn.obtain_ant_pupa.title": "Yass Queen",
+  "advancements.spawn.obtain_ant_pupa.description": "Obtain an Ant Pupa",
+  "advancements.spawn.obtain_ant_farm.title": "Permanant Home",
+  "advancements.spawn.obtain_ant_farm.description": "Craft an Ant Farm to bring your Ant friends home",
+  "advancements.spawn.hatch_ant.title": "An Ant's Life",
+  "advancements.spawn.hatch_ant.description": "Hatch a pet Ant from an Ant Pupa"
 }

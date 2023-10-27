@@ -5,12 +5,14 @@ import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.entity.common.DeepLurker;
 import com.ninni.spawn.entity.common.FlopConditionable;
 import com.ninni.spawn.entity.common.TiltingFishEntity;
+import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnParticles;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -92,6 +94,7 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
             if (stack.is(SpawnTags.ANGLER_FISH_LIKES) && !this.isDeflated() && !player.hasEffect(MobEffects.NIGHT_VISION)) {
                 long time = this.level().getGameTime();
                 if (this.lastEffectGiven == 0 || time - this.lastEffectGiven > EFFECT_DELAY * 20) {
+                    if (player instanceof ServerPlayer serverPlayer) SpawnCriteriaTriggers.INTERACT_WITH_ANGLER_FISH.trigger(serverPlayer);
                     player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, EFFECT_DURATION * 20, 0, false, true));
                     if (!player.getAbilities().instabuild) stack.shrink(1);
 

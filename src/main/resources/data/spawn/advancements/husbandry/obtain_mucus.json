@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "criteria": {
+    "obtain_mucus": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "spawn:mucus"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.obtain_mucus.description"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "spawn:mucus"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.obtain_mucus.title"
+    }
+  },
+  "requirements": [
+    [
+      "obtain_mucus"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

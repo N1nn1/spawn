@@ -1,16 +1,9 @@
 package com.ninni.spawn;
 
 import com.google.common.reflect.Reflection;
+import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.*;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.worldgen.placement.VegetationPlacements;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.GenerationStep;
 
 //TODO Advancements
 public class Spawn implements ModInitializer {
@@ -26,10 +19,10 @@ public class Spawn implements ModInitializer {
 				SpawnCreativeModeTab.class,
 				SpawnItems.class,
 				SpawnBlocks.class,
+				SpawnCriteriaTriggers.class,
 				SpawnPointsOfInterests.class,
 				SpawnDecoratedPotPatterns.class
 		);
-
 		SpawnVanillaIntegration.serverInit();
 	}
 }

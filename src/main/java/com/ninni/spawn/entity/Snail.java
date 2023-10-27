@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.block.SnailEggsBlock;
 import com.ninni.spawn.registry.SpawnBlocks;
+import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.ChatFormatting;
@@ -28,14 +29,20 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -167,7 +174,6 @@ public class Snail extends Animal {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-
         ItemStack itemStack = player.getItemInHand(hand);
 
         if (this.isFood(itemStack) && this.getAge() == 0) {
@@ -175,7 +181,7 @@ public class Snail extends Animal {
             this.playSound(SpawnSoundEvents.SNAIL_EAT, 1, 1);
         }
 
-        if (itemStack.is(Items.WATER_BUCKET) && !this.isScared() && this.getWetTicks() == 0) {
+        if (itemStack.is(Items.WATER_BUCKET) && !this.isScared() && this.getWetTicks() < 900) {
             if (!this.level().isClientSide) {
                 if (!player.getAbilities().instabuild) player.setItemInHand(player.getUsedItemHand(), Items.BUCKET.getDefaultInstance());
                 this.addWetTicks(300);
@@ -248,6 +254,7 @@ public class Snail extends Animal {
         //code snatched with permission from lunarbunten (ily)
         if (!this.level().isClientSide && this.getShellGrowthTicks() == 0) {
             if (source.is(DamageTypeTags.IS_PROJECTILE)) {
+
                 if (!this.isScared()) {
                     this.spawnAtLocation(new ItemStack(SpawnItems.SNAIL_SHELL), 0.1F);
                     this.playSound(SpawnSoundEvents.SNAIL_HURT_HIDDEN, 1.0F, 1.0F);
@@ -260,6 +267,7 @@ public class Snail extends Animal {
         }
 
         if (source.getEntity() instanceof LivingEntity && amount < 12 && !level().isClientSide) {
+
             if (this.isScared()) {
                 playSound(SpawnSoundEvents.SNAIL_HURT_HIDDEN, 1, 1);
                 return false;

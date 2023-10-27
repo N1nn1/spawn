@@ -1,0 +1,29 @@
+{
+  "parent": "spawn:husbandry/obtain_mucus",
+  "criteria": {
+    "went_through_ghostly_mucus": {
+      "trigger": "spawn:went_through_ghostly_mucus"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.spawn.went_through_ghostly_mucus.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "spawn:ghostly_mucus_block"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.spawn.went_through_ghostly_mucus.title"
+    }
+  },
+  "requirements": [
+    [
+      "went_through_ghostly_mucus"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

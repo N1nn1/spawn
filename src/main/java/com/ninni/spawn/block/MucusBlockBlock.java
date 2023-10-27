@@ -3,10 +3,12 @@ package com.ninni.spawn.block;
 
 import com.ninni.spawn.SpawnProperties;
 import com.ninni.spawn.SpawnTags;
+import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -87,6 +89,7 @@ public class MucusBlockBlock extends Block {
         if (!(entity instanceof LivingEntity) || entity.getType() == SpawnEntityType.SNAIL || entity.getType() == EntityType.BEE) {
             return;
         }
+        if (entity instanceof ServerPlayer serverPlayer) SpawnCriteriaTriggers.GOT_STUCK_IN_MUCUS.trigger(serverPlayer);
         entity.makeStuckInBlock(blockState, new Vec3(0.5f, 0.5, 0.5f));
     }
 

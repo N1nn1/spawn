@@ -1,6 +1,7 @@
 package com.ninni.spawn.item;
 
 import com.ninni.spawn.entity.Ant;
+import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -9,6 +10,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
@@ -57,8 +59,8 @@ public class AntPupaItem extends Item {
             float f = (float) Mth.floor((Mth.wrapDegrees(useOnContext.getRotation() - 180.0f) + 22.5f) / 45.0f) * 45.0f;
             ant.moveTo(ant.getX(), ant.getY(), ant.getZ(), f, 0.0f);
             serverLevel.addFreshEntityWithPassengers(ant);
-
-            ((ServerLevel)level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, itemStack), ant.getX(), ant.getY(0.6666666666666666), ant.getZ(), 10, ant.getBbWidth() / 4.0f, ant.getBbHeight() / 4.0f, ant.getBbWidth() / 4.0f, 0.05);
+            if (useOnContext.getPlayer() instanceof ServerPlayer serverPlayer) SpawnCriteriaTriggers.HATCH_ANT.trigger(serverPlayer);
+            serverLevel.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, itemStack), ant.getX(), ant.getY(0.6666666666666666), ant.getZ(), 10, ant.getBbWidth() / 4.0f, ant.getBbHeight() / 4.0f, ant.getBbWidth() / 4.0f, 0.05);
             level.playSound(null, ant.getX(), ant.getY(), ant.getZ(), SpawnSoundEvents.ANT_HATCH, SoundSource.NEUTRAL, 0.75f, 0.8f);
 
             ant.gameEvent(GameEvent.ENTITY_PLACE, useOnContext.getPlayer());

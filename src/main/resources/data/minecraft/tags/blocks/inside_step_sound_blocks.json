@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "spawn:mucus",
     "spawn:fallen_leaves"
   ]
 }
