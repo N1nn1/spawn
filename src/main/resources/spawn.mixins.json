@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "com.ninni.spawn.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "spawn.refmap.json",
   "mixins": [
     "AbstractFishMixin",
     "BlockEntityTypeMixin",
