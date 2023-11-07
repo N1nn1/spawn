@@ -221,7 +221,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
                 if (this.level() instanceof ServerLevel serverLevel) {
                     serverLevel.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, itemStack), this.getX(), this.getY(0.6666666666666666), this.getZ(), 10, this.getBbWidth() / 4.0f, this.getBbHeight() / 4.0f, this.getBbWidth() / 4.0f, 0.05);
                 }
-                this.playSound(SpawnSoundEvents.ANT_EAT);
+                this.playSound(SpawnSoundEvents.ANT_EAT.get());
                 this.heal(6);
                 return InteractionResult.SUCCESS;
             } else if (item instanceof DyeItem) {
@@ -411,7 +411,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
             return false;
         }
         BlockEntity blockEntity = this.level().getBlockEntity(this.anthillPos);
-        return blockEntity != null && blockEntity.getType() == SpawnBlockEntityTypes.ANTHILL;
+        return blockEntity != null && blockEntity.getType() == SpawnBlockEntityTypes.ANTHILL.get();
     }
 
     public boolean hasResource() {
@@ -464,25 +464,25 @@ public class Ant extends TamableAnimal implements NeutralMob{
 
     @Override
     protected void playStepSound(BlockPos blockPos, BlockState blockState) {
-        this.playSound(SpawnSoundEvents.ANT_STEP, 0.15f, 1.0f);
+        this.playSound(SpawnSoundEvents.ANT_STEP.get(), 0.15f, 1.0f);
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpawnSoundEvents.ANT_AMBIENT;
+        return SpawnSoundEvents.ANT_AMBIENT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.ANT_HURT;
+        return SpawnSoundEvents.ANT_HURT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpawnSoundEvents.ANT_DEATH;
+        return SpawnSoundEvents.ANT_DEATH.get();
     }
 
     @Nullable
@@ -607,7 +607,7 @@ public class Ant extends TamableAnimal implements NeutralMob{
         @Override
         public void stop() {
             if (this.hasGatherdLongEnough()) {
-                Ant.this.playSound(SpawnSoundEvents.ANT_COLLECT_RESOURCE);
+                Ant.this.playSound(SpawnSoundEvents.ANT_COLLECT_RESOURCE.get());
                 Ant.this.setHasResource(true);
             }
             this.gathering = false;

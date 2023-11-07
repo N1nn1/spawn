@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#spawn:seahorse_spawns",
+  "spawners": [
+    {
+      "type": "spawn:seahorse",
+      "maxCount": 3,
+      "minCount": 1,
+      "weight": 20
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 {
+	"render_type": "translucent",
 	"parent": "block/block",
 	"textures": {
 		"3": "spawn:block/mucus_block_bottom_solid",

@@ -70,7 +70,7 @@ public class AnthillBlockEntity extends BlockEntity {
     private boolean hasResource;
 
     public AnthillBlockEntity(BlockPos pos, BlockState state) {
-        super(SpawnBlockEntityTypes.ANTHILL, pos, state);
+        super(SpawnBlockEntityTypes.ANTHILL.get(), pos, state);
     }
 
     public boolean hasNoAnts() {
@@ -129,7 +129,7 @@ public class AnthillBlockEntity extends BlockEntity {
                 }
                 this.hasResource = ant.hasResource();
             }
-            this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SpawnSoundEvents.ANTHILL_ENTER, SoundSource.BLOCKS, 1.0f, 1.0f);
+            this.level.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SpawnSoundEvents.ANTHILL_ENTER.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
             this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity, this.getBlockState()));
         }
         entity.discard();
@@ -171,7 +171,7 @@ public class AnthillBlockEntity extends BlockEntity {
                 double z = (double)pos.getZ() + 0.5;
                 releasedAnt.moveTo(x, y, z, releasedAnt.getYRot(), releasedAnt.getXRot());
             } else return false;
-            world.playSound(null, pos, SpawnSoundEvents.ANTHILL_EXIT, SoundSource.BLOCKS, 1.0f, 1.0f);
+            world.playSound(null, pos, SpawnSoundEvents.ANTHILL_EXIT.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
             world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(releasedAnt, world.getBlockState(pos)));
             if (world instanceof ServerLevel serverLevel) {
                 releasedAnt.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(releasedAnt.blockPosition()), MobSpawnType.EVENT, null, nbtCompound);
@@ -214,7 +214,7 @@ public class AnthillBlockEntity extends BlockEntity {
             double d = (double)pos.getX() + 0.5;
             double e = pos.getY();
             double f = (double)pos.getZ() + 0.5;
-            world.playSound(null, d, e, f, SpawnSoundEvents.ANTHILL_WORK, SoundSource.BLOCKS, 0.5f, 1.0f);
+            world.playSound(null, d, e, f, SpawnSoundEvents.ANTHILL_WORK.get(), SoundSource.BLOCKS, 0.5f, 1.0f);
         }
     }
 

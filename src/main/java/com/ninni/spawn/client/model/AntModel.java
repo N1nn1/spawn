@@ -2,18 +2,21 @@ package com.ninni.spawn.client.model;
 
 import com.google.common.collect.ImmutableList;
 import com.ninni.spawn.entity.Ant;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static net.minecraft.client.model.geom.PartNames.*;
 
 @SuppressWarnings("FieldCanBeLocal, unused")
-@Environment(value= EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AntModel<E extends Ant> extends AgeableListModel<E> {
     public static final String ABDOMEN = "abdomen";
     public static final String LEFT_ANTENNA = "left_antenna";

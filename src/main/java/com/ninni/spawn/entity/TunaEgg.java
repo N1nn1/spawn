@@ -67,7 +67,7 @@ public class TunaEgg extends Mob implements Bucketable {
         } else {
             this.level().broadcastEntityEvent(this, (byte)32);
             this.gameEvent(GameEvent.ENTITY_DAMAGE, damageSource.getEntity());
-            this.playSound(SpawnSoundEvents.TUNA_EGG_HIT);
+            this.playSound(SpawnSoundEvents.TUNA_EGG_HIT.get());
             this.lastHit = l;
         }
         return true;
@@ -143,9 +143,9 @@ public class TunaEgg extends Mob implements Bucketable {
     }
 
     public void broken() {
-        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SpawnSoundEvents.TUNA_EGG_BROKEN, this.getSoundSource(), 1.0f, 1.0f);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SpawnSoundEvents.TUNA_EGG_BROKEN.get(), this.getSoundSource(), 1.0f, 1.0f);
         if (this.level() instanceof ServerLevel) {
-            ((ServerLevel)this.level()).sendParticles(SpawnParticles.TUNA_EGG, this.getX(), this.getY() + 0.25F, this.getZ(), 10, this.getBbWidth(), this.getBbHeight(), this.getBbWidth(), 0.5);
+            ((ServerLevel)this.level()).sendParticles(SpawnParticles.TUNA_EGG.get(), this.getX(), this.getY() + 0.25F, this.getZ(), 10, this.getBbWidth(), this.getBbHeight(), this.getBbWidth(), 0.5);
         }
         this.remove(RemovalReason.DISCARDED);
     }
@@ -156,7 +156,7 @@ public class TunaEgg extends Mob implements Bucketable {
     }
 
     public void hatch(ServerLevel level) {
-        Tuna tuna = SpawnEntityType.TUNA.create(level);
+        Tuna tuna = SpawnEntityType.TUNA.get().create(level);
         assert tuna != null;
         tuna.setBaby(true);
         tuna.setPersistenceRequired();
@@ -173,16 +173,16 @@ public class TunaEgg extends Mob implements Bucketable {
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.TUNA_EGG_HIT;
+        return SpawnSoundEvents.TUNA_EGG_HIT.get();
     }
 
     @Override
     public SoundEvent getPickupSound() {
-        return SpawnSoundEvents.BUCKET_FILL_TUNA_EGG;
+        return SpawnSoundEvents.BUCKET_FILL_TUNA_EGG.get();
     }
 
     @Override
     public ItemStack getBucketItemStack() {
-        return SpawnItems.TUNA_EGG_BUCKET.getDefaultInstance();
+        return SpawnItems.TUNA_EGG_BUCKET.get().getDefaultInstance();
     }
 }

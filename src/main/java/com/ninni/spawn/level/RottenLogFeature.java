@@ -48,11 +48,11 @@ public class RottenLogFeature extends Feature<NoneFeatureConfiguration> {
                         continue;
                     }
                     if (i == 0) {
-                        world.setBlock(mutableBlockPos, SpawnBlocks.ROTTEN_LOG.defaultBlockState(), 2);
+                        world.setBlock(mutableBlockPos, SpawnBlocks.ROTTEN_LOG.get().defaultBlockState(), 2);
                     } else {
-                        BlockState blockState = random.nextInt(5) == 0 && rottenAnthill ? SpawnBlocks.ROTTEN_LOG_ANTHILL.defaultBlockState().setValue(AnthillBlock.FACING, direction) : SpawnBlocks.ROTTEN_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, direction.getAxis());
+                        BlockState blockState = random.nextInt(5) == 0 && rottenAnthill ? SpawnBlocks.ROTTEN_LOG_ANTHILL.get().defaultBlockState().setValue(AnthillBlock.FACING, direction) : SpawnBlocks.ROTTEN_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, direction.getAxis());
                         world.setBlock(mutableBlockPos, blockState, 2);
-                        if (blockState.is(SpawnBlocks.ROTTEN_LOG_ANTHILL)) {
+                        if (blockState.is(SpawnBlocks.ROTTEN_LOG_ANTHILL.get())) {
                             rottenAnthill = false;
                         }
                     }

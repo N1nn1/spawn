@@ -3,8 +3,6 @@ package com.ninni.spawn.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.spawn.entity.Snail;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -13,10 +11,13 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static net.minecraft.client.model.geom.PartNames.*;
+import static net.minecraft.client.model.geom.PartNames.LEFT_EYE;
+import static net.minecraft.client.model.geom.PartNames.RIGHT_EYE;
 
-@Environment(value= EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class SnailModel extends EntityModel<Snail> {
     private static final String FOOT = "foot";
     private static final String WHISKERS = "whiskers";

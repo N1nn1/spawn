@@ -1,7 +1,10 @@
 package com.ninni.spawn.entity;
 
 import com.ninni.spawn.SpawnTags;
+import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.entity.variant.HamsterVariant;
+import com.ninni.spawn.network.OpenHamsterScreenPacket;
+import com.ninni.spawn.network.SpawnNetworkHandler;
 import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnSoundEvents;
@@ -37,6 +40,9 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -127,11 +133,11 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         }
         if (!itemStack.is(SpawnTags.HAMSTER_FEEDS)) return super.mobInteract(player, interactionHand);
         if (!player.getAbilities().instabuild) {
-            this.playSound(SpawnSoundEvents.HAMSTER_EAT, 1.0f, 1.0f);
+            this.playSound(SpawnSoundEvents.HAMSTER_EAT.get(), 1.0f, 1.0f);
             itemStack.shrink(1);
         }
         if (this.random.nextInt(3) == 0) {
-            this.playSound(SpawnSoundEvents.HAMSTER_EAT, 1.0f, 1.0f);
+            this.playSound(SpawnSoundEvents.HAMSTER_EAT.get(), 1.0f, 1.0f);
             this.tame(player);
             this.navigation.stop();
             this.setTarget(null);
@@ -164,7 +170,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
 
     @Override
     protected void pickUpItem(ItemEntity itemEntity) {
-        this.playSound(SpawnSoundEvents.HAMSTER_EAT, 1.0f, 1.0f);
+        this.playSound(SpawnSoundEvents.HAMSTER_EAT.get(), 1.0f, 1.0f);
         InventoryCarrier.pickUpItem(this, this, itemEntity);
     }
 
@@ -239,7 +245,14 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     @Override
     public void openCustomInventoryScreen(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            ((HamsterOpenContainer)serverPlayer).openHamsterInventory(this, this.getInventory());
+            if (serverPlayer.containerMenu != serverPlayer.inventoryMenu)
+                serverPlayer.closeContainer();
+
+            serverPlayer.nextContainerCounter();
+            SpawnNetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new OpenHamsterScreenPacket(serverPlayer.containerCounter, this.getInventory().getContainerSize(), this.getId()));
+            serverPlayer.containerMenu = new HamsterInventoryMenu(serverPlayer.containerCounter, serverPlayer.getInventory(), this.inventory, this);
+            serverPlayer.initMenu(serverPlayer.containerMenu);
+            MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(serverPlayer, serverPlayer.containerMenu));
         }
     }
 
@@ -289,24 +302,24 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.HAMSTER_HURT;
+        return SpawnSoundEvents.HAMSTER_HURT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isStanding() ? SpawnSoundEvents.HAMSTER_AMBIENT_CALL : SpawnSoundEvents.HAMSTER_AMBIENT;
+        return this.isStanding() ? SpawnSoundEvents.HAMSTER_AMBIENT_CALL.get() : SpawnSoundEvents.HAMSTER_AMBIENT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpawnSoundEvents.HAMSTER_DEATH;
+        return SpawnSoundEvents.HAMSTER_DEATH.get();
     }
 
     @Override
     protected void playStepSound(BlockPos blockPos, BlockState blockState) {
-        this.playSound(SpawnSoundEvents.HAMSTER_STEP, 0.15f, 1.0f);
+        this.playSound(SpawnSoundEvents.HAMSTER_STEP.get(), 0.15f, 1.0f);
     }
 
     class StandGoal extends Goal {
@@ -403,7 +416,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     @Override
     @Nullable
     public Hamster getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        Hamster hamster = SpawnEntityType.HAMSTER.create(serverLevel);
+        Hamster hamster = SpawnEntityType.HAMSTER.get().create(serverLevel);
         if (hamster != null && ageableMob instanceof Hamster hamster2) {
             if (this.random.nextBoolean()) {
                 hamster.setVariant(this.getVariant());

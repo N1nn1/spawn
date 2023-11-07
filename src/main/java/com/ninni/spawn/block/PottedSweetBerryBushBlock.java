@@ -53,7 +53,7 @@ public class PottedSweetBerryBushBlock extends BushBlock implements Bonemealable
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
-        return new ItemStack(SpawnItems.POTTED_SWEET_BERRIES);
+        return new ItemStack(SpawnItems.POTTED_SWEET_BERRIES.get());
     }
 
     @Override

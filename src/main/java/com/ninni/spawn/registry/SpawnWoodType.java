@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 public record SpawnWoodType(String name, BlockSetType setType, SoundType soundType, SoundType hangingSignSoundType, SoundEvent fenceGateClose, SoundEvent fenceGateOpen) {
     private static final Set<net.minecraft.world.level.block.state.properties.WoodType> VALUES = new ObjectArraySet<>();
 
-    public static final WoodType ROTTEN = register(new WoodType("rotten", SpawnBlockSetType.ROTTEN, SpawnSoundEvents.ROTTEN_WOOD, SoundType.EMPTY, SpawnSoundEvents.ROTTEN_WOOD_FENCE_GATE_CLOSE, SpawnSoundEvents.ROTTEN_WOOD_FENCE_GATE_OPEN));
+    public static final WoodType ROTTEN = register(new WoodType("rotten", SpawnBlockSetType.ROTTEN, SpawnSoundEvents.ROTTEN_WOOD, SoundType.EMPTY, SpawnSoundEvents.ROTTEN_WOOD_FENCE_GATE_CLOSE.get(), SpawnSoundEvents.ROTTEN_WOOD_FENCE_GATE_OPEN.get()));
 
 
     private static net.minecraft.world.level.block.state.properties.WoodType register(net.minecraft.world.level.block.state.properties.WoodType woodType) {

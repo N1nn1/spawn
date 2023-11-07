@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout",
   "parent": "spawn:block/template_layer_block",
   "textures": {
     "all": "spawn:block/fallen_leaves0"

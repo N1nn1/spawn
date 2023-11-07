@@ -85,37 +85,37 @@ public class Seahorse extends AbstractFish implements Bucketable {
 
     @Override
     public ItemStack getBucketItemStack() {
-        return SpawnItems.SEAHORSE_BUCKET.getDefaultInstance();
+        return SpawnItems.SEAHORSE_BUCKET.get().getDefaultInstance();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpawnSoundEvents.SEAHORSE_DEATH;
+        return SpawnSoundEvents.SEAHORSE_DEATH.get();
     }
 
     @Override
     protected SoundEvent getSwimSound() {
-        return SpawnSoundEvents.FISH_SWIM;
+        return SpawnSoundEvents.FISH_SWIM.get();
     }
 
     @Override
     public @Nullable SoundEvent getAmbientSound() {
         return this.isUnderWater() ? (this.random.nextInt(3) == 0
-                ? SpawnSoundEvents.SEAHORSE_GROWL
-                : SpawnSoundEvents.SEAHORSE_CLICK
+                ? SpawnSoundEvents.SEAHORSE_GROWL.get()
+                : SpawnSoundEvents.SEAHORSE_CLICK.get()
         ) : null;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.SEAHORSE_HURT;
+        return SpawnSoundEvents.SEAHORSE_HURT.get();
     }
 
     @Override
     protected SoundEvent getFlopSound() {
-        return SpawnSoundEvents.FISH_FLOP;
+        return SpawnSoundEvents.FISH_FLOP.get();
     }
 
     @Override

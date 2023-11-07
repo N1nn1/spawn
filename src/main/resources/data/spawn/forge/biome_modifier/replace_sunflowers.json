@@ -1,0 +1,9 @@
+{
+  "type": "spawn:feature_based_biome_modifier",
+  "old_features": [
+    "minecraft:patch_sunflower"
+  ],
+  "new_features": [
+    "spawn:patch_sunflower"
+  ]
+}

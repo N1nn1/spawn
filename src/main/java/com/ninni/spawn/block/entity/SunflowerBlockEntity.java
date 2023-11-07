@@ -12,13 +12,13 @@ import net.minecraft.world.level.block.state.BlockState;
 public class SunflowerBlockEntity extends BlockEntity {
 
     public SunflowerBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(SpawnBlockEntityTypes.SUNFLOWER, blockPos, blockState);
+        super(SpawnBlockEntityTypes.SUNFLOWER.get(), blockPos, blockState);
     }
 
     public static void tick(Level world, BlockPos blockPos, BlockState blockState, SunflowerBlockEntity sunflowerBlockEntity) {
         SunflowerRotation sunflowerRotation = SunflowerBlock.getRotationType(world);
         SunflowerRotation currentRotation = blockState.getValue(SunflowerBlock.ROTATION);
-        if (currentRotation == sunflowerRotation || !blockState.is(SpawnBlocks.SUNFLOWER)) {
+        if (currentRotation == sunflowerRotation || !blockState.is(SpawnBlocks.SUNFLOWER.get())) {
             return;
         }
         boolean flag = blockState.getValue(SunflowerBlock.SEEDS) || currentRotation == SunflowerRotation.NIGHT && sunflowerRotation == SunflowerRotation.MORNING;

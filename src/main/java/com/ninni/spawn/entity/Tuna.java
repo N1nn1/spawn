@@ -82,7 +82,7 @@ public class Tuna extends Animal {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return SpawnEntityType.TUNA.create(serverLevel);
+        return SpawnEntityType.TUNA.get().create(serverLevel);
     }
 
     @Override
@@ -188,28 +188,28 @@ public class Tuna extends Animal {
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpawnSoundEvents.FISH_DEATH;
+        return SpawnSoundEvents.FISH_DEATH.get();
     }
 
     @Override
     protected SoundEvent getSwimSound() {
-        return SpawnSoundEvents.BIG_FISH_SWIM;
+        return SpawnSoundEvents.BIG_FISH_SWIM.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpawnSoundEvents.FISH_AMBIENT;
+        return SpawnSoundEvents.FISH_AMBIENT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.FISH_HURT;
+        return SpawnSoundEvents.FISH_HURT.get();
     }
 
     protected SoundEvent getFlopSound() {
-        return SpawnSoundEvents.FISH_FLOP;
+        return SpawnSoundEvents.FISH_FLOP.get();
     }
 
     @Override
@@ -224,7 +224,7 @@ public class Tuna extends Animal {
 
 
     public void spawnChildFromBreeding(ServerLevel serverLevel, Animal animal) {
-        TunaEgg egg = SpawnEntityType.TUNA_EGG.create(serverLevel);
+        TunaEgg egg = SpawnEntityType.TUNA_EGG.get().create(serverLevel);
         if (egg == null) return;
         ServerPlayer serverPlayer = this.getLoveCause();
         if (serverPlayer == null && animal.getLoveCause() != null) serverPlayer = animal.getLoveCause();

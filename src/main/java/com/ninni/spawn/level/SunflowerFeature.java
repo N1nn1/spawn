@@ -23,7 +23,7 @@ public class SunflowerFeature extends Feature<NoneFeatureConfiguration> {
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> featurePlaceContext) {
         WorldGenLevel worldGenLevel = featurePlaceContext.level();
         BlockPos blockPos = featurePlaceContext.origin();
-        BlockState sunflower = SpawnBlocks.SUNFLOWER.defaultBlockState();
+        BlockState sunflower = SpawnBlocks.SUNFLOWER.get().defaultBlockState();
         BlockState blockState = sunflower.setValue(SunflowerBlock.HALF, DoubleBlockHalf.LOWER);
         if (!blockState.canSurvive(worldGenLevel, blockPos)) return false;
         if (!worldGenLevel.isEmptyBlock(blockPos.above())) return false;

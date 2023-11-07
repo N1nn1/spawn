@@ -6,12 +6,11 @@
   "mixins": [
     "AbstractFishMixin",
     "BlockEntityTypeMixin",
+    "ComposterBlockAccessor",
     "CreativeModTabMixin",
-    "DecoratedPotPatternsMixin",
-    "MobBucketItemAccessor",
+    "FireBlockAccessor",
     "MobBucketItemMixin",
-    "OverworldBiomeBuilderMixin",
-    "ServerPlayerMixin"
+    "OverworldBiomeBuilderMixin"
   ],
   "client": [
     "client.SpiderRendererMixin"

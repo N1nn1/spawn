@@ -3,17 +3,17 @@ package com.ninni.spawn.client.renderer.entity.feature;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.ninni.spawn.client.model.AntModel;
 import com.ninni.spawn.entity.Ant;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 
-@Environment(value= EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AbdomenLayer extends RenderLayer<Ant, AntModel<Ant>> {
     private static final ResourceLocation ANT_ABDOMEN_LOCATION = new ResourceLocation(MOD_ID,"textures/entity/ant/ant_abdomen.png");
 

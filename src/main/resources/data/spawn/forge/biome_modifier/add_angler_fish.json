@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#spawn:angler_fish_spawns",
+  "spawners": [
+    {
+      "type": "spawn:angler_fish",
+      "maxCount": 5,
+      "minCount": 1,
+      "weight": 5
+    }
+  ]
+}

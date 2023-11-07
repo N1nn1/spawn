@@ -93,7 +93,7 @@ public class AnthillBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : AnthillBlock.createTickerHelper(blockEntityType, SpawnBlockEntityTypes.ANTHILL, AnthillBlockEntity::serverTick);
+        return level.isClientSide ? null : AnthillBlock.createTickerHelper(blockEntityType, SpawnBlockEntityTypes.ANTHILL.get(), AnthillBlockEntity::serverTick);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class AnthillBlock extends BaseEntityBlock {
             if (bl) {
                 CompoundTag nbtCompound = new CompoundTag();
                 nbtCompound.put("Ants", blockEntity1.getAnts());
-                BlockItem.setBlockEntityData(itemStack, SpawnBlockEntityTypes.ANTHILL, nbtCompound);
+                BlockItem.setBlockEntityData(itemStack, SpawnBlockEntityTypes.ANTHILL.get(), nbtCompound);
                 nbtCompound = new CompoundTag();
                 itemStack.addTagElement("BlockStateTag", nbtCompound);
                 ItemEntity itemEntity = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), itemStack);
@@ -130,7 +130,7 @@ public class AnthillBlock extends BaseEntityBlock {
             for (int z = -range; z <= range; z++) {
                 BlockPos blockPos = new BlockPos(pos.getX() + x, pos.getY() - range, pos.getZ() + z);
                 BlockState belowState = world.getBlockState(blockPos);
-                if (belowState.is(BlockTags.OVERWORLD_NATURAL_LOGS) || belowState.is(BlockTags.DIRT) && !belowState.is(SpawnBlocks.ANT_MOUND)) {
+                if (belowState.is(BlockTags.OVERWORLD_NATURAL_LOGS) || belowState.is(BlockTags.DIRT) && !belowState.is(SpawnBlocks.ANT_MOUND.get())) {
                     list.add(blockPos);
                 }
             }
@@ -139,15 +139,15 @@ public class AnthillBlock extends BaseEntityBlock {
             BlockPos blockPos = list.get(randomSource.nextInt(list.size()));
             BlockState placeState = null;
             if (world.getBlockState(blockPos).is(BlockTags.OVERWORLD_NATURAL_LOGS)) {
-                placeState = SpawnBlocks.ROTTEN_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, world.getBlockState(blockPos).getValue(RotatedPillarBlock.AXIS));
-            } else if (world.getBlockState(blockPos).is(BlockTags.DIRT) && !world.getBlockState(blockPos).is(SpawnBlocks.ANT_MOUND)) {
-                placeState = SpawnBlocks.ANT_MOUND.defaultBlockState();
+                placeState = SpawnBlocks.ROTTEN_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, world.getBlockState(blockPos).getValue(RotatedPillarBlock.AXIS));
+            } else if (world.getBlockState(blockPos).is(BlockTags.DIRT) && !world.getBlockState(blockPos).is(SpawnBlocks.ANT_MOUND.get())) {
+                placeState = SpawnBlocks.ANT_MOUND.get().defaultBlockState();
             }
             world.setBlock(blockPos, placeState, 2);
             if (world.getBlockEntity(blockPos) instanceof BrushableBlockEntity brushableBlockEntity) {
                 brushableBlockEntity.setLootTable(new ResourceLocation(Spawn.MOD_ID, "archaeology/anthill"), blockPos.asLong());
             }
-            world.playSound(null, pos, SpawnSoundEvents.ANTHILL_RESOURCE, SoundSource.BLOCKS);
+            world.playSound(null, pos, SpawnSoundEvents.ANTHILL_RESOURCE.get(), SoundSource.BLOCKS);
             world.setBlock(pos, state.setValue(RESOURCE_LEVEL, 0), 2);
         }
     }

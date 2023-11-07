@@ -50,7 +50,7 @@ public class RottenLogStumpFeature extends Feature<NoneFeatureConfiguration> {
                         }
                         BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
                         if (world.getBlockState(pos).is(BlockTags.REPLACEABLE)) {
-                            world.setBlock(pos, SpawnBlocks.ROTTEN_LOG.defaultBlockState(), 2);
+                            world.setBlock(pos, SpawnBlocks.ROTTEN_LOG.get().defaultBlockState(), 2);
                         }
                         if (center && random.nextInt(2) == 0) {
                             for (int length = 0; length < world.getMaxBuildHeight(); length++) {
@@ -58,7 +58,7 @@ public class RottenLogStumpFeature extends Feature<NoneFeatureConfiguration> {
                                 if (!world.getBlockState(downPos).is(BlockTags.REPLACEABLE)) {
                                     break;
                                 }
-                                world.setBlock(downPos, SpawnBlocks.ROTTEN_LOG.defaultBlockState(), 2);
+                                world.setBlock(downPos, SpawnBlocks.ROTTEN_LOG.get().defaultBlockState(), 2);
                             }
                         }
                     }

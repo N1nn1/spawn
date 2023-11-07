@@ -35,12 +35,12 @@ public class AnthillFeature extends Feature<AnthillConfig> {
             }
         });
         if (randomSource.nextFloat() <= featurePlaceContext.config().anthill_chance()) {
-            world.setBlock(blockPos.below(), SpawnBlocks.ANTHILL.defaultBlockState(), 2);
-            world.getBlockEntity(blockPos.below(), SpawnBlockEntityTypes.ANTHILL).ifPresent(anthillBlockEntity -> {
+            world.setBlock(blockPos.below(), SpawnBlocks.ANTHILL.get().defaultBlockState(), 2);
+            world.getBlockEntity(blockPos.below(), SpawnBlockEntityTypes.ANTHILL.get()).ifPresent(anthillBlockEntity -> {
                 int i = 1 + randomSource.nextInt(3);
                 for (int j = 0; j < i; ++j) {
                     CompoundTag compoundTag = new CompoundTag();
-                    compoundTag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(SpawnEntityType.ANT).toString());
+                    compoundTag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(SpawnEntityType.ANT.get()).toString());
                     anthillBlockEntity.storeAnt(compoundTag, randomSource.nextInt(599), false);
                 }
             });

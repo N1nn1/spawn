@@ -13,7 +13,7 @@ public class BlockEntityTypeMixin {
 
     @Inject(at = @At("HEAD"), method = "isValid", cancellable = true)
     private void S$isValid(BlockState blockState, CallbackInfoReturnable<Boolean> cir) {
-        if (blockState.is(SpawnBlocks.ANT_MOUND) && BlockEntityType.BRUSHABLE_BLOCK.equals(this)) {
+        if (blockState.is(SpawnBlocks.ANT_MOUND.get()) && BlockEntityType.BRUSHABLE_BLOCK.equals(this)) {
             cir.setReturnValue(true);
         }
     }

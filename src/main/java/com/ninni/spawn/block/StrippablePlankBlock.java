@@ -24,7 +24,7 @@ public class StrippablePlankBlock extends Block {
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         if (player.getItemInHand(interactionHand).getItem() instanceof AxeItem) {
             level.setBlock(blockPos, strippedBlockState, 4);
-            level.playSound(player, blockPos, SpawnSoundEvents.ROTTEN_WOOD_CRACK, SoundSource.BLOCKS, 1.0f, 1.0f);
+            level.playSound(player, blockPos, SpawnSoundEvents.ROTTEN_WOOD_CRACK.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
             player.getItemInHand(interactionHand).hurtAndBreak(1, player, player1 -> player1.broadcastBreakEvent(interactionHand));
             return InteractionResult.SUCCESS;
         }

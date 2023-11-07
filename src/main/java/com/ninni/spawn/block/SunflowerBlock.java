@@ -47,8 +47,8 @@ public class SunflowerBlock extends DoublePlantBlock implements BonemealableBloc
         if (blockState.getValue(ROTATION) != SunflowerRotation.NIGHT && blockState.getValue(SEEDS) && blockState.getValue(HALF) == DoubleBlockHalf.UPPER) {
             level.setBlock(blockPos, blockState.setValue(SEEDS, false), 3);
             int j = 1 + level.random.nextInt(2);
-            level.playSound(null, blockPos, SpawnSoundEvents.SUNFLOWER_SEED_PICKUP, SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4f);
-            SunflowerBlock.popResource(level, blockPos, new ItemStack(SpawnItems.SUNFLOWER_SEEDS, j));
+            level.playSound(null, blockPos, SpawnSoundEvents.SUNFLOWER_SEED_PICKUP.get(), SoundSource.BLOCKS, 1.0f, 0.8f + level.random.nextFloat() * 0.4f);
+            SunflowerBlock.popResource(level, blockPos, new ItemStack(SpawnItems.SUNFLOWER_SEEDS.get(), j));
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
@@ -96,7 +96,7 @@ public class SunflowerBlock extends DoublePlantBlock implements BonemealableBloc
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return !level.isClientSide && blockState.getValue(SunflowerBlock.HALF) == DoubleBlockHalf.UPPER ? createTickerHelper(blockEntityType, SpawnBlockEntityTypes.SUNFLOWER, SunflowerBlockEntity::tick) : null;
+        return !level.isClientSide && blockState.getValue(SunflowerBlock.HALF) == DoubleBlockHalf.UPPER ? createTickerHelper(blockEntityType, SpawnBlockEntityTypes.SUNFLOWER.get(), SunflowerBlockEntity::tick) : null;
     }
 
     @Nullable

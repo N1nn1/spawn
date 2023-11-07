@@ -31,7 +31,7 @@ public class MucusBlock extends Block {
 
     @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
-        if (!(entity instanceof LivingEntity) || entity.getType() == SpawnEntityType.SNAIL || entity.getType() == EntityType.BEE) return;
+        if (!(entity instanceof LivingEntity) || entity.getType() == SpawnEntityType.SNAIL.get() || entity.getType() == EntityType.BEE) return;
         if (entity instanceof ServerPlayer serverPlayer) SpawnCriteriaTriggers.GOT_STUCK_IN_MUCUS.trigger(serverPlayer);
         entity.makeStuckInBlock(blockState, new Vec3(0.5f, 0.5, 0.5f));
     }

@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#spawn:tuna_spawns",
+  "spawners": [
+    {
+      "type": "spawn:tuna",
+      "maxCount": 1,
+      "minCount": 1,
+      "weight": 15
+    }
+  ]
+}

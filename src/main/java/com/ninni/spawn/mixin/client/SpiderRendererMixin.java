@@ -2,17 +2,17 @@ package com.ninni.spawn.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.SpiderModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.SpiderRenderer;
 import net.minecraft.world.entity.monster.Spider;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(SpiderRenderer.class)
-@Environment(value= EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public abstract class SpiderRendererMixin<T extends Spider> extends MobRenderer<T, SpiderModel<T>> {
 
     public SpiderRendererMixin(EntityRendererProvider.Context context, SpiderModel<T> entityModel, float f) {

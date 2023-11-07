@@ -2,20 +2,19 @@ package com.ninni.spawn.client.inventory;
 
 import com.ninni.spawn.Spawn;
 import com.ninni.spawn.entity.Hamster;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class HamsterInventoryScreen extends AbstractContainerScreen<HamsterInventoryMenu> {
     private static final ResourceLocation HAMSTER_INVENTORY_LOCATION = new ResourceLocation(Spawn.MOD_ID, "textures/gui/container/hamster.png");
 
     public HamsterInventoryScreen(HamsterInventoryMenu abstractContainerMenu, Inventory inventory, Hamster hamster) {
         super(abstractContainerMenu, inventory, hamster.getDisplayName());
-        //this.passEvents = false;
     }
 
     @Override

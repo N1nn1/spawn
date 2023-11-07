@@ -43,8 +43,8 @@ public class SunflowerPlantBlock extends BushBlock implements BonemealableBlock 
                 serverLevel.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(blockState2));
             }
             if (i == 3) {
-                BlockState blockState2 = SpawnBlocks.SUNFLOWER.defaultBlockState().setValue(SunflowerBlock.HALF, DoubleBlockHalf.LOWER).setValue(SunflowerBlock.ROTATION, SunflowerBlock.getRotationType(serverLevel));
-                BlockState blockState3 = SpawnBlocks.SUNFLOWER.defaultBlockState().setValue(SunflowerBlock.HALF, DoubleBlockHalf.UPPER).setValue(SunflowerBlock.ROTATION, SunflowerBlock.getRotationType(serverLevel));
+                BlockState blockState2 = SpawnBlocks.SUNFLOWER.get().defaultBlockState().setValue(SunflowerBlock.HALF, DoubleBlockHalf.LOWER).setValue(SunflowerBlock.ROTATION, SunflowerBlock.getRotationType(serverLevel));
+                BlockState blockState3 = SpawnBlocks.SUNFLOWER.get().defaultBlockState().setValue(SunflowerBlock.HALF, DoubleBlockHalf.UPPER).setValue(SunflowerBlock.ROTATION, SunflowerBlock.getRotationType(serverLevel));
                 serverLevel.setBlock(blockPos, blockState2, 2);
                 serverLevel.setBlock(new BlockPos(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ()), blockState3, 2);
                 serverLevel.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(blockState2));
@@ -54,7 +54,7 @@ public class SunflowerPlantBlock extends BushBlock implements BonemealableBlock 
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
-        return new ItemStack(SpawnItems.SUNFLOWER_SEEDS);
+        return new ItemStack(SpawnItems.SUNFLOWER_SEEDS.get());
     }
 
     @Override
@@ -87,8 +87,8 @@ public class SunflowerPlantBlock extends BushBlock implements BonemealableBlock 
             serverLevel.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(blockState2));
         }
         if (i == 3) {
-            BlockState blockState2 = SpawnBlocks.SUNFLOWER.defaultBlockState().setValue(SunflowerBlock.HALF, DoubleBlockHalf.LOWER).setValue(SunflowerBlock.ROTATION, SunflowerBlock.getRotationType(serverLevel));
-            BlockState blockState3 = SpawnBlocks.SUNFLOWER.defaultBlockState().setValue(SunflowerBlock.HALF, DoubleBlockHalf.UPPER).setValue(SunflowerBlock.ROTATION, SunflowerBlock.getRotationType(serverLevel));
+            BlockState blockState2 = SpawnBlocks.SUNFLOWER.get().defaultBlockState().setValue(SunflowerBlock.HALF, DoubleBlockHalf.LOWER).setValue(SunflowerBlock.ROTATION, SunflowerBlock.getRotationType(serverLevel));
+            BlockState blockState3 = SpawnBlocks.SUNFLOWER.get().defaultBlockState().setValue(SunflowerBlock.HALF, DoubleBlockHalf.UPPER).setValue(SunflowerBlock.ROTATION, SunflowerBlock.getRotationType(serverLevel));
             serverLevel.setBlock(blockPos, blockState2, 2);
             serverLevel.setBlock(new BlockPos(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ()), blockState3, 2);
             serverLevel.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(blockState2));

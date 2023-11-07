@@ -70,7 +70,7 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
             if (deflated && !this.lastDeflated) {
                 long time = this.level().getGameTime();
                 if (this.lastDeflationSound == 0 || time - this.lastDeflationSound >= 15) {
-                    this.level().playSound(null, this, SpawnSoundEvents.ANGLER_FISH_DEFLATE, this.getSoundSource(), this.getSoundVolume(), this.getVoicePitch());
+                    this.level().playSound(null, this, SpawnSoundEvents.ANGLER_FISH_DEFLATE.get(), this.getSoundSource(), this.getSoundVolume(), this.getVoicePitch());
                     this.lastDeflationSound = time;
                 }
             }
@@ -82,7 +82,7 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
     public void aiStep() {
         super.aiStep();
         if (this.isUnderWater() && this.tickCount % 4 == 0) {
-            this.level().addParticle(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.15D), this.getY(1.25D), this.getRandomZ(0.15D), 0.0D, 0.0D, 0.0D);
+            this.level().addParticle(SpawnParticles.ANGLER_FISH_LANTERN_GLOW.get(), this.getRandomX(0.15D), this.getY(1.25D), this.getRandomZ(0.15D), 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -99,16 +99,16 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
                     if (!player.getAbilities().instabuild) stack.shrink(1);
 
                     // add visual effects
-                    this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_GIVE);
+                    this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_GIVE.get());
                     if (this.level() instanceof ServerLevel world) {
-                        world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.1F), this.getY(0.5F), this.getRandomZ(0.1F), 40, 25F, 25F, 25F, 0F);
+                        world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW.get(), this.getRandomX(0.1F), this.getY(0.5F), this.getRandomZ(0.1F), 40, 25F, 25F, 25F, 0F);
                     }
 
                     this.lastEffectGiven = time;
                 } else {
-                    this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_DENY);
+                    this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_DENY.get());
                     if (this.level() instanceof ServerLevel world) {
-                        world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.05F), this.getY(0.5F), this.getRandomZ(0.05F), 10, 25F, 25F, 25F, 0F);
+                        world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW.get(), this.getRandomX(0.05F), this.getY(0.5F), this.getRandomZ(0.05F), 10, 25F, 25F, 25F, 0F);
                     }
                 }
 
@@ -132,35 +132,35 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
 
     @Override
     public ItemStack getBucketItemStack() {
-        return SpawnItems.ANGLER_FISH_BUCKET.getDefaultInstance();
+        return SpawnItems.ANGLER_FISH_BUCKET.get().getDefaultInstance();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SpawnSoundEvents.FISH_DEATH;
+        return SpawnSoundEvents.FISH_DEATH.get();
     }
 
     @Override
     protected SoundEvent getSwimSound() {
-        return SpawnSoundEvents.FISH_SWIM;
+        return SpawnSoundEvents.FISH_SWIM.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SpawnSoundEvents.FISH_AMBIENT;
+        return SpawnSoundEvents.FISH_AMBIENT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SpawnSoundEvents.FISH_HURT;
+        return SpawnSoundEvents.FISH_HURT.get();
     }
 
     @Override
     protected SoundEvent getFlopSound() {
-        return SpawnSoundEvents.FISH_FLOP;
+        return SpawnSoundEvents.FISH_FLOP.get();
     }
 
     @Override

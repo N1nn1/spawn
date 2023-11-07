@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#spawn:small_anthill_generates",
+  "features": [
+    "spawn:small_anthill"
+  ],
+  "step": "vegetal_decoration"
+}

@@ -28,7 +28,7 @@ public class SnailEggsBlock extends MultifaceBlock {
 
     @Override
     public boolean canBeReplaced(BlockState blockState, BlockPlaceContext blockPlaceContext) {
-        return !blockPlaceContext.getItemInHand().is(SpawnItems.SNAIL_EGGS) || super.canBeReplaced(blockState, blockPlaceContext);
+        return !blockPlaceContext.getItemInHand().is(SpawnItems.SNAIL_EGGS.get()) || super.canBeReplaced(blockState, blockPlaceContext);
     }
 
     @Override
@@ -44,14 +44,14 @@ public class SnailEggsBlock extends MultifaceBlock {
     @Override
     public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         world.destroyBlock(pos, false);
-        world.playSound(null, pos, SpawnSoundEvents.SNAIL_EGGS_HATCH, SoundSource.BLOCKS, 1.0f, 1.0f);
+        world.playSound(null, pos, SpawnSoundEvents.SNAIL_EGGS_HATCH.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
         this.spawnSnails(world, pos, random);
     }
 
     private void spawnSnails(ServerLevel world, BlockPos pos, RandomSource random) {
         int i = random.nextInt(2, 4);
         for (int j = 1; j <= i; ++j) {
-            Snail snail = SpawnEntityType.SNAIL.create(world);
+            Snail snail = SpawnEntityType.SNAIL.get().create(world);
             assert snail != null;
             double d = (double)pos.getX() + this.getSpawnOffset(random);
             double e = (double)pos.getZ() + this.getSpawnOffset(random);

@@ -1,4 +1,5 @@
 {
+	"render_type": "translucent",
 	"parent": "minecraft:block/cube",
 	"textures": {
 		"all": "spawn:block/ghostly_mucus_block",

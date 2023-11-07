@@ -178,7 +178,7 @@ public class Snail extends Animal {
 
         if (this.isFood(itemStack) && this.getAge() == 0) {
             if(itemStack.is(Items.MUSHROOM_STEW)) this.spawnAtLocation(Items.BOWL);
-            this.playSound(SpawnSoundEvents.SNAIL_EAT, 1, 1);
+            this.playSound(SpawnSoundEvents.SNAIL_EAT.get(), 1, 1);
         }
 
         if (itemStack.is(Items.WATER_BUCKET) && !this.isScared() && this.getWetTicks() < 900) {
@@ -206,7 +206,7 @@ public class Snail extends Animal {
         if (this.getBlockStateOn().is(SpawnTags.MUCUS_SOLIDIFIER) || this.isInWaterOrRain()) this.addWetTicks(1);
 
         if (!this.level().isClientSide && this.onGround() && this.getWetTicks() > 0) {
-            BlockState blockState = SpawnBlocks.MUCUS.defaultBlockState();
+            BlockState blockState = SpawnBlocks.MUCUS.get().defaultBlockState();
             for (int l = 0; l < 4; ++l) {
                 if (cooldown < 0) {
                     int i = Mth.floor(this.getX() + (double)((float)(l % 2 * 2 - 1) * 0.25f));
@@ -233,7 +233,7 @@ public class Snail extends Animal {
             int shellGrowthTicks = this.getShellGrowthTicks();
             if (shellGrowthTicks > 0 && !this.isBaby()) {
                 if (shellGrowthTicks == 1) {
-                    this.playSound(SpawnSoundEvents.SNAIL_SHELL_GROW, 1.0F, 1.0F);
+                    this.playSound(SpawnSoundEvents.SNAIL_SHELL_GROW.get(), 1.0F, 1.0F);
                 }
                 this.setShellGrowthTicks(shellGrowthTicks - 1);
             }
@@ -256,8 +256,8 @@ public class Snail extends Animal {
             if (source.is(DamageTypeTags.IS_PROJECTILE)) {
 
                 if (!this.isScared()) {
-                    this.spawnAtLocation(new ItemStack(SpawnItems.SNAIL_SHELL), 0.1F);
-                    this.playSound(SpawnSoundEvents.SNAIL_HURT_HIDDEN, 1.0F, 1.0F);
+                    this.spawnAtLocation(new ItemStack(SpawnItems.SNAIL_SHELL.get()), 0.1F);
+                    this.playSound(SpawnSoundEvents.SNAIL_HURT_HIDDEN.get(), 1.0F, 1.0F);
                     this.setShellGrowthTicks(this.regrowthTicks.sample(this.random));
                 }
                 return false;
@@ -269,7 +269,7 @@ public class Snail extends Animal {
         if (source.getEntity() instanceof LivingEntity && amount < 12 && !level().isClientSide) {
 
             if (this.isScared()) {
-                playSound(SpawnSoundEvents.SNAIL_HURT_HIDDEN, 1, 1);
+                playSound(SpawnSoundEvents.SNAIL_HURT_HIDDEN.get(), 1, 1);
                 return false;
             }
         }
@@ -300,18 +300,18 @@ public class Snail extends Animal {
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SpawnSoundEvents.SNAIL_HURT;
+        return SpawnSoundEvents.SNAIL_HURT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return this.isScared() ? SpawnSoundEvents.SNAIL_DEATH_HIDDEN : SpawnSoundEvents.SNAIL_DEATH;
+        return this.isScared() ? SpawnSoundEvents.SNAIL_DEATH_HIDDEN.get() : SpawnSoundEvents.SNAIL_DEATH.get();
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SpawnSoundEvents.SNAIL_SLIDE, 0.15f, 1.0f);
+        this.playSound(SpawnSoundEvents.SNAIL_SLIDE.get(), 0.15f, 1.0f);
     }
 
 
@@ -353,8 +353,8 @@ public class Snail extends Animal {
                 Vec3 vec3d = Vec3.atCenterOf(this.layPos);
                 double distance = Mth.sqrt((float) this.snail.distanceToSqr(vec3d));
                 if (distance <= 2) {
-                    this.snail.playSound(SpawnSoundEvents.SNAIL_LAY_EGGS, 1, 1);
-                    this.snail.level().setBlock(this.layPos, SpawnBlocks.SNAIL_EGGS.defaultBlockState().setValue(SnailEggsBlock.getFaceProperty(Direction.DOWN), true), 2);
+                    this.snail.playSound(SpawnSoundEvents.SNAIL_LAY_EGGS.get(), 1, 1);
+                    this.snail.level().setBlock(this.layPos, SpawnBlocks.SNAIL_EGGS.get().defaultBlockState().setValue(SnailEggsBlock.getFaceProperty(Direction.DOWN), true), 2);
                     this.snail.setHasEgg(false);
                 }
             }

@@ -44,12 +44,12 @@ public class AntPupaItem extends Item {
         BlockPos blockPos = blockPlaceContext.getClickedPos();
         ItemStack itemStack = useOnContext.getItemInHand();
         Vec3 vec3 = Vec3.atBottomCenterOf(blockPos);
-        AABB aABB = SpawnEntityType.ANT.getDimensions().makeBoundingBox(vec3.x(), vec3.y(), vec3.z());
+        AABB aABB = SpawnEntityType.ANT.get().getDimensions().makeBoundingBox(vec3.x(), vec3.y(), vec3.z());
         if (!level.noCollision(null, aABB) || !level.getEntities(null, aABB).isEmpty()) return InteractionResult.FAIL;
 
         if (level instanceof ServerLevel serverLevel) {
             Consumer consumer = EntityType.createDefaultStackConfig(serverLevel, itemStack, useOnContext.getPlayer());
-            Ant ant = SpawnEntityType.ANT.create(serverLevel, itemStack.getTag(), consumer, blockPos, MobSpawnType.SPAWN_EGG, true, true);
+            Ant ant = SpawnEntityType.ANT.get().create(serverLevel, itemStack.getTag(), consumer, blockPos, MobSpawnType.SPAWN_EGG, true, true);
             if (ant == null) return InteractionResult.FAIL;
 
             ant.setTame(true);
@@ -61,7 +61,7 @@ public class AntPupaItem extends Item {
             serverLevel.addFreshEntityWithPassengers(ant);
             if (useOnContext.getPlayer() instanceof ServerPlayer serverPlayer) SpawnCriteriaTriggers.HATCH_ANT.trigger(serverPlayer);
             serverLevel.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, itemStack), ant.getX(), ant.getY(0.6666666666666666), ant.getZ(), 10, ant.getBbWidth() / 4.0f, ant.getBbHeight() / 4.0f, ant.getBbWidth() / 4.0f, 0.05);
-            level.playSound(null, ant.getX(), ant.getY(), ant.getZ(), SpawnSoundEvents.ANT_HATCH, SoundSource.NEUTRAL, 0.75f, 0.8f);
+            level.playSound(null, ant.getX(), ant.getY(), ant.getZ(), SpawnSoundEvents.ANT_HATCH.get(), SoundSource.NEUTRAL, 0.75f, 0.8f);
 
             ant.gameEvent(GameEvent.ENTITY_PLACE, useOnContext.getPlayer());
         }

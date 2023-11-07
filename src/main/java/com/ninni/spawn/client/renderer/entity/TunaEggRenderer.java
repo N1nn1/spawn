@@ -2,19 +2,19 @@ package com.ninni.spawn.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import com.ninni.spawn.client.model.TunaEggModel;
 import com.ninni.spawn.entity.TunaEgg;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 
-@Environment(value=EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TunaEggRenderer extends MobRenderer<TunaEgg, TunaEggModel> {
     public static final ResourceLocation TEXTURE = new ResourceLocation(MOD_ID, "textures/entity/tuna/tuna_egg.png");
 

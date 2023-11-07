@@ -1,17 +1,22 @@
 package com.ninni.spawn.registry;
 
 import com.ninni.spawn.Spawn;
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
-import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-public interface SpawnParticles {
-    SimpleParticleType ANGLER_FISH_LANTERN_GLOW = register("angler_fish_lantern_glow", FabricParticleTypes.simple());
-    SimpleParticleType TUNA_EGG = register("tuna_egg", FabricParticleTypes.simple());
+@Mod.EventBusSubscriber(modid = Spawn.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class SpawnParticles {
 
-    private static SimpleParticleType register(String id, SimpleParticleType type) {
-        return Registry.register(BuiltInRegistries.PARTICLE_TYPE, new ResourceLocation(Spawn.MOD_ID, id), type);
+    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Spawn.MOD_ID);
+
+    public static final RegistryObject<SimpleParticleType> ANGLER_FISH_LANTERN_GLOW = register("angler_fish_lantern_glow", false);
+    public static final RegistryObject<SimpleParticleType> TUNA_EGG = register("tuna_egg", false);
+
+    private static RegistryObject<SimpleParticleType> register(String id, boolean flag) {
+        return PARTICLE_TYPES.register(id, () -> new SimpleParticleType(flag));
     }
 }

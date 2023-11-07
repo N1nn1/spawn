@@ -1,4 +1,5 @@
 {
+	"render_type": "cutout",
 	"parent": "block/block",
 	"textures": {
 		"bottom": "spawn:block/ant_mound_0",

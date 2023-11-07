@@ -18,19 +18,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Mixin(MobBucketItem.class)
-public abstract class MobBucketItemMixin extends BucketItem {
-    @Shadow @Final private EntityType<?> type;
+public class MobBucketItemMixin {
 
-    public MobBucketItemMixin(Fluid fluid, Properties properties) {
-        super(fluid, properties);
-    }
+    @Shadow @Final private Supplier<? extends EntityType<?>> entityTypeSupplier;
 
     @Inject(method = "appendHoverText", at = @At("HEAD"))
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag, CallbackInfo ci) {
         CompoundTag compoundTag;
-        if (this.type == SpawnEntityType.SEAHORSE && (compoundTag = itemStack.getTag()) != null && compoundTag.contains("BucketVariantTag", 3)) {
+        if (this.entityTypeSupplier.get() == SpawnEntityType.SEAHORSE.get() && (compoundTag = itemStack.getTag()) != null && compoundTag.contains("BucketVariantTag", 3)) {
             int i = compoundTag.getInt("BucketVariantTag");
             ChatFormatting[] chatFormattings = new ChatFormatting[]{ChatFormatting.ITALIC, ChatFormatting.GRAY};
             list.add(Component.translatable("entity.spawn.seahorse.variant." + SeahorseVariant.byId(i).getSerializedName()).withStyle(chatFormattings));

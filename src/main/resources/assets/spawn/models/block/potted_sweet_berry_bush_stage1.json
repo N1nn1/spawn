@@ -1,4 +1,5 @@
 {
+	"render_type": "cutout",
 	"parent": "spawn:block/template_potted_sweet_berry_bush",
 	"textures": {
 		"berry": "block/sweet_berry_bush_stage1"

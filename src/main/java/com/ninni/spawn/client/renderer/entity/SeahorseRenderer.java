@@ -1,17 +1,17 @@
 package com.ninni.spawn.client.renderer.entity;
 
 import com.ninni.spawn.client.model.SeahorseModel;
-import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import com.ninni.spawn.entity.Seahorse;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class SeahorseRenderer extends MobRenderer<Seahorse, SeahorseModel<Seahorse>> {
     private static final ResourceLocation SEAHORSE_BLACK_LOCATION = new ResourceLocation(MOD_ID, "textures/entity/seahorse/black.png");
     private static final ResourceLocation SEAHORSE_BLUE_LOCATION = new ResourceLocation(MOD_ID, "textures/entity/seahorse/blue.png");
