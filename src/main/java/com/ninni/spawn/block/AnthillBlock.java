@@ -8,11 +8,13 @@ import com.ninni.spawn.entity.Ant;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import com.ninni.spawn.registry.SpawnBlocks;
 import com.ninni.spawn.registry.SpawnSoundEvents;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -27,13 +29,12 @@ import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.BrushableBlockEntity;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -62,10 +63,13 @@ public class AnthillBlock extends BaseEntityBlock {
     public void playerDestroy(Level level, Player player, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
         super.playerDestroy(level, player, blockPos, blockState, blockEntity, itemStack);
         if (!level.isClientSide && blockEntity instanceof AnthillBlockEntity anthillBlockEntity) {
-            anthillBlockEntity.angerAnts(player, blockState, AnthillBlockEntity.AntState.EMERGENCY);
-            level.updateNeighbourForOutputSignal(blockPos, this);
-            this.angerNearbyAnts(level, blockPos);
+            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, itemStack) == 0) {
+                anthillBlockEntity.angerAnts(player, blockState, AnthillBlockEntity.AntState.EMERGENCY);
+                level.updateNeighbourForOutputSignal(blockPos, this);
+                this.angerNearbyAnts(level, blockPos);
+            }
         }
+
     }
 
     private void angerNearbyAnts(Level world, BlockPos pos) {
@@ -73,7 +77,7 @@ public class AnthillBlock extends BaseEntityBlock {
         if (!antList.isEmpty()) {
             List<Player> playerList = world.getEntitiesOfClass(Player.class, new AABB(pos).inflate(8.0, 6.0, 8.0));
             for (Ant ant : antList) {
-                if (ant.getTarget() != null) continue;
+                if (ant.getTarget() != null || ant.isTame()) continue;
                 ant.setTarget(playerList.get(world.random.nextInt(playerList.size())));
             }
         }
