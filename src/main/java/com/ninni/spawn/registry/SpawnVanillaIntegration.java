@@ -33,9 +33,9 @@ public class SpawnVanillaIntegration {
     }
 
     private static void registerStrippables() {
-        Map<Block, Block> map = Maps.newHashMap(AxeItem.STRIPPABLES);
-        map.put(SpawnBlocks.ROTTEN_LOG.get(), SpawnBlocks.STRIPPED_ROTTEN_LOG.get());
-        map.put(SpawnBlocks.ROTTEN_WOOD.get(), SpawnBlocks.STRIPPED_ROTTEN_WOOD.get());
+        AxeItem.STRIPPABLES = Maps.newHashMap(AxeItem.STRIPPABLES);
+        AxeItem.STRIPPABLES.put(SpawnBlocks.ROTTEN_LOG.get(), SpawnBlocks.STRIPPED_ROTTEN_LOG.get());
+        AxeItem.STRIPPABLES.put(SpawnBlocks.ROTTEN_WOOD.get(), SpawnBlocks.STRIPPED_ROTTEN_WOOD.get());
     }
 
     private static void registerFlammables() {
