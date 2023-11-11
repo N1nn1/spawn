@@ -108,7 +108,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
-        if (!this.level().isClientSide && player.isSecondaryUseActive() && player instanceof HamsterOpenContainer && this.isOwnedBy(player) && !this.isBaby()) {
+        if (!this.level().isClientSide && player.isSecondaryUseActive() && this.isOwnedBy(player) && !this.isBaby()) {
             if (player instanceof ServerPlayer serverPlayer) SpawnCriteriaTriggers.OPEN_HAMSTER_INVENTORY.trigger(serverPlayer);
             this.openCustomInventoryScreen(player);
             return InteractionResult.SUCCESS;
