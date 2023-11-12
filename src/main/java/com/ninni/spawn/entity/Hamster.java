@@ -164,7 +164,7 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
 
     @Override
     protected void pickUpItem(ItemEntity itemEntity) {
-        this.playSound(SpawnSoundEvents.HAMSTER_EAT, 1.0f, 1.0f);
+        if (this.getInventory().canAddItem(itemEntity.getItem())) this.playSound(SpawnSoundEvents.HAMSTER_EAT, 1.0f, 1.0f);
         InventoryCarrier.pickUpItem(this, this, itemEntity);
     }
 
