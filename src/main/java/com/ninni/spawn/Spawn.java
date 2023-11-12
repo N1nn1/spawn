@@ -20,6 +20,7 @@ public class Spawn implements ModInitializer {
 				SpawnItems.class,
 				SpawnBlocks.class,
 				SpawnCriteriaTriggers.class,
+				SpawnParticles.class,
 				SpawnPointsOfInterests.class,
 				SpawnDecoratedPotPatterns.class
 		);
