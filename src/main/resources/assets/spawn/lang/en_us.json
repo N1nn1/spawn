@@ -88,6 +88,7 @@
   "advancements.spawn.open_hamster_inventory.title": "Say Ahhhhh",
   "advancements.spawn.open_hamster_inventory.description": "Open the cheek pouch of a Tamed Hamster",
 
+  "biome.spawn.ant_gardens": "Ant Gardens",
   "entity.spawn.ant": "Ant",
   "item.spawn.ant_spawn_egg": "Ant Spawn Egg",
   "block.spawn.anthill": "Anthill",

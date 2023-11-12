@@ -87,6 +87,7 @@
   "advancements.spawn.open_hamster_inventory.title": "Dici Ahhhhh",
   "advancements.spawn.open_hamster_inventory.description": "Dai un'occhiata nelle sacche guanciali di un criceto",
 
+  "biome.spawn.ant_gardens": "Giardino delle formiche",
   "entity.spawn.ant": "Formica",
   "item.spawn.ant_spawn_egg": "Uovo generatore di formica",
   "block.spawn.anthill": "Formicaio",
