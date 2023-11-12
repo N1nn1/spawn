@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "spawn",
-  "version": "1.0.2-fabric",
+  "version": "1.0.3-fabric",
 
   "name": "Spawn",
   "description": "An animal mod that tries to add new animals with niches and personality to the Minecraft world",
