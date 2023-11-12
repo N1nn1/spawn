@@ -148,13 +148,17 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
 
     @Override
     public void tick() {
+
         if (!this.level().isClientSide) {
-            float puffTicks = this.entityData.get(PUFF_TICKS);
-            float change = 0.2F;
-            if (!this.getInventory().hasAnyMatching(ItemStack::isEmpty)) {
-                if (puffTicks < 1) this.entityData.set(PUFF_TICKS, puffTicks + change);
-            } else if (puffTicks > 0) this.entityData.set(PUFF_TICKS, puffTicks - change);
+            float amount = 0;
+            for (ItemStack itemStack : this.getInventory().items) {
+                if (itemStack.isEmpty()) amount = amount - 0.1f;
+                amount = amount + 0.1f;
+            }
+            if (amount > 0.8f) amount = 0.8f;
+            this.entityData.set(PUFF_TICKS, amount);
         }
+
         super.tick();
     }
 
@@ -309,6 +313,62 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
         this.playSound(SpawnSoundEvents.HAMSTER_STEP, 0.15f, 1.0f);
     }
 
+    @Override
+    public void addAdditionalSaveData(CompoundTag compoundTag) {
+        super.addAdditionalSaveData(compoundTag);
+        this.writeInventoryToTag(compoundTag);
+        compoundTag.putInt("Variant", this.getVariant().id());
+        compoundTag.putBoolean("Standing", this.isStanding());
+        ListTag listTag = new ListTag();
+        for (int i = 2; i < this.inventory.getContainerSize(); ++i) {
+            ItemStack itemStack = this.inventory.getItem(i);
+            if (itemStack.isEmpty()) continue;
+            CompoundTag compoundTag2 = new CompoundTag();
+            compoundTag2.putByte("Slot", (byte)i);
+            itemStack.save(compoundTag2);
+            listTag.add(compoundTag2);
+        }
+        compoundTag.put("Items", listTag);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compoundTag) {
+        super.readAdditionalSaveData(compoundTag);
+        this.readInventoryFromTag(compoundTag);
+        this.setVariant(HamsterVariant.byId(compoundTag.getInt("Variant")));
+        this.setStanding(compoundTag.getBoolean("Standing"));
+        ListTag listTag = compoundTag.getList("Items", 10);
+        for (int i = 0; i < listTag.size(); ++i) {
+            CompoundTag compoundTag2 = listTag.getCompound(i);
+            int j = compoundTag2.getByte("Slot") & 0xFF;
+            if (j < 2 || j >= this.inventory.getContainerSize()) continue;
+            this.inventory.setItem(j, ItemStack.of(compoundTag2));
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static boolean canSpawn(EntityType<Hamster> hamsterEntityType, ServerLevelAccessor world, MobSpawnType mobSpawnType, BlockPos pos, RandomSource randomSource) {
+        return world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && Animal.isBrightEnoughToSpawn(world, pos);
+    }
+
+    @Override
+    @Nullable
+    public Hamster getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
+        Hamster hamster = SpawnEntityType.HAMSTER.create(serverLevel);
+        if (hamster != null && ageableMob instanceof Hamster hamster2) {
+            if (this.random.nextBoolean()) {
+                hamster.setVariant(this.getVariant());
+            } else {
+                hamster.setVariant(hamster2.getVariant());
+            }
+            if (this.isTame()) {
+                hamster.setOwnerUUID(this.getOwnerUUID());
+                hamster.setTame(true);
+            }
+        }
+        return hamster;
+    }
+
     class StandGoal extends Goal {
         private double relX;
         private double relZ;
@@ -361,60 +421,5 @@ public class Hamster extends TamableAnimal implements InventoryCarrier, Containe
             this.relZ = Math.sin(d);
             this.lookTime = this.adjustedTickDelay(80 + Hamster.this.getRandom().nextInt(20));
         }
-    }
-    
-    @Override
-    public void addAdditionalSaveData(CompoundTag compoundTag) {
-        super.addAdditionalSaveData(compoundTag);
-        this.writeInventoryToTag(compoundTag);
-        compoundTag.putInt("Variant", this.getVariant().id());
-        compoundTag.putBoolean("Standing", this.isStanding());
-        ListTag listTag = new ListTag();
-        for (int i = 2; i < this.inventory.getContainerSize(); ++i) {
-            ItemStack itemStack = this.inventory.getItem(i);
-            if (itemStack.isEmpty()) continue;
-            CompoundTag compoundTag2 = new CompoundTag();
-            compoundTag2.putByte("Slot", (byte)i);
-            itemStack.save(compoundTag2);
-            listTag.add(compoundTag2);
-        }
-        compoundTag.put("Items", listTag);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compoundTag) {
-        super.readAdditionalSaveData(compoundTag);
-        this.readInventoryFromTag(compoundTag);
-        this.setVariant(HamsterVariant.byId(compoundTag.getInt("Variant")));
-        this.setStanding(compoundTag.getBoolean("Standing"));
-        ListTag listTag = compoundTag.getList("Items", 10);
-        for (int i = 0; i < listTag.size(); ++i) {
-            CompoundTag compoundTag2 = listTag.getCompound(i);
-            int j = compoundTag2.getByte("Slot") & 0xFF;
-            if (j < 2 || j >= this.inventory.getContainerSize()) continue;
-            this.inventory.setItem(j, ItemStack.of(compoundTag2));
-        }
-    }
-
-    public static boolean canSpawn(EntityType<Hamster> hamsterEntityType, ServerLevelAccessor world, MobSpawnType mobSpawnType, BlockPos pos, RandomSource randomSource) {
-        return world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON) && Animal.isBrightEnoughToSpawn(world, pos);
-    }
-    
-    @Override
-    @Nullable
-    public Hamster getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        Hamster hamster = SpawnEntityType.HAMSTER.create(serverLevel);
-        if (hamster != null && ageableMob instanceof Hamster hamster2) {
-            if (this.random.nextBoolean()) {
-                hamster.setVariant(this.getVariant());
-            } else {
-                hamster.setVariant(hamster2.getVariant());
-            }
-            if (this.isTame()) {
-                hamster.setOwnerUUID(this.getOwnerUUID());
-                hamster.setTame(true);
-            }
-        }
-        return hamster;
     }
 }
