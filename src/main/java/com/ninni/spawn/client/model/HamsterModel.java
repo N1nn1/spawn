@@ -156,18 +156,17 @@ public class HamsterModel<E extends Hamster> extends AgeableListModel<E> {
                 LEFT_CHEEK,
                 CubeListBuilder.create()
                         .texOffs(23, 6)
-                        .addBox(-1.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F),
-                PartPose.offset(2.5F, -1.6F, -0.4F)
+                        .addBox(0.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F),
+                PartPose.offset(1.15F, -1.6F, -0.4F)
         );
 
         PartDefinition rightCheek = body.addOrReplaceChild(
                 RIGHT_CHEEK,
                 CubeListBuilder.create()
                         .texOffs(23, 6)
-                        .mirror()
-                        .addBox(-2.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F)
+                        .mirror().addBox(-2.0F, -0.5F, -1.0F, 2.0F, 1.0F, 2.0F)
                         .mirror(false),
-                PartPose.offset(-1.15F, -1.6F, -0.4F)
+                PartPose.offset(-1.65F, -1.6F, -0.4F)
         );
 
         PartDefinition tail = body.addOrReplaceChild(
