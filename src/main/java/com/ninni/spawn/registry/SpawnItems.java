@@ -86,6 +86,9 @@ public class SpawnItems {
     public static final Item CROWN_POTTERY_SHERD = register("crown_pottery_sherd", new Item(new Item.Properties()));
     public static final Item SPADE_POTTERY_SHERD = register("spade_pottery_sherd", new Item(new Item.Properties()));
 
+    // whale
+    public static final Item WHALE_SPAWN_EGG = register("whale_spawn_egg", new SpawnEggItem(SpawnEntityType.WHALE, 0x3C4A56, 0xD1D3D3, new Item.Properties()));
+
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spawn.MOD_ID, id), item);
     }

@@ -145,6 +145,7 @@ public class SpawnVanillaIntegration {
             EntityRendererRegistry.register(SpawnEntityType.SNAIL, SnailRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.HAMSTER, HamsterRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.ANT, AntRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.WHALE, WhaleRenderer::new);
         }
 
         private static void registerParticles() {

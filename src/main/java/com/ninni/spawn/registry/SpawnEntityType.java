@@ -93,6 +93,17 @@ public class SpawnEntityType {
                     .trackRangeChunks(10)
     );
 
+    public static final EntityType<Whale> WHALE = register(
+            "whale",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Whale::new)
+                    .defaultAttributes(Whale::createAttributes)
+                    .spawnGroup(MobCategory.WATER_CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Whale::checkSurfaceWaterAnimalSpawnRules)
+                    .dimensions(EntityDimensions.scalable(2.2F, 2.2F))
+                    .trackRangeChunks(30)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.ANGLER_FISH_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.ANGLER_FISH, 5, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.TUNA_SPAWNS), MobCategory.WATER_CREATURE, SpawnEntityType.TUNA, 15, 1, 1);

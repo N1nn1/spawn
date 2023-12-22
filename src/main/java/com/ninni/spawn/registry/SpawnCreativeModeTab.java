@@ -154,6 +154,10 @@ public class SpawnCreativeModeTab {
                 output.accept(MUSIC_DISC_ROT);
                 output.accept(CROWN_POTTERY_SHERD);
                 output.accept(SPADE_POTTERY_SHERD);
+
+                // whale
+                output.accept(WHALE_SPAWN_EGG);
+
             }).build()
     );
 
