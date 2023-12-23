@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "spawn:block/whale_flesh_top",
+    "side": "spawn:block/whale_flesh"
+  }
+}

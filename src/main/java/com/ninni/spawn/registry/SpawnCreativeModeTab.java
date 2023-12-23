@@ -157,6 +157,8 @@ public class SpawnCreativeModeTab {
 
                 // whale
                 output.accept(WHALE_SPAWN_EGG);
+                output.accept(WHALE_FLESH);
+                output.accept(WHALE_UVULA);
 
             }).build()
     );

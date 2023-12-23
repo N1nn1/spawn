@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "teeth=false": {
+      "model": "spawn:block/whale_flesh"
+    },
+    "teeth=true": {
+      "model": "spawn:block/whale_teeth"
+    }
+  }
+}

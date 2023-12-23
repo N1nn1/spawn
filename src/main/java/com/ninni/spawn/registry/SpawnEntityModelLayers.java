@@ -1,6 +1,7 @@
 package com.ninni.spawn.registry;
 
 import com.ninni.spawn.client.model.*;
+import com.ninni.spawn.client.renderer.entity.WhaleUvulaRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -22,6 +23,7 @@ public interface SpawnEntityModelLayers {
     ModelLayerLocation HAMSTER_STANDING = main("hamster_standing", HamsterModel::getStandingLayerDefinition);
     ModelLayerLocation ANT = main("ant", AntModel::getLayerDefinition);
     ModelLayerLocation WHALE = main("whale", WhaleModel::getLayerDefinition);
+    ModelLayerLocation WHALE_UVULA = main("whale_uvula", WhaleUvulaRenderer::createBodyLayer);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

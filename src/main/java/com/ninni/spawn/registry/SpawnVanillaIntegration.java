@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
@@ -146,6 +147,8 @@ public class SpawnVanillaIntegration {
             EntityRendererRegistry.register(SpawnEntityType.HAMSTER, HamsterRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.ANT, AntRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.WHALE, WhaleRenderer::new);
+
+            BlockEntityRendererRegistry.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
         }
 
         private static void registerParticles() {

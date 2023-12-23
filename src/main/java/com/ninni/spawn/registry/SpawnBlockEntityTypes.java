@@ -3,6 +3,7 @@ package com.ninni.spawn.registry;
 import com.ninni.spawn.Spawn;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
 import com.ninni.spawn.block.entity.SunflowerBlockEntity;
+import com.ninni.spawn.block.entity.WhaleUvulaBlockEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -28,4 +29,11 @@ public class SpawnBlockEntityTypes {
             ).build(null)
     );
 
+    public static final BlockEntityType<WhaleUvulaBlockEntity> WHALE_UVULA = Registry.register(
+            BuiltInRegistries.BLOCK_ENTITY_TYPE,
+            new ResourceLocation(Spawn.MOD_ID, "whale_uvula"),
+            BlockEntityType.Builder.of(WhaleUvulaBlockEntity::new,
+                    SpawnBlocks.WHALE_UVULA
+            ).build(null)
+    );
 }

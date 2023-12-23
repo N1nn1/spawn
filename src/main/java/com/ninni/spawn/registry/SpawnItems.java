@@ -88,6 +88,8 @@ public class SpawnItems {
 
     // whale
     public static final Item WHALE_SPAWN_EGG = register("whale_spawn_egg", new SpawnEggItem(SpawnEntityType.WHALE, 0x3C4A56, 0xD1D3D3, new Item.Properties()));
+    public static final Item WHALE_FLESH = register("whale_flesh", new BlockItem(SpawnBlocks.WHALE_FLESH, new FabricItemSettings()));
+    public static final Item WHALE_UVULA = register("whale_uvula", new BlockItem(SpawnBlocks.WHALE_UVULA, new FabricItemSettings()));
 
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spawn.MOD_ID, id), item);
