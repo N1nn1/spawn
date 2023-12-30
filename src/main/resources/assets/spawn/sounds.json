@@ -27,7 +27,16 @@
 		"subtitle": "subtitles.entity.spawn.fish.death"
 	},
 	"entity.fish.ambient": { "sounds": [], "subtitle": "subtitles.entity.spawn.fish.ambient" },
-
+	"entity.fish.jump": {
+		"sounds": [
+			"spawn:entity/fish/jump1",
+			"spawn:entity/fish/jump2",
+			"spawn:entity/fish/jump3",
+			"spawn:entity/fish/jump4",
+			"spawn:entity/fish/jump5"
+		],
+		"subtitle": "subtitles.entity.spawn.fish.jump"
+	},
 	"entity.angler_fish.deflate": {
 		"sounds": [ "spawn:entity/angler_fish/deflate" ],
 		"subtitle": "subtitles.entity.spawn.angler_fish.deflate"

@@ -16,6 +16,7 @@ public interface SpawnSoundEvents {
     SoundEvent FISH_HURT = register("entity.fish.hurt");
     SoundEvent FISH_DEATH = register("entity.fish.death");
     SoundEvent BIG_FISH_SWIM = register("entity.big_fish.swim");
+    SoundEvent FISH_JUMP = register("entity.fish.jump");
 
     SoundEvent ANGLER_FISH_DEFLATE = register("entity.angler_fish.deflate");
     SoundEvent ANGLER_FISH_EFFECT_GIVE = register("entity.angler_fish.effect.give");

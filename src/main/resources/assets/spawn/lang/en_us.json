@@ -5,6 +5,7 @@
   "subtitles.entity.spawn.fish.flop": "Fish flops",
   "subtitles.entity.spawn.fish.hurt": "Fish hurts",
   "subtitles.entity.spawn.fish.death": "Fish dies",
+  "subtitles.entity.spawn.fish.jump": "Fish jumps",
   "subtitles.entity.spawn.fish.ambient": "Swimming",
 
   "entity.spawn.angler_fish": "Angler Fish",

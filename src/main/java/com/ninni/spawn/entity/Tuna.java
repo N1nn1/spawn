@@ -1,6 +1,7 @@
 package com.ninni.spawn.entity;
 
 import com.ninni.spawn.SpawnTags;
+import com.ninni.spawn.entity.common.WaterJumpGoal;
 import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -51,7 +52,8 @@ public class Tuna extends Animal {
         this.goalSelector.addGoal(3, new BreedGoal(this, 1.0));
         this.goalSelector.addGoal(4, new TemptGoal(this, 1.4, Ingredient.of(SpawnTags.TUNA_TEMPTS), false));
         this.goalSelector.addGoal(5, new FollowParentGoal(this, 1.1));
-        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
+        this.goalSelector.addGoal(6, new RandomSwimmingGoal(this, 1.0D, 10));
+        this.goalSelector.addGoal(7, new WaterJumpGoal(this, 300));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

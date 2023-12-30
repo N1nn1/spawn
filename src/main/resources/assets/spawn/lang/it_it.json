@@ -5,6 +5,7 @@
   "subtitles.entity.spawn.fish.flop": "Pesce si dibatte",
   "subtitles.entity.spawn.fish.hurt": "Pesce ferito",
   "subtitles.entity.spawn.fish.death": "Pesce muore",
+  "subtitles.entity.spawn.fish.jump": "Pesce salta",
   "subtitles.entity.spawn.fish.ambient": "Nuoto",
 
   "entity.spawn.angler_fish": "Pesce abissale",
