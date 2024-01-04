@@ -38,7 +38,7 @@ public class KrillSwarm extends AbstractSchoolingFish implements FlopConditionab
     public void aiStep() {
         super.aiStep();
         float size = 0.4f;
-        if (random.nextInt(2) == 0) this.level().addParticle(SpawnParticles.KRILL, this.getRandomX(size), this.getRandomY(), this.getRandomZ(size), 0.0, 0.0, 0.0);
+        if (random.nextInt(2) == 0 && this.isInWaterOrBubble()) this.level().addParticle(SpawnParticles.KRILL, this.getRandomX(size), this.getRandomY(), this.getRandomZ(size), 0.0, 0.0, 0.0);
     }
 
     @Override
