@@ -131,5 +131,14 @@
   "advancements.spawn.obtain_ant_farm.title": "Insetti del podere",
   "advancements.spawn.obtain_ant_farm.description": "Crea un formicaio per portare le tue amiche formiche a casa",
   "advancements.spawn.hatch_ant.title": "Fabio?",
-  "advancements.spawn.hatch_ant.description": "Fai nascere una formica addomesticata da una pupa"
+  "advancements.spawn.hatch_ant.description": "Fai nascere una formica addomesticata da una pupa",
+
+  "entity.spawn.whale": "Balena",
+  "item.spawn.whale_spawn_egg": "Uovo generatore di balena",
+  "block.spawn.whale_flesh": "Carne di balena",
+  "block.spawn.whale_uvula": "Ugola di balena",
+
+  "entity.spawn.krill_swarm": "Banco di krill",
+  "item.spawn.krill_swarm_spawn_egg": "Uovo generatore di banco di krill",
+  "item.spawn.krill_swarm_bucket": "Secchio con banco di krill"
 }

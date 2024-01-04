@@ -5,6 +5,7 @@ import com.ninni.spawn.Spawn;
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
+import com.ninni.spawn.client.particles.KrillParticle;
 import com.ninni.spawn.client.particles.TunaEggParticle;
 import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.entity.Hamster;
@@ -147,6 +148,7 @@ public class SpawnVanillaIntegration {
             EntityRendererRegistry.register(SpawnEntityType.HAMSTER, HamsterRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.ANT, AntRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.WHALE, WhaleRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.KRILL_SWARM, KrillSwarmRenderer::new);
 
             BlockEntityRendererRegistry.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
         }
@@ -154,6 +156,7 @@ public class SpawnVanillaIntegration {
         private static void registerParticles() {
             ParticleFactoryRegistry.getInstance().register(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, GlowParticle.GlowSquidProvider::new);
             ParticleFactoryRegistry.getInstance().register(SpawnParticles.TUNA_EGG, TunaEggParticle.Factory::new);
+            ParticleFactoryRegistry.getInstance().register(SpawnParticles.KRILL, KrillParticle.Factory::new);
         }
 
     }

@@ -60,7 +60,7 @@ public class WaterJumpGoal extends JumpGoal {
 
     public void start() {
         Direction direction = this.entity.getMotionDirection();
-        this.entity.setDeltaMovement(this.entity.getDeltaMovement().add((double)direction.getStepX() * 0.6, 0.7, (double)direction.getStepZ() * 0.6));
+        this.entity.setDeltaMovement(this.entity.getDeltaMovement().add((double)direction.getStepX() * 0.8, 0.7, (double)direction.getStepZ() * 0.8));
         this.entity.getNavigation().stop();
     }
 

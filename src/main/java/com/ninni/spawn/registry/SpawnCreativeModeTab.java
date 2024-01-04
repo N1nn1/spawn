@@ -160,6 +160,10 @@ public class SpawnCreativeModeTab {
                 output.accept(WHALE_FLESH);
                 output.accept(WHALE_UVULA);
 
+                // krill
+                output.accept(KRILL_SWARM_SPAWN_EGG);
+                output.accept(KRILL_SWARM_BUCKET);
+
             }).build()
     );
 

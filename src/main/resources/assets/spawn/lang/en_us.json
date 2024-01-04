@@ -132,5 +132,14 @@
   "advancements.spawn.obtain_ant_farm.title": "Permanant Home",
   "advancements.spawn.obtain_ant_farm.description": "Craft an Ant Farm to bring your Ant friends home",
   "advancements.spawn.hatch_ant.title": "An Ant's Life",
-  "advancements.spawn.hatch_ant.description": "Hatch a pet Ant from an Ant Pupa"
+  "advancements.spawn.hatch_ant.description": "Hatch a pet Ant from an Ant Pupa",
+
+  "entity.spawn.whale": "Whale",
+  "item.spawn.whale_spawn_egg": "Whale Spawn Egg",
+  "block.spawn.whale_flesh": "Whale Flesh",
+  "block.spawn.whale_uvula": "Whale Uvula",
+
+  "entity.spawn.krill_swarm": "Krill Swarm",
+  "item.spawn.krill_swarm_spawn_egg": "Krill Swarm Spawn Egg",
+  "item.spawn.krill_swarm_bucket": "Bucket of Krill Swarm"
 }

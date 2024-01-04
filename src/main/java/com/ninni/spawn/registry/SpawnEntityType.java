@@ -104,6 +104,17 @@ public class SpawnEntityType {
                     .trackRangeChunks(30)
     );
 
+    public static final EntityType<KrillSwarm> KRILL_SWARM = register(
+            "krill_swarm",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(KrillSwarm::new)
+                    .defaultAttributes(KrillSwarm::createAttributes)
+                    .spawnGroup(MobCategory.WATER_CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, KrillSwarm::checkSurfaceWaterAnimalSpawnRules)
+                    .dimensions(EntityDimensions.scalable(1.8F, 1.8F))
+                    .trackRangeChunks(30)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.ANGLER_FISH_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.ANGLER_FISH, 5, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.TUNA_SPAWNS), MobCategory.WATER_CREATURE, SpawnEntityType.TUNA, 15, 1, 1);

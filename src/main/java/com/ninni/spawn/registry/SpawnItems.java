@@ -91,6 +91,10 @@ public class SpawnItems {
     public static final Item WHALE_FLESH = register("whale_flesh", new BlockItem(SpawnBlocks.WHALE_FLESH, new FabricItemSettings()));
     public static final Item WHALE_UVULA = register("whale_uvula", new BlockItem(SpawnBlocks.WHALE_UVULA, new FabricItemSettings()));
 
+    // krill
+    public static final Item KRILL_SWARM_SPAWN_EGG = register("krill_swarm_spawn_egg", new SpawnEggItem(SpawnEntityType.KRILL_SWARM, 0xEE7F4F, 0xFFBCA0, new Item.Properties()));
+    public static final Item KRILL_SWARM_BUCKET = register("krill_swarm_bucket", new MobBucketItem(SpawnEntityType.KRILL_SWARM, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
+
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spawn.MOD_ID, id), item);
     }

@@ -19,14 +19,13 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.world.entity.ai.goal.TryFindWaterGoal;
 import net.minecraft.world.entity.animal.AbstractFish;
-import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-public class Seahorse extends AbstractFish implements Bucketable {
+public class Seahorse extends AbstractFish {
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(Seahorse.class, EntityDataSerializers.INT);
     public static final String BUCKET_VARIANT_TAG = "BucketVariantTag";
 
