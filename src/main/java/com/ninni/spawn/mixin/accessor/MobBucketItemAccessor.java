@@ -1,4 +1,4 @@
-package com.ninni.spawn.mixin;
+package com.ninni.spawn.mixin.accessor;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.MobBucketItem;

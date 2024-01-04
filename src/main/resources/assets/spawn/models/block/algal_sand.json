@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "side": "spawn:block/algal_sand",
+    "top": "spawn:block/algal_sand_top",
+    "bottom": "block/sand"
+  }
+}

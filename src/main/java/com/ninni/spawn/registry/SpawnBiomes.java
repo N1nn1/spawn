@@ -9,6 +9,7 @@ import net.minecraft.world.level.biome.Biome;
 public class SpawnBiomes {
 
     public static final ResourceKey<Biome> ANT_GARDENS = register("ant_gardens");
+    public static final ResourceKey<Biome> SEAGRASS_MEADOW = register("seagrass_meadow");
 
     private static ResourceKey<Biome> register(String string) {
         return ResourceKey.create(Registries.BIOME, new ResourceLocation(Spawn.MOD_ID, string));

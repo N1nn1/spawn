@@ -8,10 +8,12 @@
     "BlockEntityTypeMixin",
     "CreativeModTabMixin",
     "DecoratedPotPatternsMixin",
-    "MobBucketItemAccessor",
+    "MinecraftServerMixin",
     "MobBucketItemMixin",
     "OverworldBiomeBuilderMixin",
-    "ServerPlayerMixin"
+    "ServerPlayerMixin",
+    "accessor.MobBucketItemAccessor",
+    "accessor.NoiseGeneratorSettingsAccessor"
   ],
   "client": [
     "client.SpiderRendererMixin"
