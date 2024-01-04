@@ -16,8 +16,8 @@
       "tick_delay": 6000
     },
     "sky_color": 8103167,
-    "water_color": 6746281,
-    "water_fog_color": 216860
+    "water_color": 5947296,
+    "water_fog_color": 75811
   },
   "features": [
     [],
@@ -83,7 +83,7 @@
       "minecraft:seagrass_deep_warm",
       "minecraft:seagrass_cold",
       "minecraft:seagrass_warm",
-      "minecraft:sea_pickle"
+      "spawn:sea_pickle_meadow"
     ],
     [
       "minecraft:freeze_top_layer"
@@ -170,6 +170,12 @@
     "water_ambient": [
       {
         "type": "minecraft:pufferfish",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 5
+      },
+      {
+        "type": "spawn:seahorse",
         "maxCount": 3,
         "minCount": 1,
         "weight": 5

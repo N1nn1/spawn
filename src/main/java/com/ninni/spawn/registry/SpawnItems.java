@@ -86,6 +86,8 @@ public class SpawnItems {
     public static final Item CROWN_POTTERY_SHERD = register("crown_pottery_sherd", new Item(new Item.Properties()));
     public static final Item SPADE_POTTERY_SHERD = register("spade_pottery_sherd", new Item(new Item.Properties()));
 
+    public static final Item ALGAL_SAND = register("algal_sand", new BlockItem(SpawnBlocks.ALGAL_SAND, new FabricItemSettings()));
+
     // whale
     public static final Item WHALE_SPAWN_EGG = register("whale_spawn_egg", new SpawnEggItem(SpawnEntityType.WHALE, 0x3C4A56, 0xD1D3D3, new Item.Properties()));
     public static final Item WHALE_FLESH = register("whale_flesh", new BlockItem(SpawnBlocks.WHALE_FLESH, new FabricItemSettings()));
@@ -94,6 +96,7 @@ public class SpawnItems {
     // krill
     public static final Item KRILL_SWARM_SPAWN_EGG = register("krill_swarm_spawn_egg", new SpawnEggItem(SpawnEntityType.KRILL_SWARM, 0xEE7F4F, 0xFFBCA0, new Item.Properties()));
     public static final Item KRILL_SWARM_BUCKET = register("krill_swarm_bucket", new MobBucketItem(SpawnEntityType.KRILL_SWARM, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
+
 
     private static Item register(String id, Item item) {
         return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Spawn.MOD_ID, id), item);

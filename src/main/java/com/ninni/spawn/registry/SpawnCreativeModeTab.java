@@ -155,6 +155,8 @@ public class SpawnCreativeModeTab {
                 output.accept(CROWN_POTTERY_SHERD);
                 output.accept(SPADE_POTTERY_SHERD);
 
+                output.accept(ALGAL_SAND);
+
                 // whale
                 output.accept(WHALE_SPAWN_EGG);
                 output.accept(WHALE_FLESH);
