@@ -22,6 +22,7 @@ public interface SpawnEntityModelLayers {
     ModelLayerLocation HAMSTER = main("hamster", HamsterModel::getLayerDefinition);
     ModelLayerLocation HAMSTER_STANDING = main("hamster_standing", HamsterModel::getStandingLayerDefinition);
     ModelLayerLocation ANT = main("ant", AntModel::getLayerDefinition);
+    ModelLayerLocation HERRING = main("herring", HerringModel::getLayerDefinition);
     ModelLayerLocation WHALE = main("whale", WhaleModel::getLayerDefinition);
     ModelLayerLocation WHALE_UVULA = main("whale_uvula", WhaleUvulaRenderer::createBodyLayer);
 

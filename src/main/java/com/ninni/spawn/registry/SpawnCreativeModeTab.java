@@ -157,6 +157,11 @@ public class SpawnCreativeModeTab {
 
                 output.accept(ALGAL_SAND);
 
+                output.accept(HERRING_SPAWN_EGG);
+                output.accept(HERRING_BUCKET);
+                output.accept(HERRING);
+                output.accept(COOKED_HERRING);
+
                 // whale
                 output.accept(WHALE_SPAWN_EGG);
                 output.accept(WHALE_FLESH);

@@ -88,6 +88,12 @@ public class SpawnItems {
 
     public static final Item ALGAL_SAND = register("algal_sand", new BlockItem(SpawnBlocks.ALGAL_SAND, new FabricItemSettings()));
 
+    // herring
+    public static final Item HERRING_SPAWN_EGG = register("herring_spawn_egg", new SpawnEggItem(SpawnEntityType.HERRING, 0x1051AD, 0xCACACA, new Item.Properties()));
+    public static final Item HERRING_BUCKET = register("herring_bucket", new MobBucketItem(SpawnEntityType.HERRING, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));
+    public static final Item HERRING = register("herring", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(1).saturationMod(0.1f).build())));
+    public static final Item COOKED_HERRING = register("cooked_herring", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.5f).build())));
+
     // whale
     public static final Item WHALE_SPAWN_EGG = register("whale_spawn_egg", new SpawnEggItem(SpawnEntityType.WHALE, 0x3C4A56, 0xD1D3D3, new Item.Properties()));
     public static final Item WHALE_FLESH = register("whale_flesh", new BlockItem(SpawnBlocks.WHALE_FLESH, new FabricItemSettings()));

@@ -133,6 +133,12 @@
   "advancements.spawn.hatch_ant.title": "Fabio?",
   "advancements.spawn.hatch_ant.description": "Fai nascere una formica addomesticata da una pupa",
 
+  "entity.spawn.herring": "Aringa",
+  "item.spawn.herring_spawn_egg": "Uovo generatore di aringa",
+  "item.spawn.herring_bucket": "Secchio con aringa",
+  "item.spawn.herring": "Aringa cruda",
+  "item.spawn.cooked_herring": "Aringa cotta",
+
   "entity.spawn.whale": "Balena",
   "item.spawn.whale_spawn_egg": "Uovo generatore di balena",
   "block.spawn.whale_flesh": "Carne di balena",

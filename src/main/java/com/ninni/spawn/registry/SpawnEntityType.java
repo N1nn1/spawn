@@ -115,9 +115,21 @@ public class SpawnEntityType {
                     .trackRangeChunks(30)
     );
 
+    public static final EntityType<Herring> HERRING = register(
+            "herring",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Herring::new)
+                    .defaultAttributes(Herring::createAttributes)
+                    .spawnGroup(MobCategory.WATER_AMBIENT)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Herring::checkSurfaceWaterAnimalSpawnRules)
+                    .dimensions(EntityDimensions.scalable(0.4F, 0.25F))
+                    .trackRangeChunks(30)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.ANGLER_FISH_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.ANGLER_FISH, 5, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.TUNA_SPAWNS), MobCategory.WATER_CREATURE, SpawnEntityType.TUNA, 15, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.HERRING_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.HERRING, 15, 1, 5);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.SEAHORSE_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.SEAHORSE, 20, 1, 3);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.SNAIL_SPAWNS), MobCategory.CREATURE, SpawnEntityType.SNAIL, 12, 1, 3);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.HAMSTER_SPAWNS), MobCategory.CREATURE, SpawnEntityType.HAMSTER, 25, 1, 1);

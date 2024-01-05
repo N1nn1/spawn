@@ -26,7 +26,8 @@
       "minecraft:lake_lava_surface"
     ],
     [
-      "minecraft:amethyst_geode"
+      "minecraft:amethyst_geode",
+      "minecraft:forest_rock"
     ],
     [
       "minecraft:monster_room",
@@ -180,6 +181,12 @@
         "maxCount": 3,
         "minCount": 1,
         "weight": 5
+      },
+      {
+        "type": "spawn:herring",
+        "maxCount": 5,
+        "minCount": 1,
+        "weight": 15
       },
       {
         "type": "spawn:seahorse",

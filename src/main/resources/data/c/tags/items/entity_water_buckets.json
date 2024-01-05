@@ -3,6 +3,8 @@
   "values": [
     "spawn:tuna_egg_bucket",
     "spawn:angler_fish_bucket",
-    "spawn:seahorse_bucket"
+    "spawn:seahorse_bucket",
+    "spawn:krill_swarm_bucket",
+    "spawn:herring_bucket"
   ]
 }
