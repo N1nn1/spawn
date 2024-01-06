@@ -1,10 +1,11 @@
 package com.ninni.spawn.mixin;
 
-import com.ninni.spawn.entity.variant.SeahorseVariant;
+import com.ninni.spawn.entity.Seahorse;
 import com.ninni.spawn.registry.SpawnEntityType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -29,11 +30,22 @@ public abstract class MobBucketItemMixin extends BucketItem {
 
     @Inject(method = "appendHoverText", at = @At("HEAD"))
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag, CallbackInfo ci) {
-        CompoundTag compoundTag;
-        if (this.type == SpawnEntityType.SEAHORSE && (compoundTag = itemStack.getTag()) != null && compoundTag.contains("BucketVariantTag", 3)) {
-            int i = compoundTag.getInt("BucketVariantTag");
-            ChatFormatting[] chatFormattings = new ChatFormatting[]{ChatFormatting.ITALIC, ChatFormatting.GRAY};
-            list.add(Component.translatable("entity.spawn.seahorse.variant." + SeahorseVariant.byId(i).getSerializedName()).withStyle(chatFormattings));
+        if (this.type == SpawnEntityType.SEAHORSE) {
+            CompoundTag compoundTag = itemStack.getTag();
+            if (compoundTag != null && compoundTag.contains("BucketVariantTag", 3)) {
+                int i = compoundTag.getInt("BucketVariantTag");
+                ChatFormatting[] chatFormattings = new ChatFormatting[]{ChatFormatting.ITALIC, ChatFormatting.GRAY};
+                String string = "color.minecraft." + Seahorse.getBaseColor(i);
+                String string2 = "color.minecraft." + Seahorse.getPatternColor(i);
+
+                list.add(Seahorse.getPattern(i).displayName().plainCopy().withStyle(chatFormattings));
+                MutableComponent mutableComponent = Component.translatable(string);
+                if (!string.equals(string2)) {
+                    mutableComponent.append(", ").append(Component.translatable(string2));
+                }
+                mutableComponent.withStyle(chatFormattings);
+                list.add(mutableComponent);
+            }
         }
     }
 }

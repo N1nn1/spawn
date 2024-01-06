@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.spawn.entity.Seahorse;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.model.ColorableHierarchicalModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -18,7 +19,8 @@ import static net.minecraft.client.model.geom.PartNames.*;
 
 @SuppressWarnings("FieldCanBeLocal, unused")
 @Environment(EnvType.CLIENT)
-public class SeahorseModel<E extends Seahorse> extends EntityModel<E> {
+public class SeahorseModel<E extends Seahorse> extends ColorableHierarchicalModel<E> {
+    public static final String FIN = "fin";
     public static final String TAIL_BASE = "tail_base";
     public static final String SNOUT = "snout";
     public static final String CREST = "crest";
@@ -29,6 +31,7 @@ public class SeahorseModel<E extends Seahorse> extends EntityModel<E> {
     private final ModelPart tail;
     private final ModelPart leftFin;
     private final ModelPart rightFin;
+    private final ModelPart fin;
     private final ModelPart head;
     private final ModelPart snout;
     private final ModelPart crest;
@@ -42,6 +45,7 @@ public class SeahorseModel<E extends Seahorse> extends EntityModel<E> {
         this.leftFin = this.body.getChild(LEFT_FIN);
         this.rightFin = this.body.getChild(RIGHT_FIN);
         this.head = this.body.getChild(HEAD);
+        this.fin = this.body.getChild(FIN);
         
         this.snout = this.head.getChild(SNOUT);
         this.crest = this.head.getChild(CREST);
@@ -49,75 +53,53 @@ public class SeahorseModel<E extends Seahorse> extends EntityModel<E> {
         this.tail = this.tailBase.getChild(TAIL);
     }
 
-    public static LayerDefinition getLayerDefinition() {
-        MeshDefinition data = new MeshDefinition();
-        PartDefinition root = data.getRoot();
+    public static LayerDefinition getALayerDefinition() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = root.addOrReplaceChild(
-            BODY,
-            CubeListBuilder.create()
-                            .texOffs(0, 0)
-                            .addBox(-1.5F, -1.0F, -1.5F, 3.0F, 4.0F, 3.0F),
-            PartPose.offset(0.0F, 17.0F, 0.0F)
-        );
+        PartDefinition body = partdefinition.addOrReplaceChild(BODY, CubeListBuilder.create().texOffs(0, 0).addBox(-1.5F, -2.0F, -1.5F, 3.0F, 4.0F, 3.0F), PartPose.offset(0.0F, 18.0F, 1.5F));
 
-        PartDefinition tailBase = body.addOrReplaceChild(
-            TAIL_BASE,
-            CubeListBuilder.create()
-                            .texOffs(22, 1)
-                            .addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 2.0F),
-            PartPose.offset(0.0F, 3.0F, 0.5F)
-        );
+        PartDefinition tailBase = body.addOrReplaceChild(TAIL_BASE, CubeListBuilder.create().texOffs(22, 1).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 2.0F), PartPose.offset(0.0F, 2.0F, 0.5F));
 
-        PartDefinition tail = tailBase.addOrReplaceChild(
-            TAIL,
-            CubeListBuilder.create()
-                            .texOffs(14, 0)
-                            .addBox(-1.0F, 0.0F, -3.0F, 2.0F, 3.0F, 4.0F),
-            PartPose.offset(0.0F, 1.0F, 0.0F)
-        );
+        PartDefinition tail = tailBase.addOrReplaceChild(TAIL, CubeListBuilder.create().texOffs(14, 0).addBox(-1.0F, 0.0F, -3.0F, 2.0F, 3.0F, 4.0F), PartPose.offset(0.0F, 1.0F, 0.0F));
 
-        PartDefinition leftFin = body.addOrReplaceChild(
-            LEFT_FIN,
-            CubeListBuilder.create()
-                            .texOffs(0, 0)
-                            .addBox(0.0F, -1.0F, 0.0F, 0.0F, 2.0F, 1.0F),
-            PartPose.offset(-1.5F, 1.0F, 0.0F)
-        );
+        PartDefinition leftFin = body.addOrReplaceChild(LEFT_FIN, CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -1.0F, 0.0F, 0.0F, 2.0F, 1.0F), PartPose.offsetAndRotation(1.5F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
 
-        PartDefinition rightFin = body.addOrReplaceChild(
-            RIGHT_FIN,
-            CubeListBuilder.create()
-                            .texOffs(0, 0)
-                            .addBox(0.0F, -1.0F, 0.0F, 0.0F, 2.0F, 1.0F),
-            PartPose.offset(1.5F, 1.0F, 0.0F)
-        );
+        PartDefinition rightFin = body.addOrReplaceChild(RIGHT_FIN, CubeListBuilder.create().texOffs(0, 0).mirror().addBox(0.0F, -1.0F, 0.0F, 0.0F, 2.0F, 1.0F).mirror(false), PartPose.offsetAndRotation(-1.5F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
-        PartDefinition head = body.addOrReplaceChild(
-            HEAD,
-            CubeListBuilder.create()
-                            .texOffs(0, 14)
-                            .addBox(-2.0F, -2.0F, -2.5F, 4.0F, 3.0F, 4.0F),
-            PartPose.offset(0.0F, -2.0F, 0.0F)
-        );
+        PartDefinition head = body.addOrReplaceChild(HEAD, CubeListBuilder.create().texOffs(0, 14).addBox(-2.0F, -3.0F, -2.5F, 4.0F, 3.0F, 4.0F), PartPose.offset(0.0F, -2.0F, 0.0F));
 
-        PartDefinition snout = head.addOrReplaceChild(
-            SNOUT,
-            CubeListBuilder.create()
-                            .texOffs(16, 17)
-                            .addBox(-0.5F, -0.5F, -3.0F, 1.0F, 1.0F, 3.0F),
-            PartPose.offset(0.1F, 0.5F, -2.5F)
-        );
+        PartDefinition snout = head.addOrReplaceChild(SNOUT, CubeListBuilder.create().texOffs(16, 17).addBox(-0.5F, -0.5F, -3.0F, 1.0F, 1.0F, 3.0F), PartPose.offset(0.0F, -0.5F, -2.5F));
 
-        PartDefinition crest = head.addOrReplaceChild(
-            CREST,
-            CubeListBuilder.create()
-                            .texOffs(0, 4)
-                            .addBox(0.0F, -4.5F, -2.5F, 0.0F, 5.0F, 5.0F),
-            PartPose.offset(0.0F, 0.5F, 0.0F)
-        );
+        PartDefinition crest = head.addOrReplaceChild(CREST, CubeListBuilder.create().texOffs(0, 3).addBox(0.0F, -5.0F, -5.0F, 0.0F, 5.0F, 6.0F), PartPose.offset(0.0F, 0.0F, 1.5F));
 
-        return LayerDefinition.create(data, 32, 32);
+        PartDefinition fin = body.addOrReplaceChild(FIN, CubeListBuilder.create(), PartPose.offset(0.0F, -0.0F, -0.0F));
+
+        return LayerDefinition.create(meshdefinition, 32, 32);
+    }
+
+    public static LayerDefinition getBLayerDefinition() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+
+        PartDefinition body = partdefinition.addOrReplaceChild(BODY, CubeListBuilder.create().texOffs(12, 4).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 5.0F, 3.0F), PartPose.offset(0.0F, 14.0F, 1.5F));
+
+        PartDefinition fin = body.addOrReplaceChild(FIN, CubeListBuilder.create().texOffs(0, 12).addBox(0.0F, -2.5F, 0.0F, 0.0F, 5.0F, 3.0F), PartPose.offset(0.0F, 2.5F, 1.5F));
+
+        PartDefinition tailBase = body.addOrReplaceChild(TAIL_BASE, CubeListBuilder.create().texOffs(14, 12).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 1.0F, 2.0F), PartPose.offset(0.0F, 5.0F, 0.5F));
+
+        PartDefinition tail = tailBase.addOrReplaceChild(TAIL, CubeListBuilder.create().texOffs(0, 7).addBox(-1.0F, 0.0F, -3.0F, 2.0F, 4.0F, 4.0F), PartPose.offset(0.0F, 1.0F, 0.0F));
+
+        PartDefinition head = body.addOrReplaceChild(HEAD, CubeListBuilder.create().texOffs(0, 0).addBox(-1.5F, -3.0F, -2.5F, 3.0F, 3.0F, 4.0F)
+                .texOffs(10, 0).addBox(-1.5F, -3.0F, 1.5F, 3.0F, 2.0F, 2.0F), PartPose.offset(0.0F, 0.0F, 0.0F));
+
+        PartDefinition snout = head.addOrReplaceChild(SNOUT, CubeListBuilder.create().texOffs(8, 12).addBox(-0.5F, -0.5F, -4.0F, 1.0F, 1.0F, 4.0F), PartPose.offset(0.0F, -0.5F, -2.5F));
+
+        PartDefinition crest = head.addOrReplaceChild(CREST, CubeListBuilder.create(), PartPose.offset(0.0F, -0.0F, -0.0F));
+        PartDefinition leftFin = body.addOrReplaceChild(LEFT_FIN, CubeListBuilder.create(), PartPose.offset(0.0F, -0.0F, -0.0F));
+        PartDefinition rightFin = body.addOrReplaceChild(RIGHT_FIN, CubeListBuilder.create(), PartPose.offset(0.0F, -0.0F, -0.0F));
+
+        return LayerDefinition.create(meshdefinition, 32, 32);
     }
 
     @Override
@@ -131,16 +113,17 @@ public class SeahorseModel<E extends Seahorse> extends EntityModel<E> {
             this.head.xRot = 0;
             this.head.yRot = 0;
         }
+        this.fin.yRot = Mth.cos(limbAngle * speed * 1.8F) * degree * 1.5F * limbDistance;
         this.body.y = Mth.cos(animationProgress * speed * 0.1F) * degree * 0.5F * 0.25F + 17.0F;
-        this.leftFin.yRot = Mth.cos(animationProgress * speed * 0.4F) * degree * -1.8F * 0.25F - 0.6F;
-        this.rightFin.yRot = Mth.cos(animationProgress * speed * 0.4F) * degree * 1.8F * 0.25F + 0.6F;
+        this.leftFin.yRot = Mth.cos(animationProgress * speed * 0.4F) * degree * -1.8F * 0.25F + 0.6F;
+        this.rightFin.yRot = Mth.cos(animationProgress * speed * 0.4F) * degree * 1.8F * 0.25F - 0.6F;
         this.tailBase.xRot = Mth.cos(-1.0F + animationProgress * speed * 0.1F) * degree * 0.6F * 0.25F;
         this.tail.xRot = Mth.cos(-2.0F + animationProgress * speed * 0.1F) * degree * 0.6F * 0.25F;
         this.body.xRot = Mth.cos(animationProgress * speed * 0.1F) * degree * 0.4F * 0.25F;
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, float f, float g, float h, float k) {
-        this.root.render(poseStack, vertexConsumer, i, j, f, g, h, k);
+    public ModelPart root() {
+        return this.root;
     }
 }
