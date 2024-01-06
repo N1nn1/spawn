@@ -134,6 +134,8 @@
   "advancements.spawn.hatch_ant.title": "An Ant's Life",
   "advancements.spawn.hatch_ant.description": "Hatch a pet Ant from an Ant Pupa",
 
+  "block.spawn.algal_sand": "Algal Sand",
+
   "entity.spawn.herring": "Herring",
   "item.spawn.herring_spawn_egg": "Herring Spawn Egg",
   "item.spawn.herring_bucket": "Bucket of Herring",

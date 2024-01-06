@@ -19,18 +19,19 @@ import java.util.function.Consumer;
 public abstract class OverworldBiomeBuilderMixin {
 
     @Shadow @Final private Climate.Parameter[] temperatures;
-
     @Shadow @Final private Climate.Parameter[] humidities;
-
     @Shadow protected abstract void addSurfaceBiome(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> consumer, Climate.Parameter parameter, Climate.Parameter parameter2, Climate.Parameter parameter3, Climate.Parameter parameter4, Climate.Parameter parameter5, float f, ResourceKey<Biome> resourceKey);
-
     @Shadow @Final private Climate.Parameter[] erosions;
-
-    @Shadow @Final private Climate.Parameter farInlandContinentalness;
-
-    @Shadow @Final private Climate.Parameter midInlandContinentalness;
-
     @Shadow @Final private Climate.Parameter nearInlandContinentalness;
+    @Shadow @Final private Climate.Parameter FULL_RANGE;
+    private final Climate.Parameter seagrassMeadowTemperature = Climate.Parameter.span(0.24f, 0.35f);
+    private final Climate.Parameter seagrassMeadowContinentalness = Climate.Parameter.span(-0.355f, -0.17f);
+
+    @Inject(at = @At("TAIL"), method = "addOffCoastBiomes")
+    private void S$addOffCoastBiomes(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> consumer, CallbackInfo ci) {
+        //TODO why the FUCK does this not work
+        //this.addSurfaceBiome(consumer, seagrassMeadowTemperature, FULL_RANGE, seagrassMeadowContinentalness, FULL_RANGE, FULL_RANGE, 0.0f, SpawnBiomes.SEAGRASS_MEADOW);
+    }
 
     @Inject(at = @At("RETURN"), method = "addMidSlice")
     private void S$addLowSlice(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> consumer, Climate.Parameter parameter, CallbackInfo ci) {
