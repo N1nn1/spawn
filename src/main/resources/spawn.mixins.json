@@ -12,6 +12,7 @@
     "MobBucketItemMixin",
     "OverworldBiomeBuilderMixin",
     "ServerPlayerMixin",
+    "accessor.TropicalFishAccessor",
     "accessor.MobBucketItemAccessor",
     "accessor.NoiseGeneratorSettingsAccessor"
   ],

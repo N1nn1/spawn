@@ -5,7 +5,6 @@ import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.*;
 import net.fabricmc.api.ModInitializer;
 
-//TODO Advancements
 public class Spawn implements ModInitializer {
 	public static final String MOD_ID = "spawn";
 
@@ -15,6 +14,7 @@ public class Spawn implements ModInitializer {
 				SpawnSoundEvents.class,
 				SpawnEntityType.class,
 				SpawnFeatures.class,
+				SpawnMenuTypes.class,
 				SpawnBlockEntityTypes.class,
 				SpawnCreativeModeTab.class,
 				SpawnItems.class,

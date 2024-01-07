@@ -4,6 +4,7 @@ import com.ninni.spawn.entity.common.DeepLurker;
 import com.ninni.spawn.entity.common.FlopConditionable;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnParticles;
+import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 
 public class KrillSwarm extends AbstractSchoolingFish implements FlopConditionable, DeepLurker {
 
@@ -66,6 +68,11 @@ public class KrillSwarm extends AbstractSchoolingFish implements FlopConditionab
         if (entity instanceof KrillSwarm) {
             super.doPush(entity);
         }
+    }
+
+    @Override
+    public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
+        return this.getLurkingPathfindingFavor(blockPos, levelReader);
     }
 
     @Override

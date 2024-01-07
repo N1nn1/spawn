@@ -138,6 +138,9 @@
   "advancements.spawn.hatch_ant.description": "Hatch a pet Ant from an Ant Pupa",
 
   "block.spawn.algal_sand": "Algal Sand",
+  "container.spawn.fish_customizer": "Customize",
+  "container.spawn.fish_customizer.body_plan": "Change Body Plan",
+  "container.spawn.fish_customizer.pattern": "Change Pattern",
 
   "entity.spawn.herring": "Herring",
   "item.spawn.herring_spawn_egg": "Herring Spawn Egg",

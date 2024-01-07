@@ -83,12 +83,16 @@ public class HerringModel<T extends Entity>
     }
 
     @Override
-    public void setupAnim(T entity, float f, float g, float h, float i, float j) {
-        float k = 1.0f;
-        if (!entity.isInWater()) {
-            k = 1.5f;
-        }
-        this.tail.yRot = -k * 0.45f * Mth.sin(0.6f * h);
+    public void setupAnim(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        float pi = ((float)Math.PI);
+        this.body.xRot = headPitch * (pi/180);
+        this.body.yRot = headYaw * (pi/180);
+
+        this.root.y = Mth.cos(animationProgress + 3) * 0.4F * 0.25F;
+        this.root.yRot = Mth.cos(animationProgress + 1) * 0.4F * 0.25F;
+        this.tail.yRot = Mth.cos(animationProgress + 2) * 2.8F * 0.25F;
+        this.rightFin.zRot = Mth.cos(animationProgress + 1f + pi) * 2 * 0.25F + 0.6F;
+        this.leftFin.zRot = Mth.cos(animationProgress + 1.5f) * 2F * 0.25F - 0.6F;
     }
 }
 

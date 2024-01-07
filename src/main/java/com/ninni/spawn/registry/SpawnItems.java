@@ -1,9 +1,11 @@
 package com.ninni.spawn.registry;
 
 import com.ninni.spawn.Spawn;
+import com.ninni.spawn.block.FishCustomizerBlock;
 import com.ninni.spawn.item.AntPupaItem;
 import com.ninni.spawn.item.EscargotItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +14,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.MapColor;
 
 public class SpawnItems {
 
@@ -87,6 +92,7 @@ public class SpawnItems {
     public static final Item SPADE_POTTERY_SHERD = register("spade_pottery_sherd", new Item(new Item.Properties()));
 
     public static final Item ALGAL_SAND = register("algal_sand", new BlockItem(SpawnBlocks.ALGAL_SAND, new FabricItemSettings()));
+    public static final Item FISH_CUSTOMIZER = register("fish_customizer", new BlockItem(SpawnBlocks.FISH_CUSTOMIZER, new FabricItemSettings()));
 
     // herring
     public static final Item HERRING_SPAWN_EGG = register("herring_spawn_egg", new SpawnEggItem(SpawnEntityType.HERRING, 0x1051AD, 0xCACACA, new Item.Properties()));

@@ -29,8 +29,7 @@ public abstract class OverworldBiomeBuilderMixin {
 
     @Inject(at = @At("TAIL"), method = "addOffCoastBiomes")
     private void S$addOffCoastBiomes(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> consumer, CallbackInfo ci) {
-        //TODO why the FUCK does this not work
-        //this.addSurfaceBiome(consumer, seagrassMeadowTemperature, FULL_RANGE, seagrassMeadowContinentalness, FULL_RANGE, FULL_RANGE, 0.0f, SpawnBiomes.SEAGRASS_MEADOW);
+        this.addSurfaceBiome(consumer, seagrassMeadowTemperature, FULL_RANGE, seagrassMeadowContinentalness, FULL_RANGE, FULL_RANGE, 0.0f, SpawnBiomes.SEAGRASS_MEADOW);
     }
 
     @Inject(at = @At("RETURN"), method = "addMidSlice")

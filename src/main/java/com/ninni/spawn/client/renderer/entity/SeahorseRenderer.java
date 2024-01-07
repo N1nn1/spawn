@@ -3,6 +3,7 @@ package com.ninni.spawn.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.ninni.spawn.client.model.SeahorseModel;
 import com.ninni.spawn.client.renderer.entity.feature.SeahorsePatternLayer;
+import com.ninni.spawn.entity.common.DeepLurker;
 import com.ninni.spawn.registry.SpawnEntityModelLayers;
 import com.ninni.spawn.entity.Seahorse;
 import net.fabricmc.api.EnvType;

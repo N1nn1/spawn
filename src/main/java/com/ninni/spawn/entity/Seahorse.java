@@ -1,9 +1,11 @@
 package com.ninni.spawn.entity;
 
 import com.mojang.serialization.Codec;
+import com.ninni.spawn.entity.common.DeepLurker;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -27,12 +29,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntFunction;
 
-public class Seahorse extends AbstractFish implements VariantHolder<Seahorse.Pattern> {
+public class Seahorse extends AbstractFish implements VariantHolder<Seahorse.Pattern>, DeepLurker {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(Seahorse.class, EntityDataSerializers.INT);
 
     public Seahorse(EntityType<? extends Seahorse> type, Level world) {
@@ -68,6 +71,11 @@ public class Seahorse extends AbstractFish implements VariantHolder<Seahorse.Pat
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
     }
 
+
+    @Override
+    public float getWalkTargetValue(BlockPos blockPos, LevelReader levelReader) {
+        return this.getLurkingPathfindingFavor(blockPos, levelReader);
+    }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
@@ -150,11 +158,11 @@ public class Seahorse extends AbstractFish implements VariantHolder<Seahorse.Pat
         this.setPackedVariant(compoundTag.getInt("Variant"));
     }
 
-    private void setPackedVariant(int i) {
+    public void setPackedVariant(int i) {
         this.entityData.set(DATA_ID_TYPE_VARIANT, i);
     }
 
-    private int getPackedVariant() {
+    public int getPackedVariant() {
         return this.entityData.get(DATA_ID_TYPE_VARIANT);
     }
 

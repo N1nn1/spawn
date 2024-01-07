@@ -3,6 +3,8 @@ package com.ninni.spawn.registry;
 import com.google.common.reflect.Reflection;
 import com.ninni.spawn.Spawn;
 import com.ninni.spawn.SpawnTags;
+import com.ninni.spawn.client.inventory.FishCustomizerMenu;
+import com.ninni.spawn.client.inventory.FishCustomizerScreen;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
 import com.ninni.spawn.client.particles.KrillParticle;
@@ -24,21 +26,28 @@ import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.mixin.biome.NetherBiomePresetMixin;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.particle.GlowParticle;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.GenerationStep;
 
 import java.util.Optional;
 
+import static com.ninni.spawn.Spawn.MOD_ID;
+
 public class SpawnVanillaIntegration {
-    public static final ResourceLocation OPEN_HAMSTER_SCREEN = new ResourceLocation(Spawn.MOD_ID, "open_hamster_screen");
+    public static final ResourceLocation OPEN_HAMSTER_SCREEN = new ResourceLocation(MOD_ID, "open_hamster_screen");
 
     public static void serverInit() {
         registerBiomeModifications();
@@ -48,7 +57,7 @@ public class SpawnVanillaIntegration {
     }
 
     private static void registerBiomeModifications() {
-        BiomeModifications.create(new ResourceLocation(Spawn.MOD_ID, "replace_sunflower_patch")).add(ModificationPhase.REPLACEMENTS, biomeSelectionContext -> biomeSelectionContext.hasPlacedFeature(VegetationPlacements.PATCH_SUNFLOWER), biomeModificationContext -> {
+        BiomeModifications.create(new ResourceLocation(MOD_ID, "replace_sunflower_patch")).add(ModificationPhase.REPLACEMENTS, biomeSelectionContext -> biomeSelectionContext.hasPlacedFeature(VegetationPlacements.PATCH_SUNFLOWER), biomeModificationContext -> {
             BiomeModificationContext.GenerationSettingsContext generationSettings = biomeModificationContext.getGenerationSettings();
             if (generationSettings.removeFeature(VegetationPlacements.PATCH_SUNFLOWER)) {
                 generationSettings.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, SpawnPlacedFeatures.PATCH_SUNFLOWER);
@@ -103,6 +112,9 @@ public class SpawnVanillaIntegration {
         }
 
         private static void registerScreens() {
+
+            MenuScreens.register(SpawnMenuTypes.FISH_CUSTOMIZER_MENU, FishCustomizerScreen::new);
+
             ClientPlayNetworking.registerGlobalReceiver(OPEN_HAMSTER_SCREEN, (client, handler, buf, responseSender) -> {
                 int id = buf.readInt();
                 Level level = client.level;

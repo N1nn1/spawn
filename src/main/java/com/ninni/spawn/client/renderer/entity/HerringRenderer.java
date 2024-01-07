@@ -30,8 +30,6 @@ public class HerringRenderer extends MobRenderer<Herring, HerringModel<Herring>>
     @Override
     protected void setupRotations(Herring herring, PoseStack poseStack, float f, float g, float h) {
         super.setupRotations(herring, poseStack, f, g, h);
-        float i = 4.3f * Mth.sin(0.6f * f);
-        poseStack.mulPose(Axis.YP.rotationDegrees(i));
         if (!herring.isInWater()) {
             poseStack.mulPose(Axis.ZP.rotationDegrees(90.0f));
         }

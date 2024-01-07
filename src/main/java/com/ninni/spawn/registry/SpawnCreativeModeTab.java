@@ -156,6 +156,7 @@ public class SpawnCreativeModeTab {
                 output.accept(SPADE_POTTERY_SHERD);
 
                 output.accept(ALGAL_SAND);
+                output.accept(FISH_CUSTOMIZER);
 
                 output.accept(HERRING_SPAWN_EGG);
                 output.accept(HERRING_BUCKET);

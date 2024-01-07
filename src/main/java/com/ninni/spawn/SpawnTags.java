@@ -14,6 +14,7 @@ import static com.ninni.spawn.Spawn.MOD_ID;
 public interface SpawnTags {
 
     //Item tags
+    TagKey<Item> CUSTOMIZABLE_MOB_ITEMS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "customizable_mob_items"));
     TagKey<Item> ANGLER_FISH_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "angler_fish_tempts"));
     TagKey<Item> ANGLER_FISH_LIKES = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "angler_fish_likes"));
     TagKey<Item> TUNA_TEMPTS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "tuna_tempts"));
@@ -43,6 +44,6 @@ public interface SpawnTags {
     TagKey<Biome> HAMSTER_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "hamster_spawns"));
     TagKey<Biome> SMALL_ANTHILL_GENERATES = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "small_anthill_generates"));
 
-    //pointOfInterestTags
+    //pointOfInterest tags
     TagKey<PoiType> ANT_HOME = TagKey.create(Registries.POINT_OF_INTEREST_TYPE, new ResourceLocation(MOD_ID, "ant_home"));
 }
