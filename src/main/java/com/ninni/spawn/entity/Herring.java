@@ -1,8 +1,6 @@
 package com.ninni.spawn.entity;
 
-import com.ninni.spawn.entity.common.BoidGoal;
-import com.ninni.spawn.entity.common.HeightBoundsGoal;
-import com.ninni.spawn.entity.common.LimitSpeedAndLookInVelocityDirectionGoal;
+import com.ninni.spawn.entity.common.BoidFishEntity;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.sounds.SoundEvent;
@@ -14,12 +12,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
-import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class Herring extends AbstractSchoolingFish {
-    public Herring(EntityType<? extends AbstractSchoolingFish> entityType, Level level) {
+public class Herring extends BoidFishEntity {
+    public Herring(EntityType<? extends BoidFishEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02f, 0.1f, true);
         this.lookControl = new SmoothSwimmingLookControl(this, 10);
@@ -30,23 +27,8 @@ public class Herring extends AbstractSchoolingFish {
     }
 
     @Override
-    protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(5, new BoidGoal(this, 0.2f, 0.4f, 8 / 20f, 1 / 20f));
-        this.goalSelector.addGoal(3, new HeightBoundsGoal(this));
-        this.goalSelector.addGoal(2, new LimitSpeedAndLookInVelocityDirectionGoal(this, 0.3f, 0.4f));
-    }
-
-
-    @Override
     public int getMaxSchoolSize() {
-        return 20;
-    }
-
-
-    @Override
-    protected SoundEvent getSwimSound() {
-        return this.random.nextInt(10) == 0 ? super.getSwimSound() : SoundEvents.EMPTY;
+        return 15;
     }
 
     @Override
@@ -73,4 +55,5 @@ public class Herring extends AbstractSchoolingFish {
     protected SoundEvent getFlopSound() {
         return SpawnSoundEvents.FISH_FLOP;
     }
+
 }

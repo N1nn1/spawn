@@ -4,7 +4,6 @@ package com.ninni.spawn.entity;
 import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.entity.common.DeepLurker;
 import com.ninni.spawn.entity.common.FlopConditionable;
-import com.ninni.spawn.entity.common.TiltingFishEntity;
 import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnItems;
 import com.ninni.spawn.registry.SpawnParticles;
@@ -23,7 +22,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +34,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import org.jetbrains.annotations.Nullable;
 
-public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLurker, FlopConditionable {
+public class AnglerFish extends AbstractFish implements Bucketable, DeepLurker, FlopConditionable {
     public static final Ingredient TEMPT_INGREDIENT = Ingredient.of(SpawnTags.ANGLER_FISH_TEMPTS);
     public static final String LAST_EFFECT_GIVEN_KEY = "LastEffectGiven";
 
@@ -45,6 +47,8 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
 
     public AnglerFish(EntityType<? extends AnglerFish> type, Level world) {
         super(type, world);
+        this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.1F, true);
+        this.lookControl = new SmoothSwimmingLookControl(this, 10);
     }
 
     public boolean isDeflated() {
@@ -54,6 +58,10 @@ public class AnglerFish extends TiltingFishEntity implements Bucketable, DeepLur
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(0, new TryFindWaterGoal(this));
+        this.goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(1, new TemptGoal(this, 1.25F, TEMPT_INGREDIENT, false));
     }
 

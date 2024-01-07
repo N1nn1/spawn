@@ -1,9 +1,7 @@
 package com.ninni.spawn.entity.common;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 
 // Code took and modified from https://github.com/Tomate0613/boids,
 // I went ahead and used it because the project's license is MIT,
@@ -11,11 +9,11 @@ import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 // and you are not ok with me using it, please put me in contact with the author directly and I will act accordingly by removing it
 
 public class LimitSpeedAndLookInVelocityDirectionGoal extends Goal {
-    private final AbstractSchoolingFish mob;
+    private final BoidFishEntity mob;
     private final float minSpeed;
     private final float maxSpeed;
 
-    public LimitSpeedAndLookInVelocityDirectionGoal(AbstractSchoolingFish mob, float minSpeed, float maxSpeed) {
+    public LimitSpeedAndLookInVelocityDirectionGoal(BoidFishEntity mob, float minSpeed, float maxSpeed) {
         this.mob = mob;
         this.minSpeed = minSpeed;
         this.maxSpeed = maxSpeed;

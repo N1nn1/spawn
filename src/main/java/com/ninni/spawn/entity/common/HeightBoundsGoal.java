@@ -1,9 +1,7 @@
 package com.ninni.spawn.entity.common;
 
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
@@ -13,9 +11,9 @@ import net.minecraft.world.phys.Vec3;
 // and you are not ok with me using it, please put me in contact with the author directly and I will act accordingly by removing it
 
 public class HeightBoundsGoal extends Goal {
-    private final AbstractSchoolingFish mob;
+    private final BoidFishEntity mob;
 
-    public HeightBoundsGoal(AbstractSchoolingFish mob) {
+    public HeightBoundsGoal(BoidFishEntity mob) {
         this.mob = mob;
     }
 
