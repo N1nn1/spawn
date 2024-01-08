@@ -23,7 +23,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
+import java.util.Optional;
+
 public class FishCustomizerMenu extends AbstractContainerMenu {
+    private Optional<Seahorse.Pattern> optional = Optional.empty();
     private final Level level;
     private final ContainerLevelAccess access;
     final Slot bodyDyeSlot;
@@ -137,7 +140,8 @@ public class FishCustomizerMenu extends AbstractContainerMenu {
                             patternColor = dyeItem.getDyeColor();
 
 
-                        Seahorse.Variant variant = new Seahorse.Variant(Seahorse.getPattern(tag), bodyColor, patternColor);
+                        Seahorse.Pattern pattern = this.optional.isPresent() ? this.optional.get() : Seahorse.getPattern(tag);
+                        Seahorse.Variant variant = new Seahorse.Variant(pattern, bodyColor, patternColor);
                         Seahorse seahorse = SpawnEntityType.SEAHORSE.create(this.level);
                         seahorse.setPackedVariant(variant.getPackedId());
                         resultCopy.getOrCreateTag().putInt("BucketVariantTag", seahorse.getPackedVariant());
@@ -172,7 +176,11 @@ public class FishCustomizerMenu extends AbstractContainerMenu {
         }
     }
 
-    public void onButtonClick(AbstractClientPlayer player, boolean isBodyPlanButton) {
+    public void onButtonClick(Player player, boolean isBodyPlanButton, Optional<Seahorse.Pattern> optional) {
+        if (!isBodyPlanButton) {
+            this.optional = optional;
+            System.out.println(optional.get());
+        }
     }
 
     @Override

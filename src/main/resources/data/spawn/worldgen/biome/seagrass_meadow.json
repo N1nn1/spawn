@@ -76,7 +76,9 @@
       "minecraft:red_mushroom_normal",
       "minecraft:patch_sugar_cane",
       "minecraft:patch_pumpkin",
-      "spawn:sea_pickle_meadow"
+      "spawn:sea_pickle_meadow",
+      "spawn:small_seagrass_meadow",
+      "spawn:tall_seagrass_meadow"
     ],
     [
       "minecraft:freeze_top_layer"

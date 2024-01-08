@@ -44,6 +44,7 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
     private final FishCustomizerMenu menu;
     private final Player player;
     private final Level level;
+    private Optional<Seahorse.Pattern> optional = Optional.empty();
     private double rotationY = 0;
     private double rotateY = 0;
 
@@ -109,9 +110,10 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
                 if (item.is(SpawnItems.SEAHORSE_BUCKET)) {
                     int h;
                     Seahorse seahorse = SpawnEntityType.SEAHORSE.create(this.level);
-                    Seahorse.Variant variant = new Seahorse.Variant(Seahorse.getPattern(tag), Seahorse.getBaseColor(tag), Seahorse.getPatternColor(tag));
+                    Seahorse.Pattern pattern = this.optional.isPresent() ? this.optional.get() : Seahorse.getPattern(tag);
+                    Seahorse.Variant variant = new Seahorse.Variant(pattern, Seahorse.getBaseColor(tag), Seahorse.getPatternColor(tag));
                     seahorse.setPackedVariant(variant.getPackedId());
-                    if (Seahorse.getPattern(tag).base() == Seahorse.Base.LARGE) {
+                    if (pattern.base() == Seahorse.Base.LARGE) {
                         h = -10;
                     } else h = 0;
 
@@ -191,7 +193,19 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
 
         @Override
         public void onPress() {
-            //FishCustomizerScreen.this.menu.onButtonClick(false);
+            ItemStack item = menu.resultSlot.getItem();
+            CompoundTag compoundTag = item.getTag();
+            if (compoundTag != null) {
+                int tag = compoundTag.getInt("BucketVariantTag");
+                Seahorse.Pattern pattern = Seahorse.getPattern(tag);
+                int newId = (pattern.getPackedId() >> 8) + 1;
+                int shifted = newId << 8;
+                Seahorse.Pattern newPattern = Seahorse.Pattern.byId(shifted);
+                if (newPattern != null) {
+                    optional = Optional.of(newPattern);
+                }
+            }
+            FishCustomizerScreen.this.menu.onButtonClick(player,false, optional);
         }
 
         @Override

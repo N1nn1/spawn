@@ -1,0 +1,19 @@
+{
+  "feature": "spawn:small_seagrass_meadow",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 45
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}
