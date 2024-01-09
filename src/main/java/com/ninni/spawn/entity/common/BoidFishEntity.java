@@ -29,7 +29,7 @@ public abstract class BoidFishEntity extends AbstractFish {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(4, new FishSwimGoal(this));
-        this.goalSelector.addGoal(5, new BoidGoal(this, 0.2f, 0.4f, 8 / 20f, 1 / 20f));
+        this.goalSelector.addGoal(5, new BoidFishSchoolingGoal(this, 0.2f, 0.4f, 8 / 20f, 1 / 20f));
         this.goalSelector.addGoal(3, new HeightBoundsGoal(this));
         this.goalSelector.addGoal(2, new LimitSpeedAndLookInVelocityDirectionGoal(this, 0.3f, 0.4f));
         this.goalSelector.addGoal(5, new OrganizeBoidSchoolingGoal(this));
@@ -80,16 +80,6 @@ public abstract class BoidFishEntity extends AbstractFish {
     @Override
     public void tick() {
         super.tick();
-        List<? extends BoidFishEntity> nearbyFish = this.level().getEntitiesOfClass(this.getClass(), this.getBoundingBox().inflate(8.0, 8.0, 8.0));
-
-        if (this.hasFollowers() && this.level().random.nextInt(200) == 1 ) {
-            for (BoidFishEntity fish : ownSchool) {
-                if (nearbyFish.contains(fish) && nearbyFish.size() <= 1) {
-                    this.removeFollowerFromOwnSchool(fish);
-                }
-            }
-        }
-
     }
 
     public boolean hasFollowers() {

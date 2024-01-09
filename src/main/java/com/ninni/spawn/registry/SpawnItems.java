@@ -94,6 +94,9 @@ public class SpawnItems {
     public static final Item ALGAL_SAND = register("algal_sand", new BlockItem(SpawnBlocks.ALGAL_SAND, new FabricItemSettings()));
     public static final Item FISH_CUSTOMIZER = register("fish_customizer", new BlockItem(SpawnBlocks.FISH_CUSTOMIZER, new FabricItemSettings()));
 
+    // sea cow
+    public static final Item SEA_COW_SPAWN_EGG = register("sea_cow_spawn_egg", new SpawnEggItem(SpawnEntityType.SEA_COW, 0x696969, 0x7C7C7C, new Item.Properties()));
+
     // herring
     public static final Item HERRING_SPAWN_EGG = register("herring_spawn_egg", new SpawnEggItem(SpawnEntityType.HERRING, 0x1051AD, 0xCACACA, new Item.Properties()));
     public static final Item HERRING_BUCKET = register("herring_bucket", new MobBucketItem(SpawnEntityType.HERRING, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));

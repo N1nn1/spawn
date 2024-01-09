@@ -6,7 +6,7 @@ import com.ninni.spawn.entity.common.DeepLurker;
 import com.ninni.spawn.entity.common.FlopConditionable;
 import com.ninni.spawn.registry.SpawnCriteriaTriggers;
 import com.ninni.spawn.registry.SpawnItems;
-import com.ninni.spawn.registry.SpawnParticles;
+import com.ninni.spawn.registry.SpawnParticleTypes;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -90,7 +90,7 @@ public class AnglerFish extends AbstractFish implements Bucketable, DeepLurker, 
     public void aiStep() {
         super.aiStep();
         if (this.isUnderWater() && this.tickCount % 4 == 0) {
-            this.level().addParticle(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.15D), this.getY(1.25D), this.getRandomZ(0.15D), 0.0D, 0.0D, 0.0D);
+            this.level().addParticle(SpawnParticleTypes.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.15D), this.getY(1.25D), this.getRandomZ(0.15D), 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -109,14 +109,14 @@ public class AnglerFish extends AbstractFish implements Bucketable, DeepLurker, 
                     // add visual effects
                     this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_GIVE);
                     if (this.level() instanceof ServerLevel world) {
-                        world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.1F), this.getY(0.5F), this.getRandomZ(0.1F), 40, 25F, 25F, 25F, 0F);
+                        world.sendParticles(SpawnParticleTypes.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.1F), this.getY(0.5F), this.getRandomZ(0.1F), 40, 25F, 25F, 25F, 0F);
                     }
 
                     this.lastEffectGiven = time;
                 } else {
                     this.playSound(SpawnSoundEvents.ANGLER_FISH_EFFECT_DENY);
                     if (this.level() instanceof ServerLevel world) {
-                        world.sendParticles(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.05F), this.getY(0.5F), this.getRandomZ(0.05F), 10, 25F, 25F, 25F, 0F);
+                        world.sendParticles(SpawnParticleTypes.ANGLER_FISH_LANTERN_GLOW, this.getRandomX(0.05F), this.getY(0.5F), this.getRandomZ(0.05F), 10, 25F, 25F, 25F, 0F);
                     }
                 }
 

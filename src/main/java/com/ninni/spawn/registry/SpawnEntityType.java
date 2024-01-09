@@ -35,7 +35,7 @@ public class SpawnEntityType {
                     .entityFactory(Tuna::new)
                     .defaultAttributes(Tuna::createAttributes)
                     .spawnGroup(MobCategory.WATER_CREATURE)
-                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Tuna::checkSurfaceWaterAnimalSpawnRules)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR_WG, Tuna::checkSurfaceWaterAnimalSpawnRules)
                     .dimensions(EntityDimensions.scalable(1.2F, 0.8F))
     );
 
@@ -123,6 +123,17 @@ public class SpawnEntityType {
                     .spawnGroup(MobCategory.WATER_AMBIENT)
                     .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Herring::checkSurfaceWaterAnimalSpawnRules)
                     .dimensions(EntityDimensions.scalable(0.4F, 0.25F))
+                    .trackRangeChunks(30)
+    );
+
+    public static final EntityType<SeaCow> SEA_COW = register(
+            "sea_cow",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(SeaCow::new)
+                    .defaultAttributes(SeaCow::createAttributes)
+                    .spawnGroup(MobCategory.WATER_CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.OCEAN_FLOOR_WG, SeaCow::checkSurfaceWaterAnimalSpawnRules)
+                    .dimensions(EntityDimensions.scalable(1.3F, 1F))
                     .trackRangeChunks(30)
     );
 

@@ -3,7 +3,7 @@ package com.ninni.spawn.entity;
 import com.ninni.spawn.entity.common.DeepLurker;
 import com.ninni.spawn.entity.common.FlopConditionable;
 import com.ninni.spawn.registry.SpawnItems;
-import com.ninni.spawn.registry.SpawnParticles;
+import com.ninni.spawn.registry.SpawnParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -40,7 +40,7 @@ public class KrillSwarm extends AbstractSchoolingFish implements FlopConditionab
     public void aiStep() {
         super.aiStep();
         float size = 0.4f;
-        if (random.nextInt(2) == 0 && this.isInWaterOrBubble()) this.level().addParticle(SpawnParticles.KRILL, this.getRandomX(size), this.getRandomY(), this.getRandomZ(size), 0.0, 0.0, 0.0);
+        if (random.nextInt(2) == 0 && this.isInWaterOrBubble()) this.level().addParticle(SpawnParticleTypes.KRILL, this.getRandomX(size), this.getRandomY(), this.getRandomZ(size), 0.0, 0.0, 0.0);
     }
 
     @Override

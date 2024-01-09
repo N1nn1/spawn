@@ -16,7 +16,7 @@
       "tick_delay": 6000
     },
     "sky_color": 8103167,
-    "water_color": 5947325,
+    "water_color": 3255236,
     "water_fog_color": 75811
   },
   "features": [
@@ -190,6 +190,12 @@
       }
     ],
     "water_creature": [
+      {
+        "type": "spawn:sea_cow",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 10
+      },
       {
         "type": "minecraft:squid",
         "maxCount": 2,

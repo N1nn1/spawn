@@ -26,6 +26,7 @@ public interface SpawnEntityModelLayers {
     ModelLayerLocation HERRING = main("herring", HerringModel::getLayerDefinition);
     ModelLayerLocation WHALE = main("whale", WhaleModel::getLayerDefinition);
     ModelLayerLocation WHALE_UVULA = main("whale_uvula", WhaleUvulaRenderer::createBodyLayer);
+    ModelLayerLocation SEA_COW = main("sea_cow", SeaCowModel::getLayerDefinition);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

@@ -4,15 +4,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-import java.util.function.Predicate;
-
 // Code took and modified from https://github.com/Tomate0613/boids,
 // I went ahead and used it because the project's license is MIT,
 // but if you are the author or someone that knows the author reading this
 // and you are not ok with me using it, please put me in contact with the author directly and I will act accordingly by removing it
 
-public class BoidGoal extends Goal {
+public class BoidFishSchoolingGoal extends Goal {
 
     public final float separationInfluence;
     public final float separationRange;
@@ -20,7 +17,7 @@ public class BoidGoal extends Goal {
     public final float cohesionInfluence;
     private final BoidFishEntity mob;
 
-    public BoidGoal(BoidFishEntity mob, float separationInfluence, float separationRange, float alignmentInfluence, float cohesionInfluence) {
+    public BoidFishSchoolingGoal(BoidFishEntity mob, float separationInfluence, float separationRange, float alignmentInfluence, float cohesionInfluence) {
         this.mob = mob;
         this.separationInfluence = separationInfluence;
         this.separationRange = separationRange;
@@ -34,9 +31,9 @@ public class BoidGoal extends Goal {
     }
 
     public void tick() {
-        if (mob.getRandom().nextInt(5) == 1) {
+        //if (mob.getRandom().nextInt(5) == 1) {
             mob.addDeltaMovement(separation());
-        }
+        //}
         mob.addDeltaMovement(random());
         mob.addDeltaMovement(cohesion());
         mob.addDeltaMovement(alignment());

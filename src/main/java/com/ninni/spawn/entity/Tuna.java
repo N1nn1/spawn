@@ -187,6 +187,11 @@ public class Tuna extends Animal {
         return false;
     }
 
+    @Override
+    protected boolean canRide(Entity entity) {
+        return false;
+    }
+
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {

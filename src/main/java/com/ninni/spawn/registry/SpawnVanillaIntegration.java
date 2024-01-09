@@ -1,13 +1,12 @@
 package com.ninni.spawn.registry;
 
 import com.google.common.reflect.Reflection;
-import com.ninni.spawn.Spawn;
 import com.ninni.spawn.SpawnTags;
-import com.ninni.spawn.client.inventory.FishCustomizerMenu;
 import com.ninni.spawn.client.inventory.FishCustomizerScreen;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
 import com.ninni.spawn.client.particles.KrillParticle;
+import com.ninni.spawn.client.particles.SandCloudParticle;
 import com.ninni.spawn.client.particles.TunaEggParticle;
 import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.entity.Hamster;
@@ -25,20 +24,14 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
-import net.fabricmc.fabric.mixin.biome.NetherBiomePresetMixin;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.particle.GlowParticle;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.GenerationStep;
 
@@ -146,7 +139,8 @@ public class SpawnVanillaIntegration {
                     SpawnBlocks.ANT_FARM,
                     SpawnBlocks.POTTED_SWEET_BERRY_BUSH,
                     SpawnBlocks.SUNFLOWER,
-                    SpawnBlocks.SUNFLOWER_PLANT
+                    SpawnBlocks.SUNFLOWER_PLANT,
+                    SpawnBlocks.TRIMMED_SEAGRASS
             );
         }
 
@@ -162,14 +156,16 @@ public class SpawnVanillaIntegration {
             EntityRendererRegistry.register(SpawnEntityType.HERRING, HerringRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.WHALE, WhaleRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.KRILL_SWARM, KrillSwarmRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.SEA_COW, SeaCowRenderer::new);
 
             BlockEntityRendererRegistry.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
         }
 
         private static void registerParticles() {
-            ParticleFactoryRegistry.getInstance().register(SpawnParticles.ANGLER_FISH_LANTERN_GLOW, GlowParticle.GlowSquidProvider::new);
-            ParticleFactoryRegistry.getInstance().register(SpawnParticles.TUNA_EGG, TunaEggParticle.Factory::new);
-            ParticleFactoryRegistry.getInstance().register(SpawnParticles.KRILL, KrillParticle.Factory::new);
+            ParticleFactoryRegistry.getInstance().register(SpawnParticleTypes.ANGLER_FISH_LANTERN_GLOW, GlowParticle.GlowSquidProvider::new);
+            ParticleFactoryRegistry.getInstance().register(SpawnParticleTypes.TUNA_EGG, TunaEggParticle.Factory::new);
+            ParticleFactoryRegistry.getInstance().register(SpawnParticleTypes.KRILL, KrillParticle.Factory::new);
+            ParticleFactoryRegistry.getInstance().register(SpawnParticleTypes.SAND_CLOUD, SandCloudParticle.Factory::new);
         }
 
     }

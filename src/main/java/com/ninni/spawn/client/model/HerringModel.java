@@ -88,6 +88,8 @@ public class HerringModel<T extends Entity>
         this.body.xRot = headPitch * (pi/180);
         this.body.yRot = headYaw * (pi/180);
 
+
+
         this.root.y = Mth.cos(animationProgress + 3) * 0.4F * 0.25F;
         this.root.yRot = Mth.cos(animationProgress + 1) * 0.4F * 0.25F;
         this.tail.yRot = Mth.cos(animationProgress + 2) * 2.8F * 0.25F;

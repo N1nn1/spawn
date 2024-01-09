@@ -59,9 +59,10 @@ public class SpawnBlocks {
     public static final Block ROTTEN_FENCE_GATE = register("rotten_fence_gate", new FenceGateBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).forceSolidOn(), SpawnWoodType.ROTTEN));
     public static final Block ROTTEN_DOOR = register("rotten_door", new DoorBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).noOcclusion(), SpawnBlockSetType.ROTTEN));
     public static final Block ROTTEN_TRAPDOOR = register("rotten_trapdoor", new TrapDoorBlock(FabricBlockSettings.copy(ROTTEN_PLANKS).noOcclusion().isValidSpawn(SpawnBlocks::never), SpawnBlockSetType.ROTTEN));
-    public static final Block FALLEN_LEAVES = register("fallen_leaves", new FallenLeavesBlock(FabricBlockSettings.create().noOcclusion().sound(SpawnSoundEvents.FALLEN_LEAVES).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY).mapColor(DyeColor.BROWN).noCollission()));
+    public static final Block FALLEN_LEAVES = register("fallen_leaves", new FallenLeavesBlock(FabricBlockSettings.create().noOcclusion().sound(SpawnSoundEvents.FALLEN_LEAVES).instabreak().ignitedByLava().replaceable().pushReaction(PushReaction.DESTROY).mapColor(DyeColor.BROWN).noCollission()));
 
     public static final Block ALGAL_SAND = register("algal_sand", new AlgalSandBlock(FabricBlockSettings.copyOf(Blocks.SAND).randomTicks().mapColor(MapColor.COLOR_GREEN)));
+    public static final Block TRIMMED_SEAGRASS = register("trimmed_seagrass", new TrimmedSeagrassBlock(FabricBlockSettings.copyOf(Blocks.SEAGRASS).offsetType(BlockBehaviour.OffsetType.XZ).randomTicks()));
     public static final Block FISH_CUSTOMIZER = register("fish_customizer", new FishCustomizerBlock(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).mapColor(MapColor.COLOR_BROWN)));
 
     // whale
