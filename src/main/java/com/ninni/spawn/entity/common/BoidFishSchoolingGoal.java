@@ -31,9 +31,7 @@ public class BoidFishSchoolingGoal extends Goal {
     }
 
     public void tick() {
-        //if (mob.getRandom().nextInt(5) == 1) {
-            mob.addDeltaMovement(separation());
-        //}
+        mob.addDeltaMovement(separation());
         mob.addDeltaMovement(random());
         mob.addDeltaMovement(cohesion());
         mob.addDeltaMovement(alignment());

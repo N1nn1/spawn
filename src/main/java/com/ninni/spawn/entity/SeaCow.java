@@ -170,7 +170,7 @@ public class SeaCow extends WaterAnimal implements Shearable {
                 LootTable lootTable = lootParams.getLevel().getServer().getLootData().getLootTable(LOOT_COMMON);
                 ObjectArrayList<ItemStack> list = lootTable.getRandomItems(lootParams);
                 for (ItemStack stack : list) {
-                    this.spawnAtLocation(stack);
+                    this.spawnAtHeadLocation(stack);
                 }
                 this.addMunchingCooldown(this.random.nextInt(300) + 200);
                 this.setFullness(0);
@@ -178,7 +178,7 @@ public class SeaCow extends WaterAnimal implements Shearable {
                 LootTable lootTable = lootParams.getLevel().getServer().getLootData().getLootTable(LOOT_RARE);
                 ObjectArrayList<ItemStack> list = lootTable.getRandomItems(lootParams);
                 for (ItemStack stack : list) {
-                    this.spawnAtLocation(stack);
+                    this.spawnAtHeadLocation(stack);
                 }
                 this.addMunchingCooldown(this.random.nextInt(300) + 400);
                 this.setFullness(0);
@@ -215,13 +215,15 @@ public class SeaCow extends WaterAnimal implements Shearable {
     @Override
     public void shear(SoundSource soundSource) {
         this.level().playSound(null, this, SoundEvents.SHEEP_SHEAR, soundSource, 1.0f, 1.0f);
-        this.setAlgaeAmount(0);
-        int i = this.random.nextInt(10) + 10;
-        for (int j = 0; j < i; ++j) {
-            ItemEntity itemEntity = this.spawnAtLocation(Items.SEAGRASS, 1);
-            if (itemEntity == null) continue;
-            itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1f, this.random.nextFloat() * 0.05f, (this.random.nextFloat() - this.random.nextFloat()) * 0.1f));
+        if (this.getAlgaeAmount() > 35000) {
+            int i = this.random.nextInt(10) + 10;
+            for (int j = 0; j < i; ++j) {
+                ItemEntity itemEntity = this.spawnAtLocation(Items.SEAGRASS, 1);
+                if (itemEntity == null) continue;
+                itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1f, this.random.nextFloat() * 0.05f, (this.random.nextFloat() - this.random.nextFloat()) * 0.1f));
+            }
         }
+        this.setAlgaeAmount(0);
     }
 
 
@@ -279,7 +281,7 @@ public class SeaCow extends WaterAnimal implements Shearable {
 
     @Override
     public boolean readyForShearing() {
-        return this.getAlgaeAmount() == maxAlgaeAmount;
+        return this.getAlgaeAmount() > 14000;
     }
 
     @Override
@@ -321,6 +323,13 @@ public class SeaCow extends WaterAnimal implements Shearable {
         return this.getXRot() * ((float)Math.PI / 180);
     }
 
+    public void spawnAtHeadLocation(ItemStack itemStack) {
+        if (!itemStack.isEmpty() && !this.level().isClientSide) {
+            ItemEntity itemEntity = new ItemEntity(this.level(), this.getHeadPos(false, 0).x, this.getHeadPos(false, 0).y, this.getHeadPos(false, 0).z, itemStack);
+            itemEntity.setDefaultPickUpDelay();
+            this.level().addFreshEntity(itemEntity);
+        }
+    }
 
     public Vec3 getHeadPos(boolean random, float randomValue) {
         final float angle = (0.0174532925F * SeaCow.this.yBodyRot);

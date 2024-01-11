@@ -76,13 +76,20 @@ public interface SpawnSoundEvents {
     SoundEvent ROTTEN_WOOD_TRAPDOOR_OPEN = register("block.rotten_wood_trapdoor.open");
     SoundEvent ROTTEN_WOOD_TRAPDOOR_CLOSE = register("block.rotten_wood_trapdoor.close");
 
+    //TODO sounds for:
+    //Algal sand
+    //Sea cows
+    //Fish customizer
+    //Whale
+    //Whale blocks
+
     SoundType MUCUS = register("mucus", 1, 1);
     SoundType ROTTEN_WOOD = register("rotten_wood", 1, 1);
     SoundType CRACKED_ROTTEN_WOOD = register("cracked_rotten_wood", 1, 1);
     SoundType FALLEN_LEAVES = register("fallen_leaves", 1, 1);
     SoundType SNAIL_SHELL = register("snail_shell", 1, 1);
 
-	private static SoundType register(String name, float volume, float pitch) {
+    private static SoundType register(String name, float volume, float pitch) {
         return new SoundType(volume, pitch, register("block." + name + ".break"), register("block." + name + ".step"), register("block." + name + ".place"), register("block." + name + ".hit"), register("block." + name + ".fall"));
     }
 
