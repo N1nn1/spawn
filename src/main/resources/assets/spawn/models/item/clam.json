@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "spawn:item/scallop"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "variant": 0.25
+      },
+      "model": "spawn:item/clam_wedge_shell"
+    },
+    {
+      "predicate": {
+        "variant": 0.5
+      },
+      "model": "spawn:item/clam_scallop"
+    },
+    {
+      "predicate": {
+        "variant": 0.75
+      },
+      "model": "spawn:item/clam_giant_clam"
+    }
+  ]
+}

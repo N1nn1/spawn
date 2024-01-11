@@ -27,6 +27,9 @@ public interface SpawnEntityModelLayers {
     ModelLayerLocation WHALE = main("whale", WhaleModel::getLayerDefinition);
     ModelLayerLocation WHALE_UVULA = main("whale_uvula", WhaleUvulaRenderer::createBodyLayer);
     ModelLayerLocation SEA_COW = main("sea_cow", SeaCowModel::getLayerDefinition);
+    ModelLayerLocation CLAM_WEDGE_SHELL = main("clam_wedge_shell", ClamModel::createWedgeShellLayer);
+    ModelLayerLocation CLAM_SCALLOP = main("clam_scallop", ClamModel::createScallopLayer);
+    ModelLayerLocation CLAM_GIANT_CLAM = main("clam_giant_clam", ClamModel::createGiantClamLayer);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {
         ModelLayerLocation layer = new ModelLayerLocation(new ResourceLocation(MOD_ID, id), name);

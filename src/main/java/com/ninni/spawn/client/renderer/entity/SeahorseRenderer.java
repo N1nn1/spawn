@@ -49,10 +49,6 @@ public class SeahorseRenderer extends MobRenderer<Seahorse, SeahorseModel<Seahor
 
         this.model = model;
 
-        //if (model == this.modelB) {
-        //    poseStack.scale(1.25f, 1.25f, 1.25f);
-        //} else poseStack.scale(0.75f, 0.75f, 0.75f);
-
         float[] fs = seahorse.getBaseColor().getTextureDiffuseColors();
         model.setColor(fs[0], fs[1], fs[2]);
 

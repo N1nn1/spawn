@@ -137,6 +137,17 @@ public class SpawnEntityType {
                     .trackRangeChunks(30)
     );
 
+    public static final EntityType<Clam> CLAM = register(
+            "clam",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Clam::new)
+                    .defaultAttributes(Clam::createAttributes)
+                    .spawnGroup(MobCategory.WATER_AMBIENT)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Clam::checkSurfaceWaterAnimalSpawnRules)
+                    .dimensions(EntityDimensions.scalable(0.4F, 0.2F))
+                    .trackRangeChunks(30)
+    );
+
     static {
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.ANGLER_FISH_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.ANGLER_FISH, 5, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.TUNA_SPAWNS), MobCategory.WATER_CREATURE, SpawnEntityType.TUNA, 15, 1, 1);

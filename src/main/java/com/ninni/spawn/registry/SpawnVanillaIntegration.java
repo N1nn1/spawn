@@ -9,7 +9,9 @@ import com.ninni.spawn.client.particles.KrillParticle;
 import com.ninni.spawn.client.particles.SandCloudParticle;
 import com.ninni.spawn.client.particles.TunaEggParticle;
 import com.ninni.spawn.client.renderer.entity.*;
+import com.ninni.spawn.entity.Clam;
 import com.ninni.spawn.entity.Hamster;
+import com.ninni.spawn.entity.variant.ClamVariant;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
@@ -21,14 +23,19 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.particle.GlowParticle;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
@@ -102,6 +109,7 @@ public class SpawnVanillaIntegration {
             registerParticles();
             registerBlockRenderLayers();
             registerScreens();
+            registerItemModelPredicates();
         }
 
         private static void registerScreens() {
@@ -144,6 +152,23 @@ public class SpawnVanillaIntegration {
             );
         }
 
+        private static void registerItemModelPredicates() {
+            FabricModelPredicateProviderRegistry.register(SpawnItems.CLAM, new ResourceLocation("variant"), (itemStack, clientWorld, livingEntity, i) -> {
+
+                CompoundTag compoundTag = itemStack.getTag();
+                if (compoundTag != null && compoundTag.contains("ItemVariantTag", 3)) {
+                    int a = compoundTag.getInt("ItemVariantTag");
+                    ClamVariant.Base base = Clam.getBaseColor(a).base();
+
+                    if (base == ClamVariant.Base.WEDGE_SHELL) return 0.25f;
+                    if (base == ClamVariant.Base.SCALLOP) return 0.5f;
+                    if (base == ClamVariant.Base.GIANT_CLAM) return 0.75f;
+                }
+
+                return 0.0F;
+            });
+        }
+
         private static void registerModelLayers() {
             Reflection.initialize(SpawnEntityModelLayers.class);
             EntityRendererRegistry.register(SpawnEntityType.ANGLER_FISH, AnglerFishRenderer::new);
@@ -157,6 +182,7 @@ public class SpawnVanillaIntegration {
             EntityRendererRegistry.register(SpawnEntityType.WHALE, WhaleRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.KRILL_SWARM, KrillSwarmRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.SEA_COW, SeaCowRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.CLAM, ClamRenderer::new);
 
             BlockEntityRendererRegistry.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
         }

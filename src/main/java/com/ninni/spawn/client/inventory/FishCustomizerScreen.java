@@ -188,7 +188,7 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
     @Environment(value=EnvType.CLIENT)
     class UpdatePatternButton extends AbstractButton {
         public UpdatePatternButton(int i, int j) {
-            super(i, j, 16, 16, Component.translatable("container.spawn.fish_customizer.pattern"));
+            super(i, j, 16, 16, Component.translatable("container.spawn.fish_customizer.color"));
         }
 
         @Override
@@ -214,7 +214,7 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
             if (this.isHovered()) {
                 l = 32;
             }
-            this.setTooltip(Tooltip.create(Component.translatable("container.spawn.fish_customizer.pattern"), null));
+            this.setTooltip(Tooltip.create(Component.translatable("container.spawn.fish_customizer.color"), null));
             guiGraphics.blit(RESOURCE_LOCATION, this.getX(), this.getY(), 192, l, this.width, this.height);
         }
 

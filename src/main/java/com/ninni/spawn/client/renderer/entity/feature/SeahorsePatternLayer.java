@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.ninni.spawn.client.model.SeahorseModel;
 import com.ninni.spawn.entity.Seahorse;
 import com.ninni.spawn.registry.SpawnEntityModelLayers;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -12,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import static com.ninni.spawn.Spawn.MOD_ID;
 
+@Environment(value= EnvType.CLIENT)
 public class SeahorsePatternLayer extends RenderLayer<Seahorse, SeahorseModel<Seahorse>> {
     private static final ResourceLocation RIDGED = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_a_pattern_1.png");
     private static final ResourceLocation SHARP = new ResourceLocation(MOD_ID, "textures/entity/fish/seahorse_a_pattern_2.png");
