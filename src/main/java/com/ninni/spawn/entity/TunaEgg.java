@@ -48,10 +48,16 @@ public class TunaEgg extends Mob implements Bucketable {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
         if (mobSpawnType == MobSpawnType.BUCKET && compoundTag != null && compoundTag.contains(BUCKET_VARIANT_TAG, 3)) {
+            this.setPersistenceRequired();
             this.setHatchTicks(compoundTag.getInt(BUCKET_VARIANT_TAG));
             return spawnGroupData;
         }
         return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double d) {
+        return false;
     }
 
     @Override

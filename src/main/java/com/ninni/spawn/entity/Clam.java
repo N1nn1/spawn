@@ -218,16 +218,7 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
     }
 
     public static int packVariant(ClamVariant.BaseColor baseColor, ClamVariant.Pattern pattern, DyeColor dyeColor) {
-        int baseColor2 = baseColor.getPackedId() & '\uffff';
-        int pattern2 = pattern.getPackedId() & '\uffff';
-        int dyeColor2 = (dyeColor.getId() & 255) << 24;
-
-        System.out.println("baseColor :" + baseColor2);
-        System.out.println("pattern :" + pattern2);
-        System.out.println("dyeColor :" + dyeColor2);
-        System.out.println("everything :" + (baseColor2 | pattern2 | dyeColor2));
-
-        return baseColor2 | pattern2 | dyeColor2;
+        return (baseColor.getId() << 8) | (pattern.getId() << 4) | dyeColor.getId();
     }
 
     public ClamVariant.BaseColor getBaseColor() {
@@ -242,13 +233,13 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
 
 
     public static ClamVariant.BaseColor getBaseColor(int i) {
-        return ClamVariant.BaseColor.byId(i & '\uffff');
+        return ClamVariant.BaseColor.byId((i >> 8) & 0xF);
     }
     public static ClamVariant.Pattern getPattern(int i) {
-        return ClamVariant.Pattern.byId(i & '\uffff');
+        return ClamVariant.Pattern.byId((i >> 4) & 0xF);
     }
     public static DyeColor getDyeColor(int i) {
-        return DyeColor.byId(i >> 24 & 255);
+        return DyeColor.byId(i & 0xF);
     }
 
     public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<Clam> clamEntityType, ServerLevelAccessor levelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {

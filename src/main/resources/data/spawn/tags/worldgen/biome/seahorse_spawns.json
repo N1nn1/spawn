@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "spawn:seagrass_meadow",
     "minecraft:warm_ocean"
   ]
 }

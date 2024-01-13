@@ -44,6 +44,7 @@ public interface SpawnTags {
     TagKey<Biome> SEAHORSE_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "seahorse_spawns"));
     TagKey<Biome> HAMSTER_FREQUENTLY_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "hamster_frequently_spawns"));
     TagKey<Biome> HAMSTER_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "hamster_spawns"));
+    TagKey<Biome> SEA_COW_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "sea_cow_spawns"));
     TagKey<Biome> SMALL_ANTHILL_GENERATES = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "small_anthill_generates"));
 
     //pointOfInterest tags

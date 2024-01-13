@@ -42,15 +42,17 @@ public class ClamVariant {
         TILED(3, "tiled"),
         RIDGED(4, "ridged");
 
-        private static final IntFunction<Pattern> BY_ID = ByIdMap.sparse(Pattern::getPackedId, values(), NO_PATTERN);
+        private static final IntFunction<Pattern> BY_ID = ByIdMap.sparse(Pattern::getId, values(), NO_PATTERN);
         final int id;
         private final String name;
-        private final int packedId;
 
         Pattern(int j, String name) {
             this.id = j;
             this.name = name;
-            this.packedId = id | j << 8;
+        }
+
+        public int getId() {
+            return id;
         }
 
         public String patternName() {
@@ -61,9 +63,6 @@ public class ClamVariant {
             return BY_ID.apply(i);
         }
 
-        public int getPackedId() {
-            return this.packedId;
-        }
 
         public Component patternDisplayName() {
             return Component.translatable("entity.spawn.clam.pattern." + this.name);
@@ -75,26 +74,28 @@ public class ClamVariant {
         WBROWN(1, Base.WEDGE_SHELL, "brown"),
         WPURPLE(2, Base.WEDGE_SHELL, "purple"),
         WYELLOW(3, Base.WEDGE_SHELL, "yellow"),
-        SPURPLE(0, Base.SCALLOP, "purple"),
-        SRED(1, Base.SCALLOP, "red"),
-        SWHITE(2, Base.SCALLOP, "white"),
-        SYELLOW(3, Base.SCALLOP, "yellow"),
-        GCYAN(0, Base.GIANT_CLAM, "cyan"),
-        GGREEN(1, Base.GIANT_CLAM, "green"),
-        GORANGE(2, Base.GIANT_CLAM, "orange"),
-        GPURPLE(3, Base.GIANT_CLAM, "purple");
+        SPURPLE(4, Base.SCALLOP, "purple"),
+        SRED(5, Base.SCALLOP, "red"),
+        SWHITE(6, Base.SCALLOP, "white"),
+        SYELLOW(7, Base.SCALLOP, "yellow"),
+        GCYAN(8, Base.GIANT_CLAM, "cyan"),
+        GGREEN(9, Base.GIANT_CLAM, "green"),
+        GORANGE(10, Base.GIANT_CLAM, "orange"),
+        GPURPLE(11, Base.GIANT_CLAM, "purple");
 
-        private static final IntFunction<BaseColor> BY_ID = ByIdMap.sparse(BaseColor::getPackedId, values(), WBLUE);
+        private static final IntFunction<BaseColor> BY_ID = ByIdMap.sparse(BaseColor::getId, values(), WBLUE);
         final int id;
         final Base base;
         private final String name;
-        private final int packedId;
 
         BaseColor(int j, Base base, String name) {
             this.id = j;
             this.name = name;
             this.base = base;
-            this.packedId = base.id | j << 8;
+        }
+
+        public int getId() {
+            return id;
         }
 
         public Base base() {
@@ -111,10 +112,6 @@ public class ClamVariant {
 
         public static BaseColor byId(int i) {
             return BY_ID.apply(i);
-        }
-
-        public int getPackedId() {
-            return this.packedId;
         }
 
         public Component colorDisplayName() {

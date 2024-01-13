@@ -27,10 +27,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
@@ -143,6 +140,11 @@ public class Tuna extends Animal {
     }
 
     @Override
+    public boolean removeWhenFarAway(double d) {
+        return !this.isPersistenceRequired();
+    }
+
+    @Override
     public int getMaxHeadXRot() {
         return 1;
     }
@@ -223,10 +225,10 @@ public class Tuna extends Animal {
     protected void playStepSound(BlockPos blockPos, BlockState blockState) {}
 
     @SuppressWarnings("unused, deprecation")
-    public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<? extends Tuna> entityType, LevelAccessor levelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
-        int i = levelAccessor.getSeaLevel();
+    public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<Tuna> mobEntityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
+        int i = serverLevelAccessor.getSeaLevel();
         int j = i - 13;
-        return blockPos.getY() >= j && blockPos.getY() <= i && levelAccessor.getFluidState(blockPos.below()).is(FluidTags.WATER) && levelAccessor.getBlockState(blockPos.above()).is(Blocks.WATER);
+        return blockPos.getY() >= j && blockPos.getY() <= i && serverLevelAccessor.getFluidState(blockPos.below()).is(FluidTags.WATER) && serverLevelAccessor.getBlockState(blockPos.above()).is(Blocks.WATER);
     }
 
 
@@ -244,6 +246,7 @@ public class Tuna extends Animal {
         this.resetLove();
         animal.resetLove();
 
+        egg.setPersistenceRequired();
         egg.setHatchTicks(5 * 20 * 60);
         egg.moveTo(this.getX(), this.getY(), this.getZ(), 0.0f, 0.0f);
         serverLevel.addFreshEntity(egg);

@@ -3,6 +3,7 @@ package com.ninni.spawn.client.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ninni.spawn.entity.Clam;
+import com.ninni.spawn.entity.variant.ClamVariant;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.EntityModel;
@@ -10,6 +11,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.Blocks;
 
 @SuppressWarnings("FieldCanBeLocal, unused")
 @Environment(value= EnvType.CLIENT)
@@ -30,7 +33,15 @@ public class ClamModel extends EntityModel<Clam> {
 
     @Override
     public void setupAnim(Clam entity, float f, float g, float h, float i, float j) {
-
+        //if (entity.getBaseColor().base() == ClamVariant.Base.GIANT_CLAM && entity.getBlockStateOn().is(Blocks.SAND) && entity.isInWaterOrBubble()) {
+        //    this.bottom.y = 24F;
+        //    this.top.xRot = - (Mth.HALF_PI / 2);
+        //    this.bottom.xRot = -Mth.HALF_PI + (Mth.HALF_PI / 2);
+        //} else {
+        //    this.bottom.y = 23.5F;
+        //    this.bottom.xRot = 0;
+        //    this.top.xRot = 0;
+        //}
     }
 
     @Override

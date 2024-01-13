@@ -96,11 +96,13 @@ public class SeaCow extends WaterAnimal implements Shearable {
             player.playSound(SoundEvents.COW_MILK, 1.0f, 1.0f);
             ItemStack itemStack2 = ItemUtils.createFilledResult(itemStack, player, Items.MILK_BUCKET.getDefaultInstance());
             player.setItemInHand(interactionHand, itemStack2);
+            this.setPersistenceRequired();
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
         if ((itemStack.is(SpawnTags.SEA_COW_LIKES) || itemStack.is(SpawnTags.SEA_COW_LOVES)) && this.isInWaterOrBubble() && this.getFullness() < maxFullness) {
             this.feed(itemStack, player);
+            this.setPersistenceRequired();
             if (this.getFullness() > maxFullness) this.setFullness(maxFullness);
 
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -111,6 +113,7 @@ public class SeaCow extends WaterAnimal implements Shearable {
                 this.shear(SoundSource.PLAYERS);
                 this.gameEvent(GameEvent.SHEAR, player);
                 itemStack.hurtAndBreak(1, player, player2 -> player2.broadcastBreakEvent(interactionHand));
+                this.setPersistenceRequired();
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.CONSUME;
@@ -369,7 +372,7 @@ public class SeaCow extends WaterAnimal implements Shearable {
 
     @Override
     public boolean removeWhenFarAway(double d) {
-        return false;
+        return !this.isPersistenceRequired();
     }
 
     @Override
