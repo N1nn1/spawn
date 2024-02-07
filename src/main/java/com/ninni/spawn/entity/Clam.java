@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -21,8 +22,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +60,9 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
 
             variant = new ClamVariant.Variant(baseColor, pattern, dyeColor);
 
+            //this.yHeadRot = this.getYRot();
+            //this.yBodyRot = this.getYRot();
+//
             this.setPackedVariant(variant.getPackedId());
         }
 
@@ -107,6 +111,13 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
 
     @Override
     public void push(Entity entity) {
+    }
+
+    @Override
+    protected float tickHeadTurn(float f, float g) {
+        this.yBodyRotO = this.yRotO;
+        this.yBodyRot = this.getYRot();
+        return 0.0f;
     }
 
     @Override
@@ -200,6 +211,26 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
     }
 
     @Override
+    public MobType getMobType() {
+        return MobType.WATER;
+    }
+
+    @Override
+    public boolean checkSpawnObstruction(LevelReader levelReader) {
+        return levelReader.isUnobstructed(this);
+    }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeLeashed(Player player) {
+        return false;
+    }
+
+    @Override
     public boolean removeWhenFarAway(double d) {
         return !this.fromItem() && !this.hasCustomName();
     }
@@ -244,7 +275,7 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
 
     public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<Clam> clamEntityType, ServerLevelAccessor levelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
         int i = levelAccessor.getSeaLevel();
-        int j = i - 1;
-        return blockPos.getY() <= j && blockPos.getY() <= i && levelAccessor.getBlockState(blockPos.below()).isSolid() && levelAccessor.getBlockState(blockPos).is(Blocks.WATER);
+        int j = levelAccessor.getSeaLevel() - 35;
+        return blockPos.getY() >= j && blockPos.getY() <= i && levelAccessor.getFluidState(blockPos).is(FluidTags.WATER) && levelAccessor.getBlockState(blockPos.below()).isSolid();
     }
 }

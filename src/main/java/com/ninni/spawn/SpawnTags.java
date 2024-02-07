@@ -37,6 +37,7 @@ public interface SpawnTags {
     TagKey<Block> ANTHILLS = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "anthills"));
 
     //Biome tags
+    TagKey<Biome> CLAM_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "clam_spawns"));
     TagKey<Biome> SNAIL_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "snail_spawns"));
     TagKey<Biome> ANGLER_FISH_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "angler_fish_spawns"));
     TagKey<Biome> TUNA_SPAWNS = TagKey.create(Registries.BIOME, new ResourceLocation(MOD_ID, "tuna_spawns"));
