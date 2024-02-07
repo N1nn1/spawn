@@ -157,7 +157,6 @@ public class SpawnCreativeModeTab {
 
 
                 output.accept(ALGAL_SAND);
-                output.accept(FISH_CUSTOMIZER);
 
         // clam
                 output.accept(CLAM_SPAWN_EGG);
@@ -165,6 +164,7 @@ public class SpawnCreativeModeTab {
                 output.accept(CLAM_MEAT);
                 output.accept(SHELL_FRAGMENTS);
                 output.accept(CLAM_CASE);
+                output.accept(PIGMENT_SHIFTER);
 
         // sea cow
                 output.accept(SEA_COW_SPAWN_EGG);

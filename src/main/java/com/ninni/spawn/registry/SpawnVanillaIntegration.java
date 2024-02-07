@@ -2,12 +2,14 @@ package com.ninni.spawn.registry;
 
 import com.google.common.reflect.Reflection;
 import com.ninni.spawn.SpawnTags;
-import com.ninni.spawn.client.inventory.FishCustomizerScreen;
+import com.ninni.spawn.client.inventory.PigmentShifterScreen;
 import com.ninni.spawn.client.inventory.HamsterInventoryMenu;
 import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
 import com.ninni.spawn.client.particles.KrillParticle;
 import com.ninni.spawn.client.particles.SandCloudParticle;
 import com.ninni.spawn.client.particles.TunaEggParticle;
+import com.ninni.spawn.client.renderer.block.PigmentShifterRenderer;
+import com.ninni.spawn.client.renderer.block.WhaleUvulaRenderer;
 import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.entity.Clam;
 import com.ninni.spawn.entity.Hamster;
@@ -32,6 +34,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.particle.GlowParticle;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.nbt.CompoundTag;
@@ -114,7 +117,7 @@ public class SpawnVanillaIntegration {
 
         private static void registerScreens() {
 
-            MenuScreens.register(SpawnMenuTypes.FISH_CUSTOMIZER_MENU, FishCustomizerScreen::new);
+            MenuScreens.register(SpawnMenuTypes.FISH_CUSTOMIZER_MENU, PigmentShifterScreen::new);
 
             ClientPlayNetworking.registerGlobalReceiver(OPEN_HAMSTER_SCREEN, (client, handler, buf, responseSender) -> {
                 int id = buf.readInt();
@@ -188,7 +191,8 @@ public class SpawnVanillaIntegration {
             EntityRendererRegistry.register(SpawnEntityType.SEA_COW, SeaCowRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.CLAM, ClamRenderer::new);
 
-            BlockEntityRendererRegistry.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
+            BlockEntityRenderers.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
+            BlockEntityRenderers.register(SpawnBlockEntityTypes.PIGMENT_SHIFTER, PigmentShifterRenderer::new);
         }
 
         private static void registerParticles() {

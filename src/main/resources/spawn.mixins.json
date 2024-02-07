@@ -12,11 +12,12 @@
     "MobBucketItemMixin",
     "OverworldBiomeBuilderMixin",
     "ServerPlayerMixin",
-    "accessor.TropicalFishAccessor",
     "accessor.MobBucketItemAccessor",
-    "accessor.NoiseGeneratorSettingsAccessor"
+    "accessor.NoiseGeneratorSettingsAccessor",
+    "accessor.TropicalFishAccessor"
   ],
   "client": [
+    "client.BlockEntityWithoutLevelRendererMixin",
     "client.PufferfishRendererMixin"
   ],
   "injectors": {

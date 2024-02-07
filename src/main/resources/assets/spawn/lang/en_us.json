@@ -139,9 +139,6 @@
 
   "block.spawn.algal_sand": "Algal Sand",
   "block.spawn.trimmed_seagrass": "Trimmed Seagrass",
-  "container.spawn.fish_customizer": "Customize",
-  "container.spawn.fish_customizer.body_plan": "Change Body Plan",
-  "container.spawn.fish_customizer.pattern": "Change Pattern",
 
   "entity.spawn.clam": "Clam",
   "item.spawn.clam_spawn_egg": "Clam Spawn Egg",
@@ -169,6 +166,10 @@
   "item.spawn.clam_case": "Clam Case",
   "item.spawn.clam_case.fullness": "%s/%s",
   "item.spawn.clam_case.desc": "Only stores Collected Mobs",
+  "block.spawn.pigment_shifter": "Pigment Shifter",
+  "container.spawn.pigment_shifter": "Customize",
+  "container.spawn.pigment_shifter.body_plan": "Change Body Plan",
+  "container.spawn.pigment_shifter.pattern": "Change Pattern",
 
   "entity.spawn.sea_cow": "Sea Cow",
   "item.spawn.sea_cow_spawn_egg": "Sea Cow Spawn Egg",

@@ -138,9 +138,9 @@
 
   "block.spawn.algal_sand": "Sabbia con erba acquatica",
   "block.spawn.trimmed_seagrass": "Erba acquatica tagliata",
-  "container.spawn.fish_customizer": "Personalizza",
-  "container.spawn.fish_customizer.body_plan": "Cambia corporatura",
-  "container.spawn.fish_customizer.pattern": "Cambia pattern",
+  "container.spawn.pigment_shifter": "Personalizza",
+  "container.spawn.pigment_shifter.body_plan": "Cambia corporatura",
+  "container.spawn.pigment_shifter.pattern": "Cambia pattern",
 
   "entity.spawn.clam": "Conchiglia",
   "item.spawn.clam_spawn_egg": "Uovo generatore di conchiglia",

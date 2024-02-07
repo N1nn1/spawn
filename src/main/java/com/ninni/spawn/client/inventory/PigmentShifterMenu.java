@@ -4,7 +4,6 @@ import com.ninni.spawn.SpawnTags;
 import com.ninni.spawn.entity.Seahorse;
 import com.ninni.spawn.mixin.accessor.TropicalFishAccessor;
 import com.ninni.spawn.registry.*;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
@@ -25,7 +24,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
-public class FishCustomizerMenu extends AbstractContainerMenu {
+public class PigmentShifterMenu extends AbstractContainerMenu {
     private Optional<Seahorse.Pattern> optional = Optional.empty();
     private final Level level;
     private final ContainerLevelAccess access;
@@ -38,23 +37,23 @@ public class FishCustomizerMenu extends AbstractContainerMenu {
     public final Container inputContainer = new SimpleContainer(4) {
         @Override
         public void setChanged() {
-            FishCustomizerMenu.this.slotsChanged(this);
+            PigmentShifterMenu.this.slotsChanged(this);
             super.setChanged();
         }
     };
     private final ResultContainer outputContainer = new ResultContainer() {
         @Override
         public void setChanged() {
-            FishCustomizerMenu.this.slotsChanged(this);
+            PigmentShifterMenu.this.slotsChanged(this);
             super.setChanged();
         }
     };
 
-    public FishCustomizerMenu(int i, Inventory inventory) {
+    public PigmentShifterMenu(int i, Inventory inventory) {
         this(i, inventory, ContainerLevelAccess.NULL);
     }
 
-    public FishCustomizerMenu(int i, Inventory inventory, ContainerLevelAccess containerLevelAccess) {
+    public PigmentShifterMenu(int i, Inventory inventory, ContainerLevelAccess containerLevelAccess) {
         super(SpawnMenuTypes.FISH_CUSTOMIZER_MENU, i);
 
         this.access = containerLevelAccess;
@@ -87,15 +86,15 @@ public class FishCustomizerMenu extends AbstractContainerMenu {
 
             @Override
             public void onTake(Player player, ItemStack itemStack) {
-                FishCustomizerMenu.this.bucketSlot.remove(1);
-                FishCustomizerMenu.this.bodyDyeSlot.remove(1);
-                FishCustomizerMenu.this.patternDyeSlot.remove(1);
+                PigmentShifterMenu.this.bucketSlot.remove(1);
+                PigmentShifterMenu.this.bodyDyeSlot.remove(1);
+                PigmentShifterMenu.this.patternDyeSlot.remove(1);
 
                 containerLevelAccess.execute((level, blockPos) -> {
                     long l = level.getGameTime();
-                    if (FishCustomizerMenu.this.lastSoundTime != l) {
+                    if (PigmentShifterMenu.this.lastSoundTime != l) {
                         level.playSound(null, blockPos, SpawnSoundEvents.FISH_FLOP, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        FishCustomizerMenu.this.lastSoundTime = l;
+                        PigmentShifterMenu.this.lastSoundTime = l;
                     }
 
                 });
@@ -230,6 +229,6 @@ public class FishCustomizerMenu extends AbstractContainerMenu {
     }
 
     public boolean stillValid(Player player) {
-        return stillValid(this.access, player, SpawnBlocks.FISH_CUSTOMIZER);
+        return stillValid(this.access, player, SpawnBlocks.PIGMENT_SHIFTER);
     }
 }

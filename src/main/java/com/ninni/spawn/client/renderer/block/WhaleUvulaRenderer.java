@@ -1,4 +1,4 @@
-package com.ninni.spawn.client.renderer.entity;
+package com.ninni.spawn.client.renderer.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

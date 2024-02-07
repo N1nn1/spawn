@@ -89,13 +89,13 @@ public class SpawnItems {
     public static final Item SPADE_POTTERY_SHERD = register("spade_pottery_sherd", new Item(new Item.Properties()));
 
     public static final Item ALGAL_SAND = register("algal_sand", new BlockItem(SpawnBlocks.ALGAL_SAND, new FabricItemSettings()));
-    public static final Item FISH_CUSTOMIZER = register("fish_customizer", new BlockItem(SpawnBlocks.FISH_CUSTOMIZER, new FabricItemSettings()));
 
     // clam
     public static final Item SHELL_FRAGMENTS = register("shell_fragments", new Item(new FabricItemSettings()));
     public static final Item CLAM_SPAWN_EGG = register("clam_spawn_egg", new SpawnEggItem(SpawnEntityType.CLAM, 0xB9776B, 0xEAC6AB, new Item.Properties()));
     public static final Item CLAM = register("clam", new ClamItem(new Item.Properties().stacksTo(1).craftRemainder(SHELL_FRAGMENTS)));
     public static final Item CLAM_CASE = register("clam_case", new ClamCaseItem(new FabricItemSettings().stacksTo(1)));
+    public static final Item PIGMENT_SHIFTER = register("pigment_shifter", new BlockItem(SpawnBlocks.PIGMENT_SHIFTER, new FabricItemSettings().rarity(Rarity.RARE)));
     public static final Item CLAM_MEAT = register("clam_meat", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.5f).build())));
 
 

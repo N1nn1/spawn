@@ -16,12 +16,10 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.BeaconScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ServerboundSetBeaconPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,17 +36,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
-public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizerMenu> {
+public class PigmentShifterScreen extends AbstractContainerScreen<PigmentShifterMenu> {
     private static final ResourceLocation RESOURCE_LOCATION = new ResourceLocation(Spawn.MOD_ID, "textures/gui/container/fish.png");
     private final List<AbstractButton> buttons = Lists.newArrayList();
-    private final FishCustomizerMenu menu;
+    private final PigmentShifterMenu menu;
     private final Player player;
     private final Level level;
     private Optional<Seahorse.Pattern> optional = Optional.empty();
     private double rotationY = 0;
     private double rotateY = 0;
 
-    public FishCustomizerScreen(FishCustomizerMenu customizerMenu, Inventory inventory, Component component) {
+    public PigmentShifterScreen(PigmentShifterMenu customizerMenu, Inventory inventory, Component component) {
         super(customizerMenu, inventory, component);
         this.menu = customizerMenu;
         this.player = inventory.player;
@@ -161,7 +159,7 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
     @Environment(value=EnvType.CLIENT)
     class UpdateBodyPlanButton extends AbstractButton {
         public UpdateBodyPlanButton(int i, int j) {
-            super(i, j, 16, 16, Component.translatable("container.spawn.fish_customizer.body_plan"));
+            super(i, j, 16, 16, Component.translatable("container.spawn.pigment_shifter.body_plan"));
         }
 
         @Override
@@ -175,7 +173,7 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
             if (this.isHovered()) {
                 l = 32;
             }
-            this.setTooltip(Tooltip.create(Component.translatable("container.spawn.fish_customizer.body_plan"), null));
+            this.setTooltip(Tooltip.create(Component.translatable("container.spawn.pigment_shifter.body_plan"), null));
             guiGraphics.blit(RESOURCE_LOCATION, this.getX(), this.getY(), 176, l, this.width, this.height);
         }
 
@@ -188,7 +186,7 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
     @Environment(value=EnvType.CLIENT)
     class UpdatePatternButton extends AbstractButton {
         public UpdatePatternButton(int i, int j) {
-            super(i, j, 16, 16, Component.translatable("container.spawn.fish_customizer.pattern"));
+            super(i, j, 16, 16, Component.translatable("container.spawn.pigment_shifter.pattern"));
         }
 
         @Override
@@ -205,7 +203,7 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
                     optional = Optional.of(newPattern);
                 }
             }
-            FishCustomizerScreen.this.menu.onButtonClick(player,false, optional);
+            PigmentShifterScreen.this.menu.onButtonClick(player,false, optional);
         }
 
         @Override
@@ -214,7 +212,7 @@ public class FishCustomizerScreen extends AbstractContainerScreen<FishCustomizer
             if (this.isHovered()) {
                 l = 32;
             }
-            this.setTooltip(Tooltip.create(Component.translatable("container.spawn.fish_customizer.pattern"), null));
+            this.setTooltip(Tooltip.create(Component.translatable("container.spawn.pigment_shifter.pattern"), null));
             guiGraphics.blit(RESOURCE_LOCATION, this.getX(), this.getY(), 192, l, this.width, this.height);
         }
 

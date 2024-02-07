@@ -2,6 +2,7 @@ package com.ninni.spawn.registry;
 
 import com.ninni.spawn.Spawn;
 import com.ninni.spawn.block.entity.AnthillBlockEntity;
+import com.ninni.spawn.block.entity.PigmentShifterBlockEntity;
 import com.ninni.spawn.block.entity.SunflowerBlockEntity;
 import com.ninni.spawn.block.entity.WhaleUvulaBlockEntity;
 import net.minecraft.core.Registry;
@@ -34,6 +35,14 @@ public class SpawnBlockEntityTypes {
             new ResourceLocation(Spawn.MOD_ID, "whale_uvula"),
             BlockEntityType.Builder.of(WhaleUvulaBlockEntity::new,
                     SpawnBlocks.WHALE_UVULA
+            ).build(null)
+    );
+
+    public static final BlockEntityType<PigmentShifterBlockEntity> PIGMENT_SHIFTER = Registry.register(
+            BuiltInRegistries.BLOCK_ENTITY_TYPE,
+            new ResourceLocation(Spawn.MOD_ID, "pigment_shifter"),
+            BlockEntityType.Builder.of(PigmentShifterBlockEntity::new,
+                    SpawnBlocks.PIGMENT_SHIFTER
             ).build(null)
     );
 }
