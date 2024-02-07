@@ -294,7 +294,7 @@ public class Snail extends Animal {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return "Gary".equals(ChatFormatting.stripFormatting(this.getName().getString())) ? SoundEvents.CAT_AMBIENT : super.getAmbientSound();
+        return this.getName().getString().equalsIgnoreCase("gary") ? SoundEvents.CAT_AMBIENT : super.getAmbientSound();
     }
 
     @Nullable
