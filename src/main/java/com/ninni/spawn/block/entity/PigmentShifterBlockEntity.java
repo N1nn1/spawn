@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class PigmentShifterBlockEntity extends BlockEntity {
     public int tickCount;
@@ -25,7 +26,16 @@ public class PigmentShifterBlockEntity extends BlockEntity {
         if (blockEntity.getBlockState().getValue(PigmentShifterBlock.WATERLOGGED)) {
             blockEntity.activeRotation += 1.0f;
 
-            if (randomSource.nextInt(10) == 0) {
+            if (randomSource.nextInt(20) == 0) {
+                Vec3 vec32 = new Vec3(blockPos.getX() + 0.5, blockPos.getY() + 1.5, blockPos.getZ() + 0.5);
+                float j = (-0.5f + randomSource.nextFloat()) * (3.0f );
+                float k = -1.0f + randomSource.nextFloat();
+                float f = (-0.5f + randomSource.nextFloat()) * (3.0f);
+                Vec3 vec33 = new Vec3(j, k, f);
+                level.addParticle(ParticleTypes.NAUTILUS, vec32.x, vec32.y, vec32.z, vec33.x, vec33.y, vec33.z);
+            }
+
+            if (randomSource.nextInt(5) == 0) {
                 double d = (double) blockPos.getX() + 0.5 + randomSource.nextFloat() - randomSource.nextFloat();
                 double e = (double) blockPos.getY() + 0.7 + randomSource.nextFloat() - randomSource.nextFloat();
                 double f = (double) blockPos.getZ() + 0.5 + randomSource.nextFloat() - randomSource.nextFloat();

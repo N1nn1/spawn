@@ -162,6 +162,8 @@ public class SpawnCreativeModeTab {
                 output.accept(CLAM_SPAWN_EGG);
                 output.accept(CLAM);
                 output.accept(CLAM_MEAT);
+                output.accept(COOKED_CLAM_MEAT);
+                output.accept(CLAM_CHOWDER);
                 output.accept(SHELL_FRAGMENTS);
                 output.accept(CLAM_CASE);
                 output.accept(PIGMENT_SHIFTER);

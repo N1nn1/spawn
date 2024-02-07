@@ -96,7 +96,9 @@ public class SpawnItems {
     public static final Item CLAM = register("clam", new ClamItem(new Item.Properties().stacksTo(1).craftRemainder(SHELL_FRAGMENTS)));
     public static final Item CLAM_CASE = register("clam_case", new ClamCaseItem(new FabricItemSettings().stacksTo(1)));
     public static final Item PIGMENT_SHIFTER = register("pigment_shifter", new BlockItem(SpawnBlocks.PIGMENT_SHIFTER, new FabricItemSettings().rarity(Rarity.RARE)));
-    public static final Item CLAM_MEAT = register("clam_meat", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.5f).build())));
+    public static final Item CLAM_MEAT = register("clam_meat", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.5f).build())));
+    public static final Item COOKED_CLAM_MEAT = register("cooked_clam_meat", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.8f).build())));
+    public static final Item CLAM_CHOWDER = register("clam_chowder", new BowlFoodItem(new FabricItemSettings().stacksTo(1).food(new FoodProperties.Builder().nutrition(8).saturationMod(0.8f).build())));
 
 
     // sea cow

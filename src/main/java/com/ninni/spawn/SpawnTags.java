@@ -28,7 +28,8 @@ public interface SpawnTags {
     TagKey<Item> ANT_FEEDS = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "ant_feeds"));
     TagKey<Item> SEA_COW_LOVES = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "sea_cow_loves"));
     TagKey<Item> SEA_COW_LIKES = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "sea_cow_likes"));
-    TagKey<Item> FITS_INSIDE_WATER_BUNDLE = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "fits_inside_water_bundle"));
+    TagKey<Item> FITS_INSIDE_CLAM_CASE = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "fits_inside_clam_case"));
+    TagKey<Item> PIGMENT_SHIFTER_BASE = TagKey.create(Registries.ITEM, new ResourceLocation(MOD_ID, "pigment_shifter_base"));
 
     //Block tags
     TagKey<Block> MUCUS_SOLIDIFIER = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "mucus_solidifier"));

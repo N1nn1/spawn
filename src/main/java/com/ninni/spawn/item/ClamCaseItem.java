@@ -88,7 +88,7 @@ public class ClamCaseItem extends Item implements DyeableLeatherItem {
     }
 
     public static int add(ItemStack itemStack, ItemStack itemStack2) {
-        if (itemStack2.isEmpty() || !itemStack2.is(SpawnTags.FITS_INSIDE_WATER_BUNDLE)) {
+        if (itemStack2.isEmpty() || !itemStack2.is(SpawnTags.FITS_INSIDE_CLAM_CASE)) {
             return 0;
         }
         CompoundTag compoundTag = itemStack.getOrCreateTag();

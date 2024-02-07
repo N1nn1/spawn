@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#H#",
+    "PPP"
+  ],
+  "key": {
+    "#": {
+      "item": "spawn:shell_fragments"
+    },
+    "H": {
+      "item": "minecraft:heart_of_the_sea"
+    },
+    "P": {
+      "tag": "spawn:pigment_shifter_base"
+    }
+  },
+  "result": {
+    "item": "spawn:pigment_shifter",
+    "count": 1
+  }
+}

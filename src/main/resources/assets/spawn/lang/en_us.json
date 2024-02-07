@@ -163,6 +163,8 @@
   "entity.spawn.clam.pattern.ridged": "Ridged",
   "item.spawn.shell_fragments": "Shell Fragments",
   "item.spawn.clam_meat": "Clam Meat",
+  "item.spawn.cooked_clam_meat": "Cooked Clam Meat",
+  "item.spawn.clam_chowder": "Clam Chowder",
   "item.spawn.clam_case": "Clam Case",
   "item.spawn.clam_case.fullness": "%s/%s",
   "item.spawn.clam_case.desc": "Only stores Collected Mobs",
