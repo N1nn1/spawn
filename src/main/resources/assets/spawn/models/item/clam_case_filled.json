@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer1": "spawn:item/clam_case_filled",
+    "layer0": "spawn:item/clam_case_overlay_filled"
+  }
+}

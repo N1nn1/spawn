@@ -1,6 +1,7 @@
 package com.ninni.spawn.entity;
 
 import com.ninni.spawn.entity.variant.ClamVariant;
+import com.ninni.spawn.item.ClamCaseItem;
 import com.ninni.spawn.registry.SpawnItems;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -73,13 +74,17 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
-        if (itemStack.isEmpty() && this.isAlive()) {
+        if ((itemStack.isEmpty() || itemStack.is(SpawnItems.CLAM_CASE)) && this.isAlive()) {
             //TODO sound
             this.playSound(SoundEvents.EMPTY, 1.0f, 1.0f);
             ItemStack itemStack2 = SpawnItems.CLAM.getDefaultInstance();
             saveToBucketTag(itemStack2);
-            ItemStack itemStack3 = ItemUtils.createFilledResult(itemStack, player, itemStack2, false);
-            player.setItemInHand(interactionHand, itemStack3);
+            if (itemStack.isEmpty()) {
+                ItemStack itemStack3 = ItemUtils.createFilledResult(itemStack, player, itemStack2, false);
+                player.setItemInHand(interactionHand, itemStack3);
+            } else {
+                ClamCaseItem.add(itemStack, itemStack2);
+            }
             this.discard();
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }

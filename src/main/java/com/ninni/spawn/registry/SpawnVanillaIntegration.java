@@ -12,6 +12,7 @@ import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.entity.Clam;
 import com.ninni.spawn.entity.Hamster;
 import com.ninni.spawn.entity.variant.ClamVariant;
+import com.ninni.spawn.item.ClamCaseItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.biome.v1.BiomeModificationContext;
@@ -22,23 +23,22 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.particle.GlowParticle;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.GenerationStep;
 
@@ -153,8 +153,10 @@ public class SpawnVanillaIntegration {
         }
 
         private static void registerItemModelPredicates() {
-            FabricModelPredicateProviderRegistry.register(SpawnItems.CLAM, new ResourceLocation("variant"), (itemStack, clientWorld, livingEntity, i) -> {
 
+            ItemProperties.register(SpawnItems.CLAM_CASE, new ResourceLocation("filled"), (itemStack, clientLevel, livingEntity, i) -> ClamCaseItem.getFullnessDisplay(itemStack));
+
+            ItemProperties.register(SpawnItems.CLAM, new ResourceLocation("variant"), (itemStack, clientLevel, livingEntity, i) -> {
                 CompoundTag compoundTag = itemStack.getTag();
                 if (compoundTag != null && compoundTag.contains("ItemVariantTag", 3)) {
                     int a = compoundTag.getInt("ItemVariantTag");
@@ -167,6 +169,8 @@ public class SpawnVanillaIntegration {
 
                 return 0.0F;
             });
+
+            ColorProviderRegistry.ITEM.register((itemStack, i) -> i > 0 ? -1 : ((DyeableLeatherItem) itemStack.getItem()).getColor(itemStack), SpawnItems.CLAM_CASE);
         }
 
         private static void registerModelLayers() {

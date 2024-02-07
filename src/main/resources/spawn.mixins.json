@@ -17,7 +17,7 @@
     "accessor.NoiseGeneratorSettingsAccessor"
   ],
   "client": [
-    "client.SpiderRendererMixin"
+    "client.PufferfishRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -155,11 +155,17 @@ public class SpawnCreativeModeTab {
                 output.accept(CROWN_POTTERY_SHERD);
                 output.accept(SPADE_POTTERY_SHERD);
 
+
                 output.accept(ALGAL_SAND);
                 output.accept(FISH_CUSTOMIZER);
 
-        output.accept(CLAM_SPAWN_EGG);
-        output.accept(CLAM);
+        // clam
+                output.accept(CLAM_SPAWN_EGG);
+                output.accept(CLAM);
+                output.accept(CLAM_MEAT);
+                output.accept(SHELL_FRAGMENTS);
+                output.accept(CLAM_CASE);
+
         // sea cow
                 output.accept(SEA_COW_SPAWN_EGG);
 

@@ -1,12 +1,11 @@
 package com.ninni.spawn.registry;
 
 import com.ninni.spawn.Spawn;
-import com.ninni.spawn.block.FishCustomizerBlock;
 import com.ninni.spawn.item.AntPupaItem;
 import com.ninni.spawn.item.ClamItem;
 import com.ninni.spawn.item.EscargotItem;
+import com.ninni.spawn.item.ClamCaseItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -15,10 +14,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.MapColor;
 
 public class SpawnItems {
 
@@ -96,8 +92,12 @@ public class SpawnItems {
     public static final Item FISH_CUSTOMIZER = register("fish_customizer", new BlockItem(SpawnBlocks.FISH_CUSTOMIZER, new FabricItemSettings()));
 
     // clam
+    public static final Item SHELL_FRAGMENTS = register("shell_fragments", new Item(new FabricItemSettings()));
     public static final Item CLAM_SPAWN_EGG = register("clam_spawn_egg", new SpawnEggItem(SpawnEntityType.CLAM, 0xB9776B, 0xEAC6AB, new Item.Properties()));
-    public static final Item CLAM = register("clam", new ClamItem(new Item.Properties().stacksTo(1)));
+    public static final Item CLAM = register("clam", new ClamItem(new Item.Properties().stacksTo(1).craftRemainder(SHELL_FRAGMENTS)));
+    public static final Item CLAM_CASE = register("clam_case", new ClamCaseItem(new FabricItemSettings().stacksTo(1)));
+    public static final Item CLAM_MEAT = register("clam_meat", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.5f).build())));
+
 
     // sea cow
     public static final Item SEA_COW_SPAWN_EGG = register("sea_cow_spawn_egg", new SpawnEggItem(SpawnEntityType.SEA_COW, 0x696969, 0x7C7C7C, new Item.Properties()));
