@@ -111,7 +111,7 @@ public class ClamCaseItem extends Item implements DyeableLeatherItem {
         return k;
     }
 
-    private static int getContentWeight(ItemStack itemStack2) {
+    public static int getContentWeight(ItemStack itemStack2) {
         return ClamCaseItem.getContents(itemStack2).mapToInt(ItemStack::getCount).sum();
     }
 

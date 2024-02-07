@@ -63,7 +63,7 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
 
             //this.yHeadRot = this.getYRot();
             //this.yBodyRot = this.getYRot();
-//
+
             this.setPackedVariant(variant.getPackedId());
         }
 
@@ -74,19 +74,22 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
-        if ((itemStack.isEmpty() || itemStack.is(SpawnItems.CLAM_CASE)) && this.isAlive()) {
+        if ((itemStack.isEmpty() || itemStack.getItem() instanceof ClamCaseItem) && this.isAlive()) {
             //TODO sound
             this.playSound(SoundEvents.EMPTY, 1.0f, 1.0f);
             ItemStack itemStack2 = SpawnItems.CLAM.getDefaultInstance();
             saveToBucketTag(itemStack2);
-            if (itemStack.isEmpty()) {
-                ItemStack itemStack3 = ItemUtils.createFilledResult(itemStack, player, itemStack2, false);
-                player.setItemInHand(interactionHand, itemStack3);
-            } else {
+            if (itemStack.getItem() instanceof ClamCaseItem && ClamCaseItem.getContentWeight(itemStack) < 16) {
                 ClamCaseItem.add(itemStack, itemStack2);
+                this.discard();
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+            } else if (itemStack.isEmpty()) {
+               ItemStack itemStack3 = ItemUtils.createFilledResult(itemStack, player, itemStack2, false);
+               player.setItemInHand(interactionHand, itemStack3);
+               this.discard();
+               return InteractionResult.sidedSuccess(this.level().isClientSide);
+
             }
-            this.discard();
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
         return super.mobInteract(player, interactionHand);
