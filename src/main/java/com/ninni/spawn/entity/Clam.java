@@ -77,10 +77,9 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
         if ((itemStack.isEmpty() || itemStack.getItem() instanceof ClamCaseItem) && this.isAlive()) {
             //TODO sound
             this.playSound(SoundEvents.EMPTY, 1.0f, 1.0f);
-            ItemStack itemStack2 = SpawnItems.CLAM.getDefaultInstance();
+            ItemStack itemStack2 = this.getItemStack();
             saveToBucketTag(itemStack2);
-            if (itemStack.getItem() instanceof ClamCaseItem && ClamCaseItem.getContentWeight(itemStack) < 16) {
-                ClamCaseItem.add(itemStack, itemStack2);
+            if (itemStack.getItem() instanceof ClamCaseItem && ClamCaseItem.add(itemStack, itemStack2) > 0) {
                 this.discard();
                 return InteractionResult.sidedSuccess(this.level().isClientSide);
             } else if (itemStack.isEmpty()) {
@@ -221,6 +220,10 @@ public class Clam extends Mob implements VariantHolder<ClamVariant.Variant> {
     @Override
     public MobType getMobType() {
         return MobType.WATER;
+    }
+
+    public ItemStack getItemStack() {
+        return new ItemStack(SpawnItems.CLAM);
     }
 
     @Override

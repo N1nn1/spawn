@@ -88,7 +88,7 @@ public class ClamCaseItem extends Item implements DyeableLeatherItem {
     }
 
     public static int add(ItemStack itemStack, ItemStack itemStack2) {
-        if (itemStack2.is(SpawnTags.CLAM_CASE_BLACKLIST) || itemStack2.isEmpty() || itemStack2.getItem().getMaxStackSize() != 1) {
+        if (itemStack2.is(SpawnTags.CLAM_CASE_BLACKLIST) || itemStack2.isEmpty()) {
             return 0;
         } else if (itemStack2.getItem() instanceof MobBucketItem || itemStack2.is(SpawnTags.ADDITIONAL_CLAM_CASE_ITEMS)) {
             CompoundTag compoundTag = itemStack.getOrCreateTag();
