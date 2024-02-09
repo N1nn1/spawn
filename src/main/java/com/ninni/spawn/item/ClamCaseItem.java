@@ -58,10 +58,10 @@ public class ClamCaseItem extends Item implements DyeableLeatherItem {
             this.playRemoveOneSound(player);
             ClamCaseItem.removeOne(itemStack).ifPresent(itemStack2 -> ClamCaseItem.add(itemStack, slot.safeInsert(itemStack2)));
         } else if (itemStack22.getItem().canFitInsideContainerItems()) {
-            int i = (MAX_WEIGHT - ClamCaseItem.getContentWeight(itemStack));
-            int j = ClamCaseItem.add(itemStack, slot.safeTake(itemStack22.getCount(), i, player));
+            int j = ClamCaseItem.add(itemStack, itemStack22);
             if (j > 0) {
                 this.playInsertSound(player);
+                itemStack22.shrink(j);
             }
         }
         return true;
@@ -88,27 +88,27 @@ public class ClamCaseItem extends Item implements DyeableLeatherItem {
     }
 
     public static int add(ItemStack itemStack, ItemStack itemStack2) {
-        if (itemStack2.isEmpty() || !itemStack2.is(SpawnTags.FITS_INSIDE_CLAM_CASE)) {
+        if (itemStack2.is(SpawnTags.CLAM_CASE_BLACKLIST) || itemStack2.isEmpty() || itemStack2.getItem().getMaxStackSize() != 1) {
             return 0;
-        }
-        CompoundTag compoundTag = itemStack.getOrCreateTag();
-        if (!compoundTag.contains(TAG_ITEMS)) {
-            compoundTag.put(TAG_ITEMS, new ListTag());
-        }
+        } else if (itemStack2.getItem() instanceof MobBucketItem || itemStack2.is(SpawnTags.ADDITIONAL_CLAM_CASE_ITEMS)) {
+            CompoundTag compoundTag = itemStack.getOrCreateTag();
+            if (!compoundTag.contains(TAG_ITEMS)) {
+                compoundTag.put(TAG_ITEMS, new ListTag());
+            }
 
-        int i = ClamCaseItem.getContentWeight(itemStack);
-        int k = Math.min(itemStack2.getCount(), (MAX_WEIGHT - i));
-        if (k == 0) {
-            return 0;
-        }
-        ListTag listTag = compoundTag.getList(TAG_ITEMS, 10);
+            int i = ClamCaseItem.getContentWeight(itemStack);
+            int k = Math.min(itemStack2.getCount(), (MAX_WEIGHT - i));
+            if (k == 0) {
+                return 0;
+            }
+            ListTag listTag = compoundTag.getList(TAG_ITEMS, 10);
 
-        ItemStack itemStack4 = itemStack2.copyWithCount(k);
-        CompoundTag compoundTag3 = new CompoundTag();
-        itemStack4.save(compoundTag3);
-        listTag.add(0, compoundTag3);
-
-        return k;
+            ItemStack itemStack4 = itemStack2.copyWithCount(k);
+            CompoundTag compoundTag3 = new CompoundTag();
+            itemStack4.save(compoundTag3);
+            listTag.add(0, compoundTag3);
+            return k;
+        } else return 0;
     }
 
     public static int getContentWeight(ItemStack itemStack2) {

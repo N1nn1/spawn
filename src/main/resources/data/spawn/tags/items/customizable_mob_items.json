@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:tropical_fish_bucket",
-    "spawn:seahorse_bucket"
+    "spawn:seahorse_bucket",
+    "spawn:clam"
   ]
 }
