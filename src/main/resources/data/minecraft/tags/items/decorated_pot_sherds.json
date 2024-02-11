@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "spawn:crown_pottery_sherd",
-    "spawn:spade_pottery_sherd"
+    "spawn:spade_pottery_sherd",
+    "spawn:school_pottery_sherd",
+    "spawn:shell_pottery_sherd"
   ]
 }

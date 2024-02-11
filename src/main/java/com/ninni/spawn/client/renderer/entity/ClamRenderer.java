@@ -21,7 +21,7 @@ public class ClamRenderer extends MobRenderer<Clam, ClamModel> {
     private final ClamModel modelGiantClam;
 
     public ClamRenderer(EntityRendererProvider.Context context) {
-        super(context, new ClamModel(context.bakeLayer(SpawnEntityModelLayers.CLAM_WEDGE_SHELL)), 0.2F);
+        super(context, new ClamModel(context.bakeLayer(SpawnEntityModelLayers.CLAM_WEDGE_SHELL)), 0.0F);
         this.modelScallop = new ClamModel(context.bakeLayer(SpawnEntityModelLayers.CLAM_SCALLOP));
         this.modelGiantClam = new ClamModel(context.bakeLayer(SpawnEntityModelLayers.CLAM_GIANT_CLAM));
         this.addLayer(new ClamPatternLayer(this, context.getModelSet()));

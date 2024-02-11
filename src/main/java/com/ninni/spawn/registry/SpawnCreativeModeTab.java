@@ -40,10 +40,12 @@ public class SpawnCreativeModeTab {
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
-            entries.addAfter(Items.SALMON_BUCKET, TUNA_EGG_BUCKET);
-            entries.addAfter(Items.COD_BUCKET, ANGLER_FISH_BUCKET);
+            entries.addAfter(Items.PUFFERFISH_BUCKET, ANGLER_FISH_BUCKET, TUNA_EGG_BUCKET);
+            entries.addAfter(Items.SALMON_BUCKET, HERRING_BUCKET);
             entries.addAfter(Items.TROPICAL_FISH_BUCKET, SEAHORSE_BUCKET);
-            entries.addAfter(Items.MILK_BUCKET, ANT_PUPA);
+            entries.addAfter(Items.AXOLOTL_BUCKET, KRILL_SWARM_BUCKET);
+            entries.addAfter(Items.MILK_BUCKET, CAPTURED_OCTOPUS, CLAM, ANT_PUPA);
+            entries.addAfter(Items.FISHING_ROD, CLAM_CASE);
             entries.addAfter(Items.MUSIC_DISC_RELIC, MUSIC_DISC_ROT);
         });
 
@@ -59,6 +61,8 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.HONEYCOMB_BLOCK, ANTHILL, ROTTEN_LOG_ANTHILL, ANT_MOUND);
             entries.addAfter(Items.CHERRY_LOG, ROTTEN_LOG);
             entries.addAfter(Items.DEAD_BUSH, FALLEN_LEAVES);
+            entries.addBefore(Items.SAND, ALGAL_SAND);
+            entries.addAfter(Items.COBWEB, WHALE_FLESH, WHALE_UVULA);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
@@ -66,35 +70,48 @@ public class SpawnCreativeModeTab {
             entries.addAfter(Items.DECORATED_POT, POTTED_SWEET_BERRIES);
             entries.addAfter(Items.BEE_NEST, ANTHILL, ROTTEN_LOG_ANTHILL);
             entries.addAfter(Items.BEEHIVE, ANT_FARM, ANT_MOUND);
+            entries.addAfter(Items.CONDUIT, PIGMENT_SHIFTER);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(entries -> {
             entries.addAfter(Items.MELON_SLICE, ROASTED_SUNFLOWER_SEEDS);
-            entries.addAfter(Items.PUFFERFISH, ESCARGOT);
+            entries.addAfter(Items.PUFFERFISH, ESCARGOT, CLAM_MEAT, COOKED_CLAM_MEAT);
             entries.addAfter(Items.COOKED_SALMON,
+                    HERRING,
+                    COOKED_HERRING,
                     TUNA_CHUNK,
                     COOKED_TUNA_CHUNK,
                     ANGLER_FISH
             );
             entries.addAfter(Items.BREAD, TUNA_SANDWICH);
+            entries.addAfter(Items.RABBIT_STEW, CLAM_CHOWDER);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(entries -> {
+            entries.addAfter(Items.PRIZE_POTTERY_SHERD, SCHOOL_POTTERY_SHERD);
+            entries.addAfter(Items.SHEAF_POTTERY_SHERD, SHELL_POTTERY_SHERD);
             entries.addAfter(Items.BURN_POTTERY_SHERD, CROWN_POTTERY_SHERD);
             entries.addAfter(Items.SNORT_POTTERY_SHERD, SPADE_POTTERY_SHERD);
-            entries.addAfter(Items.HONEYCOMB, SNAIL_SHELL);
-            entries.addAfter(Items.SCUTE, MUCUS);
+            entries.addAfter(Items.BONE, SHELL_FRAGMENTS);
+            entries.addAfter(Items.SCUTE, SNAIL_SHELL);
+            entries.addAfter(Items.SLIME_BALL, MUCUS);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> {
             entries.addAfter(Items.ALLAY_SPAWN_EGG, ANGLER_FISH_SPAWN_EGG, ANT_SPAWN_EGG);
-            entries.addAfter(Items.SALMON_SPAWN_EGG, SEAHORSE_SPAWN_EGG);
+            entries.addAfter(Items.CHICKEN, CLAM_SPAWN_EGG);
+            entries.addAfter(Items.SALMON_SPAWN_EGG, SEA_COW_SPAWN_EGG, SEAHORSE_SPAWN_EGG);
             entries.addAfter(Items.SLIME_SPAWN_EGG, SNAIL_SPAWN_EGG);
             entries.addAfter(Items.TROPICAL_FISH_SPAWN_EGG, TUNA_SPAWN_EGG);
+            entries.addAfter(Items.IRON_GOLEM_SPAWN_EGG, KRILL_SWARM_SPAWN_EGG);
+            entries.addAfter(Items.WARDEN_SPAWN_EGG, WHALE_SPAWN_EGG);
+            entries.addBefore(Items.HOGLIN_SPAWN_EGG, HERRING_SPAWN_EGG);
         });
     }
 
     public static final CreativeModeTab ITEM_GROUP = register("item_group", FabricItemGroup.builder().icon(SPAWN::getDefaultInstance).title(Component.translatable("spawn.item_group")).displayItems((featureFlagSet, output) -> {
+//FIRST UPDATE
+
                 // angler fish
                 output.accept(ANGLER_FISH_SPAWN_EGG);
                 output.accept(ANGLER_FISH_BUCKET);
@@ -155,10 +172,17 @@ public class SpawnCreativeModeTab {
                 output.accept(CROWN_POTTERY_SHERD);
                 output.accept(SPADE_POTTERY_SHERD);
 
+//SECOND UPDATE
 
+        //Seagrass meadows
                 output.accept(ALGAL_SAND);
 
-        // clam
+                // sea cow
+                output.accept(SEA_COW_SPAWN_EGG);
+                output.accept(SCHOOL_POTTERY_SHERD);
+                output.accept(SHELL_POTTERY_SHERD);
+
+                // clam
                 output.accept(CLAM_SPAWN_EGG);
                 output.accept(CLAM);
                 output.accept(CLAM_MEAT);
@@ -168,18 +192,15 @@ public class SpawnCreativeModeTab {
                 output.accept(CLAM_CASE);
                 output.accept(PIGMENT_SHIFTER);
 
-        // sea cow
-                output.accept(SEA_COW_SPAWN_EGG);
-
-        // octopus
-                //output.accept(OCTOPUS_SPAWN_EGG);
-                output.accept(CAPTURED_OCTOPUS);
-
-        // herring
+                // herring
                 output.accept(HERRING_SPAWN_EGG);
                 output.accept(HERRING_BUCKET);
                 output.accept(HERRING);
                 output.accept(COOKED_HERRING);
+
+                // octopus
+                //output.accept(OCTOPUS_SPAWN_EGG);
+                output.accept(CAPTURED_OCTOPUS);
 
                 // whale
                 output.accept(WHALE_SPAWN_EGG);

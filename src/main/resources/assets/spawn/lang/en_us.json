@@ -175,6 +175,8 @@
 
   "entity.spawn.sea_cow": "Sea Cow",
   "item.spawn.sea_cow_spawn_egg": "Sea Cow Spawn Egg",
+  "item.spawn.school_pottery_sherd": "School Pottery Sherd",
+  "item.spawn.shell_pottery_sherd": "Shell Pottery Sherd",
 
   "entity.spawn.octopus": "Octopus",
   "item.spawn.captured_octopus": "Captured Octopus",
