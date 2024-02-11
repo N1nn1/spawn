@@ -2,21 +2,25 @@ package com.ninni.spawn.entity;
 
 import com.ninni.spawn.registry.SpawnItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +30,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -57,8 +63,7 @@ public class Octopus extends PathfinderMob {
         this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 16.0F);
         this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0F);
         this.setMaxUpStep(1);
-        //TODO they spin in circles
-        this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.15F, true);
+        this.moveControl = new OctopusMoveControl(this);
     }
 
     @Override
@@ -71,7 +76,7 @@ public class Octopus extends PathfinderMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0).add(Attributes.MOVEMENT_SPEED, 1.2f);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0).add(Attributes.MOVEMENT_SPEED, 0.2f);
     }
 
     @Override
@@ -123,10 +128,17 @@ public class Octopus extends PathfinderMob {
     @Override
     public void tick() {
         super.tick();
-
+        //TODO these dont work, reference camel code
         if ((this.level()).isClientSide()) {
             this.waterIdleAnimationState.animateWhen(this.isInWaterOrBubble() && !this.onGround(), this.tickCount);
-            this.idleAnimationState.animateWhen(!this.isInWaterOrBubble(), this.tickCount);
+            this.idleAnimationState.animateWhen((!this.isInWaterOrBubble() || this.isInWaterOrBubble() && this.onGround()), this.tickCount);
+
+            if (!this.isInWaterOrBubble()) {
+                if (random.nextInt(10) == 0) {
+                    level().addParticle(ParticleTypes.FALLING_WATER, this.getRandomX(0.6), this.getY() + random.nextDouble(), this.getRandomZ(0.6), 0.0, 0.0, 0.0);
+                }
+            }
+
         }
     }
 
@@ -135,16 +147,10 @@ public class Octopus extends PathfinderMob {
             this.moveRelative(this.getSpeed(), vec3);
             this.move(MoverType.SELF, this.getDeltaMovement());
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
-            if (this.getTarget() == null) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.005, 0.0));
-            }
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0,-0.0025D,0.0));
         } else {
             super.travel(vec3);
         }
-    }
-
-    protected PathNavigation createNavigation(Level level) {
-        return new AmphibiousPathNavigation(this, level);
     }
 
     protected void defineSynchedData() {
@@ -256,6 +262,66 @@ public class Octopus extends PathfinderMob {
         else return Items.BUCKET;
     }
 
+
+    @Override
+    protected PathNavigation createNavigation(Level world) { return new OctopusSwimNavigation(this, world); }
+
+    class OctopusSwimNavigation extends WaterBoundPathNavigation {
+        OctopusSwimNavigation(Octopus octopus, Level world) { super(octopus, world); }
+
+        @Override
+        protected PathFinder createPathFinder(int range) {
+            this.nodeEvaluator = new AmphibiousNodeEvaluator(false);
+            return new PathFinder(this.nodeEvaluator, range);
+        }
+
+        @Override
+        protected boolean canUpdatePath() {
+            return true;
+        }
+
+        @Override
+        public boolean isStableDestination(BlockPos blockPos) {
+            return !this.level.getBlockState(blockPos.below(2)).isAir();
+        }
+    }
+
+    static class OctopusMoveControl extends MoveControl {
+        private final Octopus octopus;
+
+        public OctopusMoveControl(Octopus octopus) {
+            super(octopus);
+            this.octopus = octopus;
+        }
+
+        @Override
+        public void tick() {
+            if (this.operation == Operation.STRAFE || this.operation == Operation.JUMPING || (this.mob.onGround() && !this.octopus.isInWaterOrBubble())) { super.tick();}
+            if (this.operation == Operation.MOVE_TO && !this.octopus.getNavigation().isDone()) {
+                double d = this.wantedX - this.octopus.getX();
+                double e = this.wantedY - this.octopus.getY();
+                double f = this.wantedZ - this.octopus.getZ();
+                double g = d * d + e * e + f * f;
+                if (g < 2.5) {
+                    this.mob.setZza(0.0F);
+                } else {
+                    float movementSpeed = (float) (this.speedModifier * this.octopus.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                    this.octopus.setYRot(this.rotlerp(this.octopus.getYRot(), (float) (Mth.atan2(f, d) * 57.3) - 90.0F, 10.0F));
+                    this.octopus.yBodyRot = this.octopus.getYRot();
+                    this.octopus.yHeadRot = this.octopus.getYRot();
+                    if (this.octopus.isInWaterOrBubble()) {
+                        this.octopus.setSpeed(movementSpeed * 0.4F);
+                        if (this.octopus.onGround()) this.octopus.setSpeed(movementSpeed * 0.1F);
+                        float j = -((float) (Mth.atan2(e, Mth.sqrt((float) (d * d + f * f))) * 57.3));
+                        this.octopus.setXRot(this.rotlerp(this.octopus.getXRot(), Mth.clamp(Mth.wrapDegrees(j), -85.0F, 85.0F), 5.0F));
+                        this.octopus.zza = Mth.cos(this.octopus.getXRot() * (float) Math.PI / 180f) * movementSpeed;
+                        this.octopus.yya = -Mth.sin(this.octopus.getXRot() * (float) Math.PI / 180f);
+                    }
+                }
+            }
+        }
+    }
+
     public class OctopusRandomStroll extends RandomStrollGoal {
 
         public OctopusRandomStroll(PathfinderMob pathfinderMob) {
@@ -267,7 +333,6 @@ public class Octopus extends PathfinderMob {
             if (Octopus.this.isInWaterOrBubble() && !Octopus.this.onGround()) {
                 return false;
             }
-
             return super.canUse();
         }
 
@@ -276,7 +341,6 @@ public class Octopus extends PathfinderMob {
             if (Octopus.this.isInWaterOrBubble() && !Octopus.this.onGround()) {
                 return false;
             }
-
             return super.canContinueToUse();
         }
     }
