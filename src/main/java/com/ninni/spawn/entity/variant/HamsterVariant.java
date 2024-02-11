@@ -1,6 +1,5 @@
 package com.ninni.spawn.entity.variant;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
 
@@ -12,8 +11,7 @@ public enum HamsterVariant implements StringRepresentable {
     RUSSIAN(2, "russian"),
     TURKISH(3, "turkish");
 
-    private static final IntFunction<HamsterVariant> BY_ID;
-    public static final Codec<HamsterVariant> CODEC;
+    private static final IntFunction<HamsterVariant> BY_ID = ByIdMap.sparse(HamsterVariant::id, HamsterVariant.values(), RUSSIAN);
     final int id;
     private final String name;
 
@@ -33,10 +31,5 @@ public enum HamsterVariant implements StringRepresentable {
 
     public static HamsterVariant byId(int i) {
         return BY_ID.apply(i);
-    }
-
-    static {
-        BY_ID = ByIdMap.sparse(HamsterVariant::id, HamsterVariant.values(), RUSSIAN);
-        CODEC = StringRepresentable.fromEnum(HamsterVariant::values);
     }
 }

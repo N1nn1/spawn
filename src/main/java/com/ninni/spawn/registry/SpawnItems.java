@@ -1,10 +1,7 @@
 package com.ninni.spawn.registry;
 
 import com.ninni.spawn.Spawn;
-import com.ninni.spawn.item.AntPupaItem;
-import com.ninni.spawn.item.ClamItem;
-import com.ninni.spawn.item.EscargotItem;
-import com.ninni.spawn.item.ClamCaseItem;
+import com.ninni.spawn.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -103,6 +100,10 @@ public class SpawnItems {
 
     // sea cow
     public static final Item SEA_COW_SPAWN_EGG = register("sea_cow_spawn_egg", new SpawnEggItem(SpawnEntityType.SEA_COW, 0x696969, 0x7C7C7C, new Item.Properties()));
+
+    // octopus
+    //public static final Item OCTOPUS_SPAWN_EGG = register("octopus_spawn_egg", new SpawnEggItem(SpawnEntityType.OCTOPUS, 0xB51C65, 0xFFBE2B, new Item.Properties()));
+    public static final Item CAPTURED_OCTOPUS = register("captured_octopus", new CapturedOctopusItem(new Item.Properties().stacksTo(1)));
 
     // herring
     public static final Item HERRING_SPAWN_EGG = register("herring_spawn_egg", new SpawnEggItem(SpawnEntityType.HERRING, 0x1051AD, 0xCACACA, new Item.Properties()));

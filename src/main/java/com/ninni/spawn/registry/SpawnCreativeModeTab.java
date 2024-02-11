@@ -171,6 +171,10 @@ public class SpawnCreativeModeTab {
         // sea cow
                 output.accept(SEA_COW_SPAWN_EGG);
 
+        // octopus
+                //output.accept(OCTOPUS_SPAWN_EGG);
+                output.accept(CAPTURED_OCTOPUS);
+
         // herring
                 output.accept(HERRING_SPAWN_EGG);
                 output.accept(HERRING_BUCKET);

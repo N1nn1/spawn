@@ -13,6 +13,7 @@ import com.ninni.spawn.client.renderer.block.WhaleUvulaRenderer;
 import com.ninni.spawn.client.renderer.entity.*;
 import com.ninni.spawn.entity.Clam;
 import com.ninni.spawn.entity.Hamster;
+import com.ninni.spawn.entity.Octopus;
 import com.ninni.spawn.entity.variant.ClamVariant;
 import com.ninni.spawn.item.ClamCaseItem;
 import net.fabricmc.api.EnvType;
@@ -173,6 +174,14 @@ public class SpawnVanillaIntegration {
                 return 0.0F;
             });
 
+            ItemProperties.register(SpawnItems.CAPTURED_OCTOPUS, new ResourceLocation("item"), (itemStack, clientLevel, livingEntity, i) -> {
+                CompoundTag compoundTag = itemStack.getTag();
+                if (compoundTag != null && compoundTag.contains("Item", 3)) {
+                    return (float)compoundTag.getInt("Item") / 20 + 0.1f;
+                }
+                return 0.0F;
+            });
+
             ColorProviderRegistry.ITEM.register((itemStack, i) -> i > 0 ? -1 : ((DyeableLeatherItem) itemStack.getItem()).getColor(itemStack), SpawnItems.CLAM_CASE);
         }
 
@@ -190,6 +199,7 @@ public class SpawnVanillaIntegration {
             EntityRendererRegistry.register(SpawnEntityType.KRILL_SWARM, KrillSwarmRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.SEA_COW, SeaCowRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.CLAM, ClamRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.OCTOPUS, OctopusRenderer::new);
 
             BlockEntityRenderers.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
             BlockEntityRenderers.register(SpawnBlockEntityTypes.PIGMENT_SHIFTER, PigmentShifterRenderer::new);

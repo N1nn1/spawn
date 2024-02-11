@@ -15,8 +15,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 
 public class SpawnEntityType {
 
-
-
     public static final EntityType<AnglerFish> ANGLER_FISH = register(
             "angler_fish",
             FabricEntityTypeBuilder.createMob()
@@ -144,6 +142,18 @@ public class SpawnEntityType {
                     .spawnGroup(MobCategory.WATER_AMBIENT)
                     .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Clam::checkSurfaceWaterAnimalSpawnRules)
                     .dimensions(EntityDimensions.scalable(0.4F, 0.2F))
+                    .trackRangeChunks(30)
+    );
+
+
+    public static final EntityType<Octopus> OCTOPUS = register(
+            "octopus",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(Octopus::new)
+                    .defaultAttributes(Octopus::createAttributes)
+                    .spawnGroup(MobCategory.WATER_CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Octopus::checkSurfaceWaterAnimalSpawnRules)
+                    .dimensions(EntityDimensions.scalable(0.8F, 0.6F))
                     .trackRangeChunks(30)
     );
 

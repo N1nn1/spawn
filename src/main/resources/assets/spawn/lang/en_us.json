@@ -176,6 +176,10 @@
   "entity.spawn.sea_cow": "Sea Cow",
   "item.spawn.sea_cow_spawn_egg": "Sea Cow Spawn Egg",
 
+  "entity.spawn.octopus": "Octopus",
+  "item.spawn.captured_octopus": "Captured Octopus",
+  "item.spawn.captured_octopus.no_container": "No Container",
+
   "entity.spawn.herring": "Herring",
   "item.spawn.herring_spawn_egg": "Herring Spawn Egg",
   "item.spawn.herring_bucket": "Bucket of Herring",

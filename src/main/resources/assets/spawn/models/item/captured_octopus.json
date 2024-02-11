@@ -1,0 +1,86 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "spawn:item/octopus_bucket"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "item": 0.0
+      },
+      "model": "spawn:item/octopus"
+    },
+    {
+      "predicate": {
+        "item": 0.1
+      },
+      "model": "spawn:item/octopus_bucket"
+    },
+    {
+      "predicate": {
+        "item": 0.15
+      },
+      "model": "spawn:item/octopus_bottle"
+    },
+    {
+      "predicate": {
+        "item": 0.2
+      },
+      "model": "spawn:item/octopus_snail_shell"
+    },
+    {
+      "predicate": {
+        "item": 0.25
+      },
+      "model": "spawn:item/octopus_bowl"
+    },
+    {
+      "predicate": {
+        "item": 0.3
+      },
+      "model": "spawn:item/octopus_cauldron"
+    },
+    {
+      "predicate": {
+        "item": 0.35
+      },
+      "model": "spawn:item/octopus_hopper"
+    },
+    {
+      "predicate": {
+        "item": 0.4
+      },
+      "model": "spawn:item/octopus_hopper_minecart"
+    },
+    {
+      "predicate": {
+        "item": 0.45
+      },
+      "model": "spawn:item/octopus_minecart"
+    },
+    {
+      "predicate": {
+        "item": 0.5
+      },
+      "model": "spawn:item/octopus_nautilus_shell"
+    },
+    {
+      "predicate": {
+        "item": 0.55
+      },
+      "model": "spawn:item/octopus_flower_pot"
+    },
+    {
+      "predicate": {
+        "item": 0.6
+      },
+      "model": "spawn:item/octopus_goat_horn"
+    },
+    {
+      "predicate": {
+        "item": 0.65
+      },
+      "model": "spawn:item/octopus_bell"
+    }
+  ]
+}
