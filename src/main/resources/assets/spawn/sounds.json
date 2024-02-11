@@ -641,5 +641,15 @@
 			"spawn:block/fallen_leaves/light4"
 		],
 		"subtitle": "subtitles.block.generic.footsteps"
+	},
+	"item.goat_horn.octopus": {
+		"sounds": [
+			"spawn:item/goat_horn/octopus1",
+			"spawn:item/goat_horn/octopus2",
+			"spawn:item/goat_horn/octopus3",
+			"spawn:item/goat_horn/octopus4",
+			"spawn:item/goat_horn/octopus5"
+		],
+		"subtitle": "subtitles.item.goat_horn.octopus"
 	}
 }

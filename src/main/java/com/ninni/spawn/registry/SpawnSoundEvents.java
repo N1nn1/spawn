@@ -83,6 +83,8 @@ public interface SpawnSoundEvents {
     //Whale
     //Whale blocks
 
+    SoundEvent GOAT_HORN_OCTOPUS = register("item.goat_horn.octopus");
+
     SoundType MUCUS = register("mucus", 1, 1);
     SoundType ROTTEN_WOOD = register("rotten_wood", 1, 1);
     SoundType CRACKED_ROTTEN_WOOD = register("cracked_rotten_wood", 1, 1);

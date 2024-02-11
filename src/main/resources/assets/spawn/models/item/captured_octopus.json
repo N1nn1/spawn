@@ -72,9 +72,17 @@
     },
     {
       "predicate": {
-        "item": 0.6
+        "item": 0.6,
+        "tooting": 0
       },
       "model": "spawn:item/octopus_goat_horn"
+    },
+    {
+      "predicate": {
+        "item": 0.6,
+        "tooting": 1
+      },
+      "model": "spawn:item/octopus_goat_horn_tooting"
     },
     {
       "predicate": {

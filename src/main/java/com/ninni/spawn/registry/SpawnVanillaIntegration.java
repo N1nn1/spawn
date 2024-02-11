@@ -43,6 +43,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.GenerationStep;
 
@@ -181,6 +182,8 @@ public class SpawnVanillaIntegration {
                 }
                 return 0.0F;
             });
+
+            ItemProperties.register(SpawnItems.CAPTURED_OCTOPUS, new ResourceLocation("tooting"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
 
             ColorProviderRegistry.ITEM.register((itemStack, i) -> i > 0 ? -1 : ((DyeableLeatherItem) itemStack.getItem()).getColor(itemStack), SpawnItems.CLAM_CASE);
         }

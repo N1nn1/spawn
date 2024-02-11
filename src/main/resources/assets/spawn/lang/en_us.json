@@ -179,6 +179,7 @@
   "entity.spawn.octopus": "Octopus",
   "item.spawn.captured_octopus": "Captured Octopus",
   "item.spawn.captured_octopus.no_container": "No Container",
+  "subtitles.item.goat_horn.octopus": "Goat Horn fails to play",
 
   "entity.spawn.herring": "Herring",
   "item.spawn.herring_spawn_egg": "Herring Spawn Egg",
