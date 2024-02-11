@@ -85,7 +85,7 @@ public class OctopusModel extends HierarchicalModel<Octopus> {
         this.animate(entity.idleAnimationState, OctopusAnimation.IDLE, ageInTicks, 1.0f);
 
         if (entity.isInWaterOrBubble() && !entity.onGround()) {
-            this.animateWalk(OctopusAnimation.SWIM, limbSwing, limbSwingAmount, 4.5f, 8.0f);
+            this.animateWalk(OctopusAnimation.SWIM, limbSwing, limbSwingAmount, 1.5f, 8.0f);
         } else {
             this.animateWalk(OctopusAnimation.WALK, limbSwing, limbSwingAmount, 4.5f, 8.0f);
         }

@@ -7,13 +7,13 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.ByIdMap;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -22,8 +22,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -50,9 +48,7 @@ public class Octopus extends PathfinderMob {
             Items.BELL
     );
     public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
     public final AnimationState waterIdleAnimationState = new AnimationState();
-    private int waterIdleAnimationTimeout = 0;
 
 
     public Octopus(EntityType<? extends PathfinderMob> entityType, Level level) {
@@ -61,18 +57,21 @@ public class Octopus extends PathfinderMob {
         this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, 16.0F);
         this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0F);
         this.setMaxUpStep(1);
+        //TODO they spin in circles
+        this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.15F, true);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.25));
-        this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(6, new OctopusRandomStroll(this));
+        this.goalSelector.addGoal(6, new RandomSwimmingGoal(this, 1.0D, 10));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0).add(Attributes.MOVEMENT_SPEED, 0.2f);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0).add(Attributes.MOVEMENT_SPEED, 1.2f);
     }
 
     @Override
@@ -126,30 +125,22 @@ public class Octopus extends PathfinderMob {
         super.tick();
 
         if ((this.level()).isClientSide()) {
-            this.setupAnimationStates();
+            this.waterIdleAnimationState.animateWhen(this.isInWaterOrBubble() && !this.onGround(), this.tickCount);
+            this.idleAnimationState.animateWhen(!this.isInWaterOrBubble(), this.tickCount);
         }
     }
 
-    private void setupAnimationStates() {
-
-        if (this.isInWaterOrBubble() && !this.onGround()) {
-            if (this.waterIdleAnimationTimeout <= 0) {
-                this.waterIdleAnimationTimeout = 20 * 8;
-                this.waterIdleAnimationState.start(this.tickCount);
-            } else {
-                --this.waterIdleAnimationTimeout;
+    public void travel(Vec3 vec3) {
+        if (this.isEffectiveAi() && this.isInWater()) {
+            this.moveRelative(this.getSpeed(), vec3);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
+            if (this.getTarget() == null) {
+                this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.005, 0.0));
             }
-            this.idleAnimationState.stop();
         } else {
-            this.waterIdleAnimationState.stop();
-            if (this.idleAnimationTimeout <= 0) {
-                this.idleAnimationTimeout = 20 * 8;
-                this.idleAnimationState.start(this.tickCount);
-            } else {
-                --this.idleAnimationTimeout;
-            }
+            super.travel(vec3);
         }
-
     }
 
     protected PathNavigation createNavigation(Level level) {
@@ -204,13 +195,17 @@ public class Octopus extends PathfinderMob {
         return super.requiresCustomPersistence() || this.fromBucket();
     }
 
-    @Override
-    public int getMaxHeadXRot() {
-        return 1;
+
+    public int getHeadRotSpeed() {
+        return 35;
+    }
+
+    public int getMaxHeadYRot() {
+        return 5;
     }
 
     @Override
-    public int getMaxHeadYRot() {
+    public int getMaxHeadXRot() {
         return 1;
     }
 
@@ -261,6 +256,30 @@ public class Octopus extends PathfinderMob {
         else return Items.BUCKET;
     }
 
+    public class OctopusRandomStroll extends RandomStrollGoal {
+
+        public OctopusRandomStroll(PathfinderMob pathfinderMob) {
+            super(pathfinderMob, 1.0);
+        }
+
+        @Override
+        public boolean canUse() {
+            if (Octopus.this.isInWaterOrBubble() && !Octopus.this.onGround()) {
+                return false;
+            }
+
+            return super.canUse();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (Octopus.this.isInWaterOrBubble() && !Octopus.this.onGround()) {
+                return false;
+            }
+
+            return super.canContinueToUse();
+        }
+    }
 
     public static boolean checkSurfaceWaterAnimalSpawnRules(EntityType<Octopus> mobEntityType, ServerLevelAccessor levelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
         int i = levelAccessor.getSeaLevel();
