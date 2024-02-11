@@ -112,6 +112,7 @@ public class Octopus extends PathfinderMob {
 
         compoundTag.putFloat("Health", this.getHealth());
         compoundTag.putInt("Item", getId(inputStack.getItem()));
+        if (inputStack.hasTag()) compoundTag.put("ItemTag", inputStack.getTag());
     }
 
     public void loadDataFromItem(CompoundTag tag) {

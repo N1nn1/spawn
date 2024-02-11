@@ -83,7 +83,9 @@ public class CapturedOctopusItem extends Item {
         }
 
         if (itemStack.hasTag() && itemStack.getTag().contains("Item")) {
-            player.setItemInHand(interactionHand, Octopus.getItem(itemStack.getTag().getInt("Item")).getDefaultInstance());
+            ItemStack stack = Octopus.getItem(itemStack.getTag().getInt("Item")).getDefaultInstance();
+            if (itemStack.getTag().contains("ItemTag")) stack.setTag(itemStack.getTag().getCompound("ItemTag"));
+            player.setItemInHand(interactionHand, stack);
         } else {
             if (!player.isCreative()) itemStack.shrink(1);
         }
