@@ -200,7 +200,7 @@ public class SpawnCreativeModeTab {
                 output.accept(COOKED_HERRING);
 
                 // octopus
-                output.accept(OCTOPUS_SPAWN_EGG);
+                //output.accept(OCTOPUS_SPAWN_EGG);
                 output.accept(CAPTURED_OCTOPUS);
 
                 // whale

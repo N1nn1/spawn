@@ -27,9 +27,7 @@ public class BlockEntityWithoutLevelRendererMixin {
     @Final
     private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
 
-    @Unique
-    private final PigmentShifterBlockEntity pigmentShifter = new PigmentShifterBlockEntity(BlockPos.ZERO, SpawnBlocks.PIGMENT_SHIFTER.defaultBlockState().setValue(PigmentShifterBlock.WATERLOGGED, false));
-    @Unique
+    private final PigmentShifterBlockEntity pigmentShifter = new PigmentShifterBlockEntity(BlockPos.ZERO, SpawnBlocks.PIGMENT_SHIFTER.defaultBlockState());
     private final ClamLauncherBlockEntity clamLauncher = new ClamLauncherBlockEntity(BlockPos.ZERO, SpawnBlocks.CLAM_LAUNCHER.defaultBlockState());
 
 
@@ -39,7 +37,7 @@ public class BlockEntityWithoutLevelRendererMixin {
         if (itemStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof PigmentShifterBlock) {
             this.blockEntityRenderDispatcher.renderItem(pigmentShifter, poseStack, multiBufferSource, i, j);
         }
-        else if (itemStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ClamLauncherBlock) {
+        if (itemStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ClamLauncherBlock) {
             this.blockEntityRenderDispatcher.renderItem(clamLauncher, poseStack, multiBufferSource, i, j);
         }
     }
