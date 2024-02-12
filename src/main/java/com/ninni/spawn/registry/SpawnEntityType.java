@@ -146,6 +146,7 @@ public class SpawnEntityType {
     );
 
 
+    //TODO apparently this is null and cannot register an spawn egg item while all the others work even tho nothing changes between them, this makes the game crash when opening the inventory
     public static final EntityType<Octopus> OCTOPUS = register(
             "octopus",
             FabricEntityTypeBuilder.createMob()

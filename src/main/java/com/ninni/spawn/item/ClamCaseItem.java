@@ -41,7 +41,7 @@ public class ClamCaseItem extends Item implements DyeableLeatherItem {
         if (compoundTag != null && compoundTag.contains(TAG_COLOR, 99)) {
             return compoundTag.getInt(TAG_COLOR);
         }
-        return 0x0077FF;
+        return 0x90B6C5;
     }
 
     public static float getFullnessDisplay(ItemStack itemStack) {

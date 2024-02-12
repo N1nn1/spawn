@@ -64,6 +64,7 @@ public class SpawnBlocks {
     public static final Block ALGAL_SAND = register("algal_sand", new AlgalSandBlock(FabricBlockSettings.copyOf(Blocks.SAND).randomTicks().mapColor(MapColor.COLOR_GREEN)));
     public static final Block TRIMMED_SEAGRASS = register("trimmed_seagrass", new TrimmedSeagrassBlock(FabricBlockSettings.copyOf(Blocks.SEAGRASS).offsetType(BlockBehaviour.OffsetType.XZ).randomTicks()));
     public static final Block PIGMENT_SHIFTER = register("pigment_shifter", new PigmentShifterBlock(FabricBlockSettings.copyOf(Blocks.CONDUIT)));
+    public static final Block CLAM_LAUNCHER = register("clam_launcher", new ClamLauncherBlock(FabricBlockSettings.create().forceSolidOn().instrument(NoteBlockInstrument.HAT).strength(3.0f).noOcclusion().mapColor(MapColor.COLOR_ORANGE)));
 
     // whale
     public static final Block WHALE_FLESH = register("whale_flesh", new WhaleFleshBlock(FabricBlockSettings.create().mapColor(MapColor.COLOR_PURPLE).sounds(SoundType.SLIME_BLOCK).strength(-1.0F, 3600000.0F).noLootTable().isValidSpawn(Blocks::never)));

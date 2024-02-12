@@ -6,7 +6,11 @@
     },
     {
       "type": "single",
-      "resource": "spawn:entity/pigment_shifter/pigment_shifter"
+      "resource": "spawn:entity/clam/pigment_shifter/pigment_shifter"
+    },
+    {
+      "type": "single",
+      "resource": "spawn:entity/clam/clam_launcher/clam_launcher"
     }
   ]
 }

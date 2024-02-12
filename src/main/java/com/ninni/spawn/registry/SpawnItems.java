@@ -93,6 +93,7 @@ public class SpawnItems {
     public static final Item CLAM = register("clam", new ClamItem(new Item.Properties().stacksTo(1).craftRemainder(SHELL_FRAGMENTS)));
     public static final Item CLAM_CASE = register("clam_case", new ClamCaseItem(new FabricItemSettings().stacksTo(1)));
     public static final Item PIGMENT_SHIFTER = register("pigment_shifter", new BlockItem(SpawnBlocks.PIGMENT_SHIFTER, new FabricItemSettings().rarity(Rarity.RARE)));
+    public static final Item CLAM_LAUNCHER = register("clam_launcher", new BlockItem(SpawnBlocks.CLAM_LAUNCHER, new FabricItemSettings()));
     public static final Item CLAM_MEAT = register("clam_meat", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.5f).build())));
     public static final Item COOKED_CLAM_MEAT = register("cooked_clam_meat", new Item(new FabricItemSettings().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.8f).build())));
     public static final Item CLAM_CHOWDER = register("clam_chowder", new BowlFoodItem(new FabricItemSettings().stacksTo(1).food(new FoodProperties.Builder().nutrition(8).saturationMod(0.8f).build())));
@@ -104,7 +105,7 @@ public class SpawnItems {
     public static final Item SHELL_POTTERY_SHERD = register("shell_pottery_sherd", new Item(new Item.Properties()));
 
     // octopus
-    //public static final Item OCTOPUS_SPAWN_EGG = register("octopus_spawn_egg", new SpawnEggItem(SpawnEntityType.OCTOPUS, 0xB51C65, 0xFFBE2B, new Item.Properties()));
+    public static final Item OCTOPUS_SPAWN_EGG = register("octopus_spawn_egg", new SpawnEggItem(SpawnEntityType.OCTOPUS, 0xB51C65, 0xFFBE2B, new Item.Properties()));
     public static final Item CAPTURED_OCTOPUS = register("captured_octopus", new CapturedOctopusItem(new Item.Properties().stacksTo(1)));
 
     // herring

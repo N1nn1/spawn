@@ -1,6 +1,7 @@
 package com.ninni.spawn.registry;
 
 import com.ninni.spawn.client.model.*;
+import com.ninni.spawn.client.renderer.block.ClamLauncherRenderer;
 import com.ninni.spawn.client.renderer.block.PigmentShifterRenderer;
 import com.ninni.spawn.client.renderer.block.WhaleUvulaRenderer;
 import net.fabricmc.api.EnvType;
@@ -32,6 +33,7 @@ public interface SpawnEntityModelLayers {
     ModelLayerLocation CLAM_SCALLOP = main("clam_scallop", ClamModel::createScallopLayer);
     ModelLayerLocation CLAM_GIANT_CLAM = main("clam_giant_clam", ClamModel::createGiantClamLayer);
     ModelLayerLocation PIGMENT_SHIFTER = main("pigment_shifter", PigmentShifterRenderer::createBodyLayer);
+    ModelLayerLocation CLAM_LAUNCHER = main("clam_launcher", ClamLauncherRenderer::createBodyLayer);
     ModelLayerLocation OCTOPUS = main("octopus", OctopusModel::createBodyLayer);
 
     private static ModelLayerLocation register(String id, String name, EntityModelLayerRegistry.TexturedModelDataProvider provider) {

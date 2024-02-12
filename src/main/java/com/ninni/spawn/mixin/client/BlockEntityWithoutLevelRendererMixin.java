@@ -1,7 +1,9 @@
 package com.ninni.spawn.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.ninni.spawn.block.ClamLauncherBlock;
 import com.ninni.spawn.block.PigmentShifterBlock;
+import com.ninni.spawn.block.entity.ClamLauncherBlockEntity;
 import com.ninni.spawn.block.entity.PigmentShifterBlockEntity;
 import com.ninni.spawn.registry.SpawnBlocks;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -27,14 +29,18 @@ public class BlockEntityWithoutLevelRendererMixin {
 
     @Unique
     private final PigmentShifterBlockEntity pigmentShifter = new PigmentShifterBlockEntity(BlockPos.ZERO, SpawnBlocks.PIGMENT_SHIFTER.defaultBlockState().setValue(PigmentShifterBlock.WATERLOGGED, false));
+    @Unique
+    private final ClamLauncherBlockEntity clamLauncher = new ClamLauncherBlockEntity(BlockPos.ZERO, SpawnBlocks.CLAM_LAUNCHER.defaultBlockState());
 
 
-    @Inject(method = "renderByItem", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderByItem", at = @At("HEAD"))
     private void DD$renderShulkerItems(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, CallbackInfo ci) {
 
         if (itemStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof PigmentShifterBlock) {
-            ci.cancel();
             this.blockEntityRenderDispatcher.renderItem(pigmentShifter, poseStack, multiBufferSource, i, j);
+        }
+        else if (itemStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ClamLauncherBlock) {
+            this.blockEntityRenderDispatcher.renderItem(clamLauncher, poseStack, multiBufferSource, i, j);
         }
     }
 }

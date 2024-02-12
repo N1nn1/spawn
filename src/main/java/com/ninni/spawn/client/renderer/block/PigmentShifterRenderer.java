@@ -26,7 +26,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class PigmentShifterRenderer implements BlockEntityRenderer<PigmentShifterBlockEntity> {
-    public static final Material SHELL_TEXTURE = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(Spawn.MOD_ID, "entity/pigment_shifter/pigment_shifter"));
+    public static final Material SHELL_TEXTURE = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(Spawn.MOD_ID, "entity/clam/pigment_shifter/pigment_shifter"));
     private final ModelPart bottom;
     private final ModelPart top;
     private final ModelPart eye;
@@ -46,7 +46,7 @@ public class PigmentShifterRenderer implements BlockEntityRenderer<PigmentShifte
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition bottom = partdefinition.addOrReplaceChild(
+        partdefinition.addOrReplaceChild(
                 "bottom",
                 CubeListBuilder.create()
                         .texOffs(0, 42)
@@ -56,7 +56,7 @@ public class PigmentShifterRenderer implements BlockEntityRenderer<PigmentShifte
                 PartPose.offset(0.0F, 24.0F, 0.0F)
         );
 
-        PartDefinition eye = partdefinition.addOrReplaceChild(
+        partdefinition.addOrReplaceChild(
                 "eye",
                 CubeListBuilder.create()
                         .texOffs(0, 31)
@@ -64,7 +64,7 @@ public class PigmentShifterRenderer implements BlockEntityRenderer<PigmentShifte
                 PartPose.offset(0.0F, 13.0F, 0.0F)
         );
 
-        PartDefinition top = partdefinition.addOrReplaceChild(
+        partdefinition.addOrReplaceChild(
                 "top",
                 CubeListBuilder.create()
                         .texOffs(0, 0)

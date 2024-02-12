@@ -8,6 +8,7 @@ import com.ninni.spawn.client.inventory.HamsterInventoryScreen;
 import com.ninni.spawn.client.particles.KrillParticle;
 import com.ninni.spawn.client.particles.SandCloudParticle;
 import com.ninni.spawn.client.particles.TunaEggParticle;
+import com.ninni.spawn.client.renderer.block.ClamLauncherRenderer;
 import com.ninni.spawn.client.renderer.block.PigmentShifterRenderer;
 import com.ninni.spawn.client.renderer.block.WhaleUvulaRenderer;
 import com.ninni.spawn.client.renderer.entity.*;
@@ -206,6 +207,7 @@ public class SpawnVanillaIntegration {
 
             BlockEntityRenderers.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
             BlockEntityRenderers.register(SpawnBlockEntityTypes.PIGMENT_SHIFTER, PigmentShifterRenderer::new);
+            BlockEntityRenderers.register(SpawnBlockEntityTypes.CLAM_LAUNCHER, ClamLauncherRenderer::new);
         }
 
         private static void registerParticles() {
