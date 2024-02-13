@@ -26,12 +26,10 @@ public class ClamLauncherRenderer implements BlockEntityRenderer<ClamLauncherBlo
     public static final Material SHELL_TEXTURE = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(Spawn.MOD_ID, "entity/clam/clam_launcher/clam_launcher"));
     private final ModelPart bottom;
     private final ModelPart top;
-    private final BlockEntityRenderDispatcher renderer;
 
 
     public ClamLauncherRenderer(BlockEntityRendererProvider.Context context) {
         ModelPart modelPart = context.bakeLayer(SpawnEntityModelLayers.CLAM_LAUNCHER);
-        this.renderer = context.getBlockEntityRenderDispatcher();
         this.bottom = modelPart.getChild("bottom");
         this.top = modelPart.getChild("top");
     }

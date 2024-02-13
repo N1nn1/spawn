@@ -6,13 +6,13 @@
   "mixins": [
     "AbstractFishMixin",
     "BlockEntityTypeMixin",
+    "ChestBlockMixin",
     "CreativeModTabMixin",
     "DecoratedPotPatternsMixin",
     "MinecraftServerMixin",
     "MobBucketItemMixin",
     "OverworldBiomeBuilderMixin",
     "ServerPlayerMixin",
-    "accessor.MobBucketItemAccessor",
     "accessor.NoiseGeneratorSettingsAccessor",
     "accessor.TropicalFishAccessor"
   ],

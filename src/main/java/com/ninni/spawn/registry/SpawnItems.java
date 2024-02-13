@@ -105,7 +105,7 @@ public class SpawnItems {
     public static final Item SHELL_POTTERY_SHERD = register("shell_pottery_sherd", new Item(new Item.Properties()));
 
     // octopus
-    public static final Item OCTOPUS_SPAWN_EGG = register("octopus_spawn_egg", new SpawnEggItem(SpawnEntityType.OCTOPUS, 0xB51C65, 0xFFBE2B, new Item.Properties()));
+    //public static final Item OCTOPUS_SPAWN_EGG = register("octopus_spawn_egg", new SpawnEggItem(SpawnEntityType.OCTOPUS, 0xB51C65, 0xFFBE2B, new Item.Properties()));
     public static final Item CAPTURED_OCTOPUS = register("captured_octopus", new CapturedOctopusItem(new Item.Properties().stacksTo(1)));
 
     // herring

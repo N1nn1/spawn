@@ -50,7 +50,7 @@ public class SpawnCreativeModeTab {
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(entries -> {
-            entries.addAfter(Items.HONEY_BLOCK, MUCUS_BLOCK, GHOSTLY_MUCUS_BLOCK);
+            entries.addAfter(Items.HONEY_BLOCK, MUCUS_BLOCK, GHOSTLY_MUCUS_BLOCK, CLAM_LAUNCHER);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(entries -> {

@@ -6,11 +6,9 @@ import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -20,13 +18,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CapturedOctopusItem extends Item {
 
@@ -43,9 +44,8 @@ public class CapturedOctopusItem extends Item {
         BlockPos blockPos3 = blockPos.relative(direction);
 
         if (blockHitResult.getType() == HitResult.Type.BLOCK) {
+
             this.spawn(player, interactionHand, level, itemStack, blockPos3);
-
-
             level.gameEvent(player, GameEvent.ENTITY_PLACE, blockPos);
             player.awardStat(Stats.ITEM_USED.get(this));
 
@@ -65,23 +65,30 @@ public class CapturedOctopusItem extends Item {
         return super.use(level, player, interactionHand);
     }
 
-    @Override
-    public int getUseDuration(ItemStack itemStack) {
-        CompoundTag compoundTag = itemStack.getTag();
-        if (compoundTag != null && compoundTag.contains("Item") && compoundTag.getInt("Item") == 10) {
-            return 20 * 3;
-        }
-        return 0;
-    }
-
     private void spawn(Player player, InteractionHand interactionHand, Level level, ItemStack itemStack, BlockPos blockPos) {
+        BlockHitResult blockHitResult = BucketItem.getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
 
         if (level instanceof ServerLevel serverLevel) {
-            Octopus entity = SpawnEntityType.OCTOPUS.spawn(serverLevel, itemStack, null, blockPos, MobSpawnType.BUCKET, true, false);
-            entity.loadDataFromItem(itemStack.getOrCreateTag());
-            entity.setFromBucket(true);
+
+            BlockPos pos = blockHitResult.getBlockPos();
+            BlockState state = level.getBlockState(pos);
+
+            if (level.getBlockEntity(pos) instanceof ChestBlockEntity && (state.getValue(ChestBlock.TYPE) == ChestType.SINGLE)) {
+                Octopus entity = SpawnEntityType.OCTOPUS.spawn(serverLevel, itemStack, null, pos.below(), MobSpawnType.BUCKET, true, false);
+                entity.setLockingPos(pos);
+                entity.setYHeadRot(state.getValue(ChestBlock.FACING).toYRot());
+            } else {
+                Octopus entity = SpawnEntityType.OCTOPUS.spawn(serverLevel, itemStack, null, blockPos, MobSpawnType.BUCKET, true, false);
+                entity.loadDataFromItem(itemStack.getOrCreateTag());
+                entity.setFromBucket(true);
+            }
+
         }
 
+        this.giveItemBack(player, interactionHand, itemStack);
+    }
+
+    public void giveItemBack(Player player, InteractionHand interactionHand, ItemStack itemStack) {
         if (itemStack.hasTag() && itemStack.getTag().contains("Item")) {
             ItemStack stack = Octopus.getItem(itemStack.getTag().getInt("Item")).getDefaultInstance();
             if (itemStack.getTag().contains("ItemTag")) stack.setTag(itemStack.getTag().getCompound("ItemTag"));
@@ -89,7 +96,15 @@ public class CapturedOctopusItem extends Item {
         } else {
             if (!player.isCreative()) itemStack.shrink(1);
         }
+    }
 
+    @Override
+    public int getUseDuration(ItemStack itemStack) {
+        CompoundTag compoundTag = itemStack.getTag();
+        if (compoundTag != null && compoundTag.contains("Item") && compoundTag.getInt("Item") == 10) {
+            return 20 * 3;
+        }
+        return 0;
     }
 
     @Override

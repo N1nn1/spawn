@@ -4,17 +4,21 @@ import com.ninni.spawn.registry.SpawnItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -28,15 +32,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class Octopus extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Octopus.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Optional<BlockPos>> LOCKED_CHEST = SynchedEntityData.defineId(Octopus.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     public static List<Item> items = List.of(
             Items.BUCKET,
             Items.GLASS_BOTTLE,
@@ -62,6 +74,7 @@ public class Octopus extends PathfinderMob {
         this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0F);
         this.setMaxUpStep(1);
         this.moveControl = new OctopusMoveControl(this);
+        this.lookControl = new OctopusLookControl(this);
     }
 
     @Override
@@ -127,6 +140,10 @@ public class Octopus extends PathfinderMob {
     @Override
     public void tick() {
         super.tick();
+
+        setNoGravity(this.isLocking());
+
+
         //TODO these dont work, reference camel code
         if ((this.level()).isClientSide()) {
             this.waterIdleAnimationState.animateWhen(this.isInWaterOrBubble() && !this.onGround(), this.tickCount);
@@ -137,34 +154,75 @@ public class Octopus extends PathfinderMob {
                     level().addParticle(ParticleTypes.FALLING_WATER, this.getRandomX(0.6), this.getY() + random.nextDouble(), this.getRandomZ(0.6), 0.0, 0.0, 0.0);
                 }
             }
-
+        } else {
+            if (this.isLocking()) {
+                BlockState state = this.level().getBlockState(getLockingPos());
+                BlockPos pos = new BlockPos((int)this.getX(), (int)this.getY(), (int)this.getZ());
+                if (!state.is(Blocks.CHEST) || (state.is(Blocks.CHEST) && state.getValue(ChestBlock.TYPE) != ChestType.SINGLE)) {
+                    this.entityData.set(LOCKED_CHEST, Optional.empty());
+                } else {
+                    if (!pos.equals(this.getLockingPos())) {
+                        this.setPos(this.getLockingPos().getX() + 0.5f, this.getLockingPos().getY(), this.getLockingPos().getZ() + 0.5f);
+                    }
+                }
+            }
         }
     }
 
     public void travel(Vec3 vec3) {
-        if (this.isEffectiveAi() && this.isInWater()) {
-            this.moveRelative(this.getSpeed(), vec3);
-            this.move(MoverType.SELF, this.getDeltaMovement());
-            this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
-            this.setDeltaMovement(this.getDeltaMovement().add(0.0,0.0025D,0.0));
-        } else {
-            super.travel(vec3);
+        if (!this.isLocking()) {
+            if (this.isEffectiveAi() && this.isInWater()) {
+                this.moveRelative(this.getSpeed(), vec3);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
+                this.setDeltaMovement(this.getDeltaMovement().add(0.0,0.0025D,0.0));
+            } else {
+                super.travel(vec3);
+            }
         }
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float f) {
+        if (this.isLocking() && !(source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_LIGHTNING) || source.is(DamageTypeTags.BYPASSES_INVULNERABILITY))) {
+            return false;
+        }
+        return super.hurt(source, f);
     }
 
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(FROM_BUCKET, false);
+        this.entityData.define(LOCKED_CHEST, Optional.empty());
     }
 
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putBoolean("FromBucket", this.fromBucket());
+        if (this.isLocking()) {
+            compoundTag.put("LockedChestPos", NbtUtils.writeBlockPos(this.getLockingPos()));
+        }
     }
 
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.setFromBucket(compoundTag.getBoolean("FromBucket"));
+        if (compoundTag.contains("LockedChestPos", 10)) {
+            this.setLockingPos(NbtUtils.readBlockPos(compoundTag.getCompound("LockedChestPos")));
+        }
+    }
+
+    public boolean isLocking() {
+        return this.entityData.get(LOCKED_CHEST).isPresent();
+    }
+
+    public void setLockingPos(@Nullable BlockPos blockPos) {
+        this.getEntityData().set(LOCKED_CHEST, Optional.ofNullable(blockPos));
+    }
+
+    @Nullable
+    public BlockPos getLockingPos() {
+        return this.getEntityData().get(LOCKED_CHEST).orElse(null);
     }
 
     public boolean fromBucket() {
@@ -265,7 +323,7 @@ public class Octopus extends PathfinderMob {
     @Override
     protected PathNavigation createNavigation(Level world) { return new OctopusSwimNavigation(this, world); }
 
-    class OctopusSwimNavigation extends WaterBoundPathNavigation {
+    static class OctopusSwimNavigation extends WaterBoundPathNavigation {
         OctopusSwimNavigation(Octopus octopus, Level world) { super(octopus, world); }
 
         @Override
@@ -295,28 +353,46 @@ public class Octopus extends PathfinderMob {
 
         @Override
         public void tick() {
-            if (this.operation == Operation.STRAFE || this.operation == Operation.JUMPING || (this.mob.onGround() && !this.octopus.isInWaterOrBubble())) { super.tick();}
-            if (this.operation == Operation.MOVE_TO && !this.octopus.getNavigation().isDone()) {
-                double d = this.wantedX - this.octopus.getX();
-                double e = this.wantedY - this.octopus.getY();
-                double f = this.wantedZ - this.octopus.getZ();
-                double g = d * d + e * e + f * f;
-                if (g < 2.5) {
-                    this.mob.setZza(0.0F);
-                } else {
-                    float movementSpeed = (float) (this.speedModifier * this.octopus.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                    this.octopus.setYRot(this.rotlerp(this.octopus.getYRot(), (float) (Mth.atan2(f, d) * 57.3) - 90.0F, 10.0F));
-                    this.octopus.yBodyRot = this.octopus.getYRot();
-                    this.octopus.yHeadRot = this.octopus.getYRot();
-                    if (this.octopus.isInWaterOrBubble()) {
-                        this.octopus.setSpeed(movementSpeed * 0.4F);
-                        if (this.octopus.onGround()) this.octopus.setSpeed(movementSpeed * 0.1F);
-                        float j = -((float) (Mth.atan2(e, Mth.sqrt((float) (d * d + f * f))) * 57.3));
-                        this.octopus.setXRot(this.rotlerp(this.octopus.getXRot(), Mth.clamp(Mth.wrapDegrees(j), -85.0F, 85.0F), 5.0F));
-                        this.octopus.zza = Mth.cos(this.octopus.getXRot() * (float) Math.PI / 180f) * movementSpeed;
-                        this.octopus.yya = -Mth.sin(this.octopus.getXRot() * (float) Math.PI / 180f);
+            if (!this.octopus.isLocking()) {
+                if (this.operation == Operation.STRAFE || this.operation == Operation.JUMPING || (this.mob.onGround() && !this.octopus.isInWaterOrBubble())) { super.tick();}
+                if (this.operation == Operation.MOVE_TO && !this.octopus.getNavigation().isDone()) {
+                    double d = this.wantedX - this.octopus.getX();
+                    double e = this.wantedY - this.octopus.getY();
+                    double f = this.wantedZ - this.octopus.getZ();
+                    double g = d * d + e * e + f * f;
+                    if (g < 2.5) {
+                        this.mob.setZza(0.0F);
+                    } else {
+                        float movementSpeed = (float) (this.speedModifier * this.octopus.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                        this.octopus.setYRot(this.rotlerp(this.octopus.getYRot(), (float) (Mth.atan2(f, d) * 57.3) - 90.0F, 10.0F));
+                        this.octopus.yBodyRot = this.octopus.getYRot();
+                        this.octopus.yHeadRot = this.octopus.getYRot();
+                        if (this.octopus.isInWaterOrBubble()) {
+                            this.octopus.setSpeed(movementSpeed * 0.4F);
+                            if (this.octopus.onGround()) this.octopus.setSpeed(movementSpeed * 0.1F);
+                            float j = -((float) (Mth.atan2(e, Mth.sqrt((float) (d * d + f * f))) * 57.3));
+                            this.octopus.setXRot(this.rotlerp(this.octopus.getXRot(), Mth.clamp(Mth.wrapDegrees(j), -85.0F, 85.0F), 5.0F));
+                            this.octopus.zza = Mth.cos(this.octopus.getXRot() * (float) Math.PI / 180f) * movementSpeed;
+                            this.octopus.yya = -Mth.sin(this.octopus.getXRot() * (float) Math.PI / 180f);
+                        }
                     }
                 }
+            }
+        }
+    }
+
+    static class OctopusLookControl extends LookControl {
+        private final Octopus octopus;
+
+        public OctopusLookControl(Octopus octopus) {
+            super(octopus);
+            this.octopus = octopus;
+        }
+
+        @Override
+        public void tick() {
+            if (!this.octopus.isLocking()) {
+                super.tick();
             }
         }
     }
