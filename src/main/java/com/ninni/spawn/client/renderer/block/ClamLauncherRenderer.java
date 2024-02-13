@@ -46,8 +46,6 @@ public class ClamLauncherRenderer implements BlockEntityRenderer<ClamLauncherBlo
                 CubeListBuilder.create()
                         .texOffs(0, 0)
                         .addBox(-8.0F, -2.0F, -8.0F, 16.0F, 2.0F, 14.0F, new CubeDeformation(-0.01F))
-                        .texOffs(-14, 36)
-                        .addBox(-8.0F, -1.0F, -8.0F, 16.0F, 0.0F, 14.0F, new CubeDeformation(-0.01F))
                         .texOffs(0, 32)
                         .addBox(-3.0F, -2.0F, 6.0F, 6.0F, 2.0F, 2.0F, new CubeDeformation(-0.01F)),
                 PartPose.offset(0.0F, 24.0F, 0.0F)
@@ -57,13 +55,11 @@ public class ClamLauncherRenderer implements BlockEntityRenderer<ClamLauncherBlo
                 "top",
                 CubeListBuilder.create()
                         .texOffs(0, 16)
-                        .addBox(-8.0F, -2.0F, -14.0F, 16.0F, 2.0F, 14.0F)
-                        .texOffs(-14, 50)
-                        .addBox(-8.0F, 0.0F, -14.0F, 16.0F, 0.0F, 14.0F),
+                        .addBox(-8.0F, -2.0F, -14.0F, 16.0F, 2.0F, 14.0F),
                 PartPose.offset(0.0F, 23.0F, 6.0F)
         );
 
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        return LayerDefinition.create(meshdefinition, 64, 48);
     }
 
     @Override
@@ -85,7 +81,6 @@ public class ClamLauncherRenderer implements BlockEntityRenderer<ClamLauncherBlo
 
         if (blockEntity.getBlockState().getValue(ClamLauncherBlock.POWERED)) {
             poseStack.translate(0.0f, 1.4f, 0.35f);
-            //TODO if you click it too much it starts spinning backwards and I cant fix it for the life of me
             poseStack.mulPose(new Quaternionf().rotateX(-(Mth.lerp(blockEntity.activeRotation, blockEntity.activeRotation, 1f))));
             poseStack.translate(0.0f, -1.4f, -0.35f);
 

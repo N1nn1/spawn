@@ -6,6 +6,7 @@ import com.ninni.spawn.block.entity.PigmentShifterBlockEntity;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -82,10 +83,15 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
 
     }
 
-    public void open(BlockState blockState, Level level, BlockPos blockPos) {
-        level.playSound(null, blockPos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5f, 1);
-        level.setBlockAndUpdate(blockPos, blockState.setValue(POWERED, true).setValue(COOLDOWN, 20));
-        level.scheduleTick(new BlockPos(blockPos), this, 10);
+    public void open(BlockState blockState, Level level, BlockPos pos) {
+        level.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5f, 1);
+        level.setBlockAndUpdate(pos, blockState.setValue(POWERED, true).setValue(COOLDOWN, 20));
+        level.scheduleTick(new BlockPos(pos), this, 10);
+
+        if (blockState.getValue(WATERLOGGED) && level instanceof  ServerLevel serverLevel) {
+            serverLevel.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, 15,0.05,0.5,0.05,0.2);
+        }
+
     }
 
     @Override
@@ -109,6 +115,10 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
         double s = entity instanceof LivingEntity ? 1.0 : 0.2;
         double e = entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA) ? 1.75 : 1.0;
         double g = entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA) ? 3.75 : 1.0;
+        if (entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA) && livingEntity.isInWaterOrBubble()) {
+            g = 2;
+            e = 3;
+        }
 
         double x = ((vec3.x * 0.2f + 2) * s) * g;
         double y = ((vec3.y * 0.2f + 1.5) * d) * e;
