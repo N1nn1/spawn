@@ -6,6 +6,9 @@ import com.ninni.spawn.registry.SpawnBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -60,6 +63,7 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
         if (!blockState.getValue(POWERED)) {
             level.setBlockAndUpdate(blockPos, blockState.setValue(POWERED, true));
             level.scheduleTick(new BlockPos(blockPos), this, 15);
+            level.playSound(player, blockPos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5f, 1);
             return InteractionResult.sidedSuccess(true);
         }
         return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
@@ -68,6 +72,7 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
     @Override
     public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
         serverLevel.setBlockAndUpdate(blockPos, blockState.setValue(POWERED, false));
+        serverLevel.playSound(null, blockPos, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5f, 1);
 
     }
 
@@ -75,6 +80,7 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
     public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
         boolean hasSignal = level.hasNeighborSignal(blockPos) || level.hasNeighborSignal(blockPos.above());
         if (hasSignal && !blockState.getValue(POWERED)) {
+            level.playSound(null, blockPos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5f, 1);
             level.setBlockAndUpdate(blockPos, blockState.setValue(POWERED, true));
             level.scheduleTick(new BlockPos(blockPos), this, 15);
         }
@@ -84,6 +90,7 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
         super.entityInside(blockState, level, blockPos, entity);
         if (blockState.getValue(POWERED)) {
+            level.playSound(null, blockPos, SoundEvents.SLIME_JUMP, SoundSource.BLOCKS, 1, 1);
             bounce(entity, blockState);
         }
     }
@@ -95,9 +102,9 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
         double e = entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA) ? 1.75 : 1.0;
         double g = entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA) ? 3.75 : 1.0;
 
-        double x = ((vec3.x + 2) * s) * g;
-        double y = ((vec3.y + 1.5) * d) * e;
-        double z = ((vec3.z + 2) * s) * g;
+        double x = ((vec3.x * 0.2f + 2) * s) * g;
+        double y = ((vec3.y * 0.2f + 1.5) * d) * e;
+        double z = ((vec3.z * 0.2f + 2) * s) * g;
 
         Vec3 vec31 = new Vec3(vec3.x, y, vec3.z);
 
