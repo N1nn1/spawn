@@ -11,8 +11,8 @@ public class Spawn implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		Reflection.initialize(
-				SpawnSoundEvents.class,
 				SpawnEntityType.class,
+				SpawnSoundEvents.class,
 				SpawnFeatures.class,
 				SpawnMenuTypes.class,
 				SpawnBlockEntityTypes.class,
@@ -24,6 +24,7 @@ public class Spawn implements ModInitializer {
 				SpawnPointsOfInterests.class,
 				SpawnDecoratedPotPatterns.class
 		);
+
 		SpawnVanillaIntegration.serverInit();
 	}
 }

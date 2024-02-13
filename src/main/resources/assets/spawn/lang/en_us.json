@@ -168,6 +168,7 @@
   "item.spawn.clam_case": "Clam Case",
   "item.spawn.clam_case.fullness": "%s/%s",
   "item.spawn.clam_case.desc": "Only stores Collected Mobs",
+  "block.spawn.clam_launcher": "Clam Launcher",
   "block.spawn.pigment_shifter": "Pigment Shifter",
   "container.spawn.pigment_shifter": "Customize",
   "container.spawn.pigment_shifter.body_plan": "Change Body Plan",

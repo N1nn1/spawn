@@ -35,7 +35,6 @@ public class SpawnBlockEntityTypes {
             ).build(null)
     );
 
-    //TODO apparently this is null and cannot register an item while all the others work even tho nothing changes between them, this makes the game crash when opening the inventory
     public static final BlockEntityType<PigmentShifterBlockEntity> PIGMENT_SHIFTER = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
             new ResourceLocation(Spawn.MOD_ID, "pigment_shifter"),

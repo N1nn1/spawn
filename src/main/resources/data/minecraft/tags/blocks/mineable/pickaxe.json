@@ -7,6 +7,7 @@
     "spawn:snail_shell_tiles",
     "spawn:snail_shell_tile_stairs",
     "spawn:snail_shell_tile_slab",
-    "spawn:pigment_shifter"
+    "spawn:pigment_shifter",
+    "spawn:clam_launcher"
   ]
 }

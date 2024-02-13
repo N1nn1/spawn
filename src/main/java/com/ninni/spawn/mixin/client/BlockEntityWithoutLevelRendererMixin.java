@@ -32,7 +32,7 @@ public class BlockEntityWithoutLevelRendererMixin {
 
 
     @Inject(method = "renderByItem", at = @At("HEAD"))
-    private void DD$renderShulkerItems(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, CallbackInfo ci) {
+    private void S$renderByItem(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, CallbackInfo ci) {
 
         if (itemStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof PigmentShifterBlock) {
             this.blockEntityRenderDispatcher.renderItem(pigmentShifter, poseStack, multiBufferSource, i, j);
