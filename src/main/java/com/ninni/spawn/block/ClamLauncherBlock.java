@@ -1,5 +1,6 @@
 package com.ninni.spawn.block;
 
+import com.ninni.spawn.SpawnProperties;
 import com.ninni.spawn.block.entity.ClamLauncherBlockEntity;
 import com.ninni.spawn.block.entity.PigmentShifterBlockEntity;
 import com.ninni.spawn.registry.SpawnBlockEntityTypes;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -44,11 +46,13 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+    public static final IntegerProperty COOLDOWN = SpawnProperties.COOLDOWN;
     protected static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 3, 16);
 
     public ClamLauncherBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false).setValue(POWERED, false));
+
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false).setValue(POWERED, false).setValue(COOLDOWN, 0));
     }
 
     @Nullable
@@ -60,30 +64,34 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
 
-        if (!blockState.getValue(POWERED)) {
-            level.setBlockAndUpdate(blockPos, blockState.setValue(POWERED, true));
-            level.scheduleTick(new BlockPos(blockPos), this, 15);
-            level.playSound(player, blockPos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5f, 1);
-            return InteractionResult.sidedSuccess(true);
-        }
+            if (!blockState.getValue(POWERED) && blockState.getValue(COOLDOWN) == 0) {
+                this.open(blockState, level, blockPos);
+                return InteractionResult.sidedSuccess(true);
+            }
+
         return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
+    }
+
+    @Override
+    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
+        boolean hasSignal = level.hasNeighborSignal(blockPos) || level.hasNeighborSignal(blockPos.above());
+
+        if (hasSignal && !blockState.getValue(POWERED) && blockState.getValue(COOLDOWN) == 0) {
+            this.open(blockState, level, blockPos);
+        }
+
+    }
+
+    public void open(BlockState blockState, Level level, BlockPos blockPos) {
+        level.playSound(null, blockPos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5f, 1);
+        level.setBlockAndUpdate(blockPos, blockState.setValue(POWERED, true).setValue(COOLDOWN, 20));
+        level.scheduleTick(new BlockPos(blockPos), this, 10);
     }
 
     @Override
     public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
         serverLevel.setBlockAndUpdate(blockPos, blockState.setValue(POWERED, false));
         serverLevel.playSound(null, blockPos, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 0.5f, 1);
-
-    }
-
-    @Override
-    public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
-        boolean hasSignal = level.hasNeighborSignal(blockPos) || level.hasNeighborSignal(blockPos.above());
-        if (hasSignal && !blockState.getValue(POWERED)) {
-            level.playSound(null, blockPos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5f, 1);
-            level.setBlockAndUpdate(blockPos, blockState.setValue(POWERED, true));
-            level.scheduleTick(new BlockPos(blockPos), this, 15);
-        }
     }
 
     @Override
@@ -171,6 +179,6 @@ public class ClamLauncherBlock extends BaseEntityBlock implements SimpleWaterlog
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, WATERLOGGED, POWERED);
+        builder.add(FACING, WATERLOGGED, POWERED, COOLDOWN);
     }
 }

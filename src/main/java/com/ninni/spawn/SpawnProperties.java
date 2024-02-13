@@ -12,4 +12,5 @@ public interface SpawnProperties {
     EnumProperty<SunflowerRotation> SUNFLOWER_ROTATION = EnumProperty.create("sunflower_rotation", SunflowerRotation.class);
     IntegerProperty LEAVES = IntegerProperty.create("leaves", 1, 4);
     IntegerProperty RESOURCE_LEVEL = IntegerProperty.create("resource_level", 0, 3);
+    IntegerProperty COOLDOWN = IntegerProperty.create("cooldown", 0, 20);
 }

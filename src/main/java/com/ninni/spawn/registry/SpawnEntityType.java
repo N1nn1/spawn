@@ -143,6 +143,7 @@ public class SpawnEntityType {
                     .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Clam::checkSurfaceWaterAnimalSpawnRules)
                     .dimensions(EntityDimensions.scalable(0.4F, 0.2F))
                     .trackRangeChunks(30)
+
     );
 
 
