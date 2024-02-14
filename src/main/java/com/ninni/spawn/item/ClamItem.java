@@ -100,6 +100,6 @@ public class ClamItem extends Item {
 
         }
 
-
+        super.appendHoverText(itemStack, level, list, tooltipFlag);
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -33,7 +34,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
@@ -43,12 +43,13 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 public class Octopus extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Octopus.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Optional<BlockPos>> LOCKED_CHEST = SynchedEntityData.defineId(Octopus.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+    protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNERUUID_ID = SynchedEntityData.defineId(Octopus.class, EntityDataSerializers.OPTIONAL_UUID);
     public static List<Item> items = List.of(
             Items.BUCKET,
             Items.GLASS_BOTTLE,
@@ -158,11 +159,15 @@ public class Octopus extends PathfinderMob {
             if (this.isLocking()) {
                 BlockState state = this.level().getBlockState(getLockingPos());
                 BlockPos pos = new BlockPos((int)this.getX(), (int)this.getY(), (int)this.getZ());
-                if (!state.is(Blocks.CHEST) || (state.is(Blocks.CHEST) && state.getValue(ChestBlock.TYPE) != ChestType.SINGLE)) {
-                    this.entityData.set(LOCKED_CHEST, Optional.empty());
+                if (!(state.getBlock() instanceof ChestBlock) || ((state.getBlock() instanceof ChestBlock) && state.getValue(ChestBlock.TYPE) != ChestType.SINGLE)) {
+                    this.stopLocking();
+                    this.entityData.set(DATA_OWNERUUID_ID, Optional.empty());
                 } else {
                     if (!pos.equals(this.getLockingPos())) {
                         this.setPos(this.getLockingPos().getX() + 0.5f, this.getLockingPos().getY(), this.getLockingPos().getZ() + 0.5f);
+                    }
+                    if (this.getYHeadRot() != state.getValue(ChestBlock.FACING).toYRot()) {
+                        this.setYHeadRot(state.getValue(ChestBlock.FACING).toYRot());
                     }
                 }
             }
@@ -194,26 +199,56 @@ public class Octopus extends PathfinderMob {
         super.defineSynchedData();
         this.entityData.define(FROM_BUCKET, false);
         this.entityData.define(LOCKED_CHEST, Optional.empty());
+        this.entityData.define(DATA_OWNERUUID_ID, Optional.empty());
     }
 
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putBoolean("FromBucket", this.fromBucket());
+        if (this.getOwnerUUID() != null) {
+            compoundTag.putUUID("Owner", this.getOwnerUUID());
+        }
         if (this.isLocking()) {
             compoundTag.put("LockedChestPos", NbtUtils.writeBlockPos(this.getLockingPos()));
         }
     }
 
     public void readAdditionalSaveData(CompoundTag compoundTag) {
+        UUID uUID;
         super.readAdditionalSaveData(compoundTag);
         this.setFromBucket(compoundTag.getBoolean("FromBucket"));
+        if (compoundTag.hasUUID("Owner")) {
+            uUID = compoundTag.getUUID("Owner");
+        } else {
+            String string = compoundTag.getString("Owner");
+            uUID = OldUsersConverter.convertMobOwnerIfNecessary(this.getServer(), string);
+        }
+        if (uUID != null) {
+            try {
+                this.setOwnerUUID(uUID);
+            } catch (Throwable ignored) {
+            }
+        }
         if (compoundTag.contains("LockedChestPos", 10)) {
             this.setLockingPos(NbtUtils.readBlockPos(compoundTag.getCompound("LockedChestPos")));
         }
     }
 
+    @Nullable
+    public UUID getOwnerUUID() {
+        return this.entityData.get(DATA_OWNERUUID_ID).orElse(null);
+    }
+
+    public void setOwnerUUID(@Nullable UUID uUID) {
+        this.entityData.set(DATA_OWNERUUID_ID, Optional.ofNullable(uUID));
+    }
+
     public boolean isLocking() {
         return this.entityData.get(LOCKED_CHEST).isPresent();
+    }
+
+    public void stopLocking() {
+        this.entityData.set(LOCKED_CHEST, Optional.empty());
     }
 
     public void setLockingPos(@Nullable BlockPos blockPos) {
@@ -255,7 +290,7 @@ public class Octopus extends PathfinderMob {
 
     @Override
     public boolean requiresCustomPersistence() {
-        return super.requiresCustomPersistence() || this.fromBucket();
+        return super.requiresCustomPersistence() || this.fromBucket() || this.isLocking();
     }
 
 

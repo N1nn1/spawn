@@ -196,6 +196,7 @@ public class ClamCaseItem extends Item implements DyeableLeatherItem {
     public void appendHoverText(ItemStack itemStack, Level level, List<Component> list, TooltipFlag tooltipFlag) {
         list.add(Component.translatable("item.spawn.clam_case.fullness", ClamCaseItem.getContentWeight(itemStack), MAX_WEIGHT).withStyle(ChatFormatting.GRAY));
         if (ClamCaseItem.getContents(itemStack).toList().isEmpty()) list.add(Component.translatable("item.spawn.clam_case.desc").withStyle(ChatFormatting.BLUE));
+        super.appendHoverText(itemStack, level, list, tooltipFlag);
     }
 
     @Override

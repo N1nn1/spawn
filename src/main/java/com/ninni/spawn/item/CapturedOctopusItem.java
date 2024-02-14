@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
@@ -73,19 +74,28 @@ public class CapturedOctopusItem extends Item {
             BlockPos pos = blockHitResult.getBlockPos();
             BlockState state = level.getBlockState(pos);
 
-            if (level.getBlockEntity(pos) instanceof ChestBlockEntity && (state.getValue(ChestBlock.TYPE) == ChestType.SINGLE)) {
-                Octopus entity = SpawnEntityType.OCTOPUS.spawn(serverLevel, itemStack, null, pos.below(), MobSpawnType.BUCKET, true, false);
-                entity.setLockingPos(pos);
-                entity.setYHeadRot(state.getValue(ChestBlock.FACING).toYRot());
+            if (level.getBlockEntity(pos) instanceof ChestBlockEntity blockEntity && (state.getValue(ChestBlock.TYPE) == ChestType.SINGLE)) {
+                List<Octopus> list = level.getEntitiesOfClass(Octopus.class, new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
+                if (list.isEmpty()) {
+                    Octopus entity = SpawnEntityType.OCTOPUS.spawn(serverLevel, itemStack, null, pos.below(), MobSpawnType.BUCKET, true, false);
+                    entity.setLockingPos(pos);
+                    entity.setOwnerUUID(player.getUUID());
+
+                    this.giveItemBack(player, interactionHand, itemStack);
+                } else {
+                    player.displayClientMessage(Component.translatable("spawn.container.isAlreadyLocked", blockEntity.getDisplayName()), true);
+                }
+
+
             } else {
                 Octopus entity = SpawnEntityType.OCTOPUS.spawn(serverLevel, itemStack, null, blockPos, MobSpawnType.BUCKET, true, false);
                 entity.loadDataFromItem(itemStack.getOrCreateTag());
                 entity.setFromBucket(true);
+
+                this.giveItemBack(player, interactionHand, itemStack);
             }
 
         }
-
-        this.giveItemBack(player, interactionHand, itemStack);
     }
 
     public void giveItemBack(Player player, InteractionHand interactionHand, ItemStack itemStack) {
@@ -123,5 +133,6 @@ public class CapturedOctopusItem extends Item {
         } else {
             list.add(Component.translatable("item.spawn.captured_octopus.no_container").withStyle(chatFormattings));
         }
+        super.appendHoverText(itemStack, level, list, tooltipFlag);
     }
 }

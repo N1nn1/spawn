@@ -9,6 +9,7 @@
     "ChestBlockMixin",
     "CreativeModTabMixin",
     "DecoratedPotPatternsMixin",
+    "ItemMixin",
     "MinecraftServerMixin",
     "MobBucketItemMixin",
     "OverworldBiomeBuilderMixin",
