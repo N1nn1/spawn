@@ -122,6 +122,7 @@ public class Octopus extends PathfinderMob {
         if (this.hasGlowingTag()) compoundTag.putBoolean("Glowing", this.hasGlowingTag());
         if (this.isInvulnerable()) compoundTag.putBoolean("Invulnerable", this.isInvulnerable());
 
+        compoundTag.putUUID("UUID", this.getUUID());
         compoundTag.putFloat("Health", this.getHealth());
         compoundTag.putInt("Item", getId(inputStack.getItem()));
         if (inputStack.hasTag()) compoundTag.put("ItemTag", inputStack.getTag());
@@ -135,6 +136,7 @@ public class Octopus extends PathfinderMob {
         if (tag.contains("Glowing")) this.setGlowingTag(tag.getBoolean("Glowing"));
         if (tag.contains("Invulnerable")) this.setInvulnerable(tag.getBoolean("Invulnerable"));
 
+        this.setUUID(tag.getUUID("UUID"));
         if (tag.contains("Health", 99)) this.setHealth(tag.getFloat("Health"));
     }
 

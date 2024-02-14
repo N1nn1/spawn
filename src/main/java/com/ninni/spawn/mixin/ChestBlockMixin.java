@@ -57,6 +57,8 @@ public abstract class ChestBlockMixin extends AbstractChestBlock<ChestBlockEntit
 
                     CompoundTag tag = stack.getOrCreateTag();
                     tag.putUUID("OctoKey", list.get(0).getUUID());
+                    if (list.get(0).hasCustomName()) tag.putString("OctoName", list.get(0).getCustomName().getString());
+                    else tag.putString("OctoName", Component.translatable("entity.spawn.octopus").getString());
                     stack2.setTag(tag);
                     player.setItemInHand(interactionHand, stack2);
                     player.displayClientMessage(Component.translatable("spawn.container.createdKey", stack2.getHoverName()), true);
@@ -65,7 +67,6 @@ public abstract class ChestBlockMixin extends AbstractChestBlock<ChestBlockEntit
                 }
             }
             else {
-
                 if (list.get(0).getOwnerUUID() == player.getUUID() || (stack.hasTag() && stack.getTag().contains("OctoKey") && stack.getTag().getUUID("OctoKey").equals(list.get(0).getUUID()))) {
                     MenuProvider menuProvider = this.getMenuProvider(blockState, level, blockPos);
                     if (menuProvider != null) {

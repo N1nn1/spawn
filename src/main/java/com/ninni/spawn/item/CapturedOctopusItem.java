@@ -78,8 +78,11 @@ public class CapturedOctopusItem extends Item {
                 List<Octopus> list = level.getEntitiesOfClass(Octopus.class, new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1));
                 if (list.isEmpty()) {
                     Octopus entity = SpawnEntityType.OCTOPUS.spawn(serverLevel, itemStack, null, pos.below(), MobSpawnType.BUCKET, true, false);
+
                     entity.setLockingPos(pos);
                     entity.setOwnerUUID(player.getUUID());
+                    entity.setFromBucket(true);
+                    entity.loadDataFromItem(itemStack.getOrCreateTag());
 
                     this.giveItemBack(player, interactionHand, itemStack);
                 } else {

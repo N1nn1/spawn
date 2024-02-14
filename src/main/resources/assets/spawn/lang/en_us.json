@@ -184,7 +184,7 @@
   "item.spawn.captured_octopus.no_container": "No Container",
   "spawn.container.isAlreadyLocked": "%s is already being Locked!",
   "spawn.container.createdKey": "Wash %s in a Cauldron to remove the Key attribute",
-  "spawn.item.isKey": "Key",
+  "spawn.item.isKey": "Bound to %s",
   "subtitles.item.goat_horn.octopus": "Goat Horn fails to play",
 
   "entity.spawn.herring": "Herring",

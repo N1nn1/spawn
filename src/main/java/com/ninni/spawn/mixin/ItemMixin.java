@@ -51,11 +51,12 @@ public class ItemMixin {
         BlockPos blockPos = blockHitResult.getBlockPos();
         ItemStack itemStack = player.getItemInHand(interactionHand);
 
-        if (level.getBlockState(blockPos).is(Blocks.WATER_CAULDRON) && itemStack.hasTag() && itemStack.getTag().contains("OctoKey")) {
+        if (level.getBlockState(blockPos).is(Blocks.WATER_CAULDRON) && itemStack.hasTag() && (itemStack.getTag().contains("OctoKey") && itemStack.getTag().contains("OctoName"))) {
             ItemStack itemStack2 = itemStack.copy();
 
             CompoundTag tag = itemStack.getOrCreateTag();
             tag.remove("OctoKey");
+            tag.remove("OctoName");
             itemStack2.setTag(tag);
             player.setItemInHand(interactionHand, itemStack2);
             LayeredCauldronBlock.lowerFillLevel(level.getBlockState(blockPos), level, blockPos);
@@ -68,8 +69,8 @@ public class ItemMixin {
 
     @Inject(method = "appendHoverText", at = @At("HEAD"))
     public void S$appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag, CallbackInfo ci) {
-        if (itemStack.hasTag() && itemStack.getTag().contains("OctoKey")) {
-            list.add(Component.translatable("spawn.item.isKey").withStyle(new ChatFormatting[]{ChatFormatting.GRAY}));
+        if (itemStack.hasTag() && itemStack.getTag().contains("OctoKey") && itemStack.getTag().contains("OctoName")) {
+            list.add(Component.translatable("spawn.item.isKey", itemStack.getTag().getString("OctoName")).withStyle(new ChatFormatting[]{ChatFormatting.GRAY}));
         }
     }
 
