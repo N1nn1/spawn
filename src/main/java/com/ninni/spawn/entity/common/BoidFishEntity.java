@@ -1,5 +1,9 @@
 package com.ninni.spawn.entity.common;
 
+import com.ninni.spawn.entity.ai.goal.BoidFishSchoolingGoal;
+import com.ninni.spawn.entity.ai.goal.HeightBoundsGoal;
+import com.ninni.spawn.entity.ai.goal.LimitSpeedAndLookInVelocityDirectionGoal;
+import com.ninni.spawn.entity.ai.goal.OrganizeBoidSchoolingGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;

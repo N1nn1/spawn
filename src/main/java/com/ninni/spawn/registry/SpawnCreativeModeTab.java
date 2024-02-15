@@ -203,6 +203,9 @@ public class SpawnCreativeModeTab {
                 //output.accept(OCTOPUS_SPAWN_EGG);
                 output.accept(CAPTURED_OCTOPUS);
 
+                // sea lion
+                //output.accept(SEA_LION_SPAWN_EGG);
+
                 // whale
                 output.accept(WHALE_SPAWN_EGG);
                 output.accept(WHALE_FLESH);

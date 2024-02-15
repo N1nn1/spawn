@@ -180,12 +180,16 @@
   "item.spawn.shell_pottery_sherd": "Shell Pottery Sherd",
 
   "entity.spawn.octopus": "Octopus",
+  "item.spawn.octopus_spawn_egg": "Octopus Spawn Egg",
   "item.spawn.captured_octopus": "Captured Octopus",
   "item.spawn.captured_octopus.no_container": "No Container",
   "spawn.container.isAlreadyLocked": "%s is already being Locked!",
   "spawn.container.createdKey": "Wash %s in a Cauldron to remove the Key attribute",
   "spawn.item.isKey": "Bound to %s",
   "subtitles.item.goat_horn.octopus": "Goat Horn fails to play",
+
+  "entity.spawn.sea_lion": "Sea Lion",
+  "item.spawn.sea_lion_spawn_egg": "Sea Lion Spawn Egg",
 
   "entity.spawn.herring": "Herring",
   "item.spawn.herring_spawn_egg": "Herring Spawn Egg",

@@ -2,6 +2,8 @@ package com.ninni.spawn.client.model;
 
 import com.ninni.spawn.client.animation.OctopusAnimation;
 import com.ninni.spawn.entity.Octopus;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.animation.definitions.CamelAnimation;
 import net.minecraft.client.animation.definitions.FrogAnimation;
 import net.minecraft.client.model.HierarchicalModel;
@@ -11,6 +13,7 @@ import net.minecraft.client.model.geom.builders.*;
 
 import static net.minecraft.client.model.geom.PartNames.*;
 
+@Environment(value= EnvType.CLIENT)
 @SuppressWarnings("FieldCanBeLocal, unused")
 public class OctopusModel extends HierarchicalModel<Octopus> {
     public static final String EVERYTHING = "everything";
@@ -77,17 +80,23 @@ public class OctopusModel extends HierarchicalModel<Octopus> {
         this.everything.getAllParts().forEach(ModelPart::resetPose);
         if (!entity.isLocking()) {
 
-            this.leftEye.xRot = headPitch * ((float)Math.PI / 180);
-            this.leftEye.yRot = headYaw * ((float)Math.PI / 180);
-            this.rightEye.xRot = headPitch * ((float)Math.PI / 180);
-            this.rightEye.yRot = headYaw * ((float)Math.PI / 180);
 
             this.animate(entity.waterIdleAnimationState, OctopusAnimation.WATER_IDLE, ageInTicks, 1.0f);
             this.animate(entity.idleAnimationState, OctopusAnimation.IDLE, ageInTicks, 1.0f);
 
             if (entity.isInWaterOrBubble() && !entity.onGround()) {
+                this.leftEye.xRot = 0;
+                this.leftEye.yRot = 0;
+                this.rightEye.xRot = 0;
+                this.rightEye.yRot = 0;
+                this.everything.xRot = headPitch * ((float)Math.PI / 180);
+                this.everything.yRot = headYaw * ((float)Math.PI / 180);
                 this.animateWalk(OctopusAnimation.SWIM, limbSwing, limbSwingAmount, 1.5f, 8.0f);
             } else {
+                this.leftEye.xRot = headPitch * ((float)Math.PI / 180);
+                this.leftEye.yRot = headYaw * ((float)Math.PI / 180);
+                this.rightEye.xRot = headPitch * ((float)Math.PI / 180);
+                this.rightEye.yRot = headYaw * ((float)Math.PI / 180);
                 this.animateWalk(OctopusAnimation.WALK, limbSwing, limbSwingAmount, 4.5f, 8.0f);
             }
         } else {

@@ -70,22 +70,6 @@ public class Whale extends Animal {
     }
 
     @Override
-    public void travel(Vec3 vec3) {
-        if (this.isEffectiveAi() && this.isInWater()) {
-
-            this.moveRelative(this.getSpeed(), vec3);
-            this.move(MoverType.SELF, this.getDeltaMovement());
-            this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
-            if (this.getTarget() == null) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.005, 0.0));
-            }
-        } else {
-            super.travel(vec3);
-        }
-
-    }
-
-    @Override
     protected PathNavigation createNavigation(Level level) {
         return new WaterBoundPathNavigation(this, level);
     }

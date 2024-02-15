@@ -146,8 +146,6 @@ public class SpawnEntityType {
 
     );
 
-
-    //TODO apparently this is null and cannot register an spawn egg item while all the others work even tho nothing changes between them, this makes the game crash when opening the inventory
     public static final EntityType<Octopus> OCTOPUS = register(
             "octopus",
             FabricEntityTypeBuilder.createMob()
@@ -157,7 +155,21 @@ public class SpawnEntityType {
                     .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Octopus::checkSurfaceWaterAnimalSpawnRules)
                     .dimensions(EntityDimensions.scalable(0.8F, 0.6F))
                     .trackRangeChunks(30)
+
     );
+
+    public static final EntityType<SeaLion> SEA_LION = register(
+            "sea_lion",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(SeaLion::new)
+                    .defaultAttributes(SeaLion::createAttributes)
+                    .spawnGroup(MobCategory.CREATURE)
+                    .spawnRestriction(SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SeaLion::checkAnimalSpawnRules)
+                    .dimensions(EntityDimensions.scalable(0.8F, 1.3F))
+                    .trackRangeChunks(30)
+
+    );
+
 
     static {
         BiomeModifications.addSpawn(BiomeSelectors.tag(SpawnTags.CLAM_SPAWNS), MobCategory.WATER_AMBIENT, SpawnEntityType.CLAM, 150, 4, 12);

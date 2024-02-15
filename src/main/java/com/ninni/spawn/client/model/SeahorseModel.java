@@ -57,7 +57,7 @@ public class SeahorseModel<E extends Seahorse> extends ColorableHierarchicalMode
     public void setupAnim(E entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         float speed = 2.0f;
         float degree = 1.0f;
-        if (entity.isUnderWater()) {
+        if (entity.isInWaterOrBubble()) {
             this.head.xRot = headPitch * (float) (Math.PI / 180);
             this.head.yRot = headYaw * (float) (Math.PI / 180);
         } else {

@@ -1,5 +1,6 @@
 package com.ninni.spawn.entity;
 
+import com.ninni.spawn.entity.ai.control.GoodAmphibiousMovement;
 import com.ninni.spawn.registry.SpawnItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,7 +12,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -20,7 +20,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
-import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
@@ -75,14 +75,15 @@ public class Octopus extends PathfinderMob {
         this.setPathfindingMalus(BlockPathTypes.DAMAGE_FIRE, -1.0F);
         this.setMaxUpStep(1);
         this.moveControl = new OctopusMoveControl(this);
-        this.lookControl = new OctopusLookControl(this);
+        this.lookControl = new SmoothSwimmingLookControl(this, 10);
     }
 
     @Override
     protected void registerGoals() {
+        super.registerGoals();
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.25));
         this.goalSelector.addGoal(6, new OctopusRandomStroll(this));
-        this.goalSelector.addGoal(6, new RandomSwimmingGoal(this, 1.0D, 10));
+        this.goalSelector.addGoal(6, new OctopusRandomSwim(this));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
@@ -182,7 +183,6 @@ public class Octopus extends PathfinderMob {
                 this.moveRelative(this.getSpeed(), vec3);
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0,0.0025D,0.0));
             } else {
                 super.travel(vec3);
             }
@@ -295,18 +295,17 @@ public class Octopus extends PathfinderMob {
         return super.requiresCustomPersistence() || this.fromBucket() || this.isLocking();
     }
 
-
     public int getHeadRotSpeed() {
-        return 35;
+        return this.isInWaterOrBubble() ? 35 : 10;
     }
 
     public int getMaxHeadYRot() {
-        return 5;
+        return this.isInWaterOrBubble() ? 5 : 75;
     }
 
     @Override
     public int getMaxHeadXRot() {
-        return 1;
+        return this.isInWaterOrBubble() ? 1 : 40;
     }
 
     @Override
@@ -358,29 +357,9 @@ public class Octopus extends PathfinderMob {
 
 
     @Override
-    protected PathNavigation createNavigation(Level world) { return new OctopusSwimNavigation(this, world); }
+    protected PathNavigation createNavigation(Level world) { return new GoodAmphibiousMovement.GoodSwimNavigation(this, world); }
 
-    static class OctopusSwimNavigation extends WaterBoundPathNavigation {
-        OctopusSwimNavigation(Octopus octopus, Level world) { super(octopus, world); }
-
-        @Override
-        protected PathFinder createPathFinder(int range) {
-            this.nodeEvaluator = new AmphibiousNodeEvaluator(false);
-            return new PathFinder(this.nodeEvaluator, range);
-        }
-
-        @Override
-        protected boolean canUpdatePath() {
-            return true;
-        }
-
-        @Override
-        public boolean isStableDestination(BlockPos blockPos) {
-            return !this.level.getBlockState(blockPos.below(2)).isAir();
-        }
-    }
-
-    static class OctopusMoveControl extends MoveControl {
+    static class OctopusMoveControl extends GoodAmphibiousMovement.GoodAmphibiousMoveControl {
         private final Octopus octopus;
 
         public OctopusMoveControl(Octopus octopus) {
@@ -390,35 +369,11 @@ public class Octopus extends PathfinderMob {
 
         @Override
         public void tick() {
-            if (!this.octopus.isLocking()) {
-                if (this.operation == Operation.STRAFE || this.operation == Operation.JUMPING || (this.mob.onGround() && !this.octopus.isInWaterOrBubble())) { super.tick();}
-                if (this.operation == Operation.MOVE_TO && !this.octopus.getNavigation().isDone()) {
-                    double d = this.wantedX - this.octopus.getX();
-                    double e = this.wantedY - this.octopus.getY();
-                    double f = this.wantedZ - this.octopus.getZ();
-                    double g = d * d + e * e + f * f;
-                    if (g < 2.5) {
-                        this.mob.setZza(0.0F);
-                    } else {
-                        float movementSpeed = (float) (this.speedModifier * this.octopus.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                        this.octopus.setYRot(this.rotlerp(this.octopus.getYRot(), (float) (Mth.atan2(f, d) * 57.3) - 90.0F, 10.0F));
-                        this.octopus.yBodyRot = this.octopus.getYRot();
-                        this.octopus.yHeadRot = this.octopus.getYRot();
-                        if (this.octopus.isInWaterOrBubble()) {
-                            this.octopus.setSpeed(movementSpeed * 0.4F);
-                            if (this.octopus.onGround()) this.octopus.setSpeed(movementSpeed * 0.1F);
-                            float j = -((float) (Mth.atan2(e, Mth.sqrt((float) (d * d + f * f))) * 57.3));
-                            this.octopus.setXRot(this.rotlerp(this.octopus.getXRot(), Mth.clamp(Mth.wrapDegrees(j), -85.0F, 85.0F), 5.0F));
-                            this.octopus.zza = Mth.cos(this.octopus.getXRot() * (float) Math.PI / 180f) * movementSpeed;
-                            this.octopus.yya = -Mth.sin(this.octopus.getXRot() * (float) Math.PI / 180f);
-                        }
-                    }
-                }
-            }
+            if (!this.octopus.isLocking()) super.tick();
         }
     }
 
-    static class OctopusLookControl extends LookControl {
+    static class OctopusLookControl extends GoodAmphibiousMovement.GoodAmphibiousLookControl {
         private final Octopus octopus;
 
         public OctopusLookControl(Octopus octopus) {
@@ -431,6 +386,29 @@ public class Octopus extends PathfinderMob {
             if (!this.octopus.isLocking()) {
                 super.tick();
             }
+        }
+    }
+
+    public class OctopusRandomSwim extends RandomSwimmingGoal {
+
+        public OctopusRandomSwim(PathfinderMob pathfinderMob) {
+            super(pathfinderMob, 1.0, 10);
+        }
+
+        @Override
+        public boolean canUse() {
+            if (Octopus.this.isInWaterOrBubble() && !Octopus.this.onGround()) {
+                return super.canUse();
+            }
+            return false;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (Octopus.this.isInWaterOrBubble() && !Octopus.this.onGround()) {
+                return super.canContinueToUse();
+            }
+            return false;
         }
     }
 

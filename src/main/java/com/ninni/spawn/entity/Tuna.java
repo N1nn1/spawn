@@ -1,7 +1,7 @@
 package com.ninni.spawn.entity;
 
 import com.ninni.spawn.SpawnTags;
-import com.ninni.spawn.entity.common.WaterJumpGoal;
+import com.ninni.spawn.entity.ai.goal.WaterJumpGoal;
 import com.ninni.spawn.registry.SpawnEntityType;
 import com.ninni.spawn.registry.SpawnSoundEvents;
 import net.minecraft.advancements.CriteriaTriggers;

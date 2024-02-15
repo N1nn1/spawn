@@ -1,5 +1,6 @@
-package com.ninni.spawn.entity.common;
+package com.ninni.spawn.entity.ai.goal;
 
+import com.ninni.spawn.entity.common.BoidFishEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.block.Blocks;

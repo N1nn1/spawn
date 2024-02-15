@@ -1,7 +1,7 @@
 package com.ninni.spawn.entity;
 
 import com.ninni.spawn.SpawnTags;
-import com.ninni.spawn.entity.common.EatSeagrassGoal;
+import com.ninni.spawn.entity.ai.goal.EatSeagrassGoal;
 import com.ninni.spawn.registry.SpawnBlocks;
 import com.ninni.spawn.registry.SpawnParticleTypes;
 import com.ninni.spawn.registry.SpawnSoundEvents;

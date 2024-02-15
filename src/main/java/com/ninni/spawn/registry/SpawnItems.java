@@ -108,6 +108,9 @@ public class SpawnItems {
     //public static final Item OCTOPUS_SPAWN_EGG = register("octopus_spawn_egg", new SpawnEggItem(SpawnEntityType.OCTOPUS, 0xB51C65, 0xFFBE2B, new Item.Properties()));
     public static final Item CAPTURED_OCTOPUS = register("captured_octopus", new CapturedOctopusItem(new Item.Properties().stacksTo(1)));
 
+    // sea lion
+    //public static final Item SEA_LION_SPAWN_EGG = register("sea_lion_spawn_egg", new SpawnEggItem(SpawnEntityType.SEA_LION, 0x5E4834, 0xC08650, new Item.Properties()));
+
     // herring
     public static final Item HERRING_SPAWN_EGG = register("herring_spawn_egg", new SpawnEggItem(SpawnEntityType.HERRING, 0x1051AD, 0xCACACA, new Item.Properties()));
     public static final Item HERRING_BUCKET = register("herring_bucket", new MobBucketItem(SpawnEntityType.HERRING, Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1)));

@@ -1,4 +1,4 @@
-package com.ninni.spawn.entity.common;
+package com.ninni.spawn.entity.ai.goal;
 
 import com.ninni.spawn.entity.SeaCow;
 import com.ninni.spawn.registry.SpawnBlocks;

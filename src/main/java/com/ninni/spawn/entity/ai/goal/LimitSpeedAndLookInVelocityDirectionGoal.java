@@ -1,5 +1,6 @@
-package com.ninni.spawn.entity.common;
+package com.ninni.spawn.entity.ai.goal;
 
+import com.ninni.spawn.entity.common.BoidFishEntity;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.ai.goal.Goal;
 

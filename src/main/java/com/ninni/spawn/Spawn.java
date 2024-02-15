@@ -12,13 +12,13 @@ public class Spawn implements ModInitializer {
 	public void onInitialize() {
 		Reflection.initialize(
 				SpawnEntityType.class,
+				SpawnBlockEntityTypes.class,
+				SpawnItems.class,
+				SpawnBlocks.class,
+				SpawnCreativeModeTab.class,
 				SpawnSoundEvents.class,
 				SpawnFeatures.class,
 				SpawnMenuTypes.class,
-				SpawnBlockEntityTypes.class,
-				SpawnCreativeModeTab.class,
-				SpawnItems.class,
-				SpawnBlocks.class,
 				SpawnCriteriaTriggers.class,
 				SpawnParticleTypes.class,
 				SpawnPointsOfInterests.class,

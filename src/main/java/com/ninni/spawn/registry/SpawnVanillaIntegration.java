@@ -207,6 +207,7 @@ public class SpawnVanillaIntegration {
             EntityRendererRegistry.register(SpawnEntityType.SEA_COW, SeaCowRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.CLAM, ClamRenderer::new);
             EntityRendererRegistry.register(SpawnEntityType.OCTOPUS, OctopusRenderer::new);
+            EntityRendererRegistry.register(SpawnEntityType.SEA_LION, SeaLionRenderer::new);
 
             BlockEntityRenderers.register(SpawnBlockEntityTypes.WHALE_UVULA, WhaleUvulaRenderer::new);
             BlockEntityRenderers.register(SpawnBlockEntityTypes.PIGMENT_SHIFTER, PigmentShifterRenderer::new);
